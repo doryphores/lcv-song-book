@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+PATH=$PATH:./node_modules/.bin
+
+rm -rf app/{js,css}
+babel src --out-dir app/js
+node-sass src/scss --output app/css
