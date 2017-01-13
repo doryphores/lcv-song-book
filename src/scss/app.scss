@@ -1,3 +1,22 @@
+@import 'flex_utils';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  background: black;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: #efefef;
+  color: rgba(0,0,0,.87);
+  font-family: sans-serif;
+}
+
+.app-container {
+  height: 100%;
 }

@@ -6,9 +6,11 @@
   "license": "MIT",
   "main": "js/index.js",
   "dependencies": {
+    "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-electron-webview": "^2.0.2",
     "react-redux": "^5.0.2",
     "redux": "^3.6.0"
   }
