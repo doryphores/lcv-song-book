@@ -8,6 +8,7 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
+    "pdfjs-dist": "^1.6.458",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-electron-webview": "^2.0.2",

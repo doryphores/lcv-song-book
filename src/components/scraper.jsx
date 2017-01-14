@@ -15,7 +15,9 @@ class Scraper extends React.Component {
     }
   }
 
-  getResources () {
+  getResources (e) {
+    e.preventDefault()
+
     this.setState({
       started: true,
       progress: 'Accessing LCV website...'
@@ -69,15 +71,21 @@ class Scraper extends React.Component {
 
   render () {
     return (
-      <div className='scraper'>
-        <input type='password'
-          placeholder='LCV resources password'
-          value={this.state.password}
-          onChange={(e) => this.setState({ password: e.target.value })} />
-        <button onClick={this.getResources.bind(this)}>Get resources</button>
+      <form className='scraper' onSubmit={this.getResources.bind(this)}>
+        <label className='field'>
+          <span className='field__label'>LCV website password</span>
+          <input type='password'
+            className='field__input'
+            value={this.state.password}
+            required
+            onChange={(e) => this.setState({ password: e.target.value })} />
+        </label>
+        <div className='form-actions'>
+          <button className='button'>Get resources</button>
+        </div>
         <span>{this.state.progress}</span>
         {this.renderBrowser()}
-      </div>
+      </form>
     )
   }
 }
