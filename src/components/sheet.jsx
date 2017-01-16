@@ -43,14 +43,14 @@ class Sheet extends React.Component {
   }
 
   loadPDF (pdfURL) {
-    if (pdfURL === '') return
+    if (pdfURL === '') {
+      this.setState({ numPages: 0 })
+    }
 
     PDFJS.getDocument(pdfURL)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
-        this.setState({
-          numPages: this.pdfDocument.numPages
-        })
+        this.setState({ numPages: this.pdfDocument.numPages })
       }).catch(console.error)
   }
 
@@ -68,10 +68,15 @@ class Sheet extends React.Component {
 }
 
 function mapStateToProps (state) {
+  if (state.selectedVoice === '' || state.selectedSong === '') {
+    return { pdfURL: '' }
+  }
+
   let selectedSong = state.songs.find(s => s.title === state.selectedSong)
+  let voice = selectedSong.voices[state.selectedVoice.replace(/ [12]/, '')] || selectedSong.voices['All parts']
 
   return {
-    pdfURL: `http://www.londoncityvoices.co.uk${selectedSong.voices['Tenor'].sheet}`
+    pdfURL: `http://www.londoncityvoices.co.uk${voice.sheet}`
   }
 }
 
