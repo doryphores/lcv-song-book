@@ -1,12 +1,13 @@
 import React from 'react'
 
-// import Scraper from './scraper'
-import SongList from './song_list'
+import Scraper from './scraper'
+import Sidebar from './sidebar'
 import Sheet from './sheet'
 
 const App = () => (
   <div className='u-flex u-flex--full u-flex--horizontal'>
-    <SongList className='u-flex__panel' />
+    {/* <Scraper /> */}
+    <Sidebar className='u-flex__panel' />
     <Sheet className='u-flex__panel--grow' />
   </div>
 )

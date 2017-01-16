@@ -14,7 +14,6 @@ const CACHE_PATH = path.join(
 export function configureStore (...middleware) {
   return new Promise((resolve, reject) => {
     readJSON(CACHE_PATH, (_, data) => {
-      console.log('RESTORE', data)
       try {
         let reducer = combineReducers(reducers)
         let store = createStore(

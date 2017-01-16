@@ -1,25 +1,55 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { PDFJS } from 'pdfjs-dist'
 
 PDFJS.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js'
 
-export default class Sheet extends React.Component {
+class Sheet extends React.Component {
+  constructor () {
+    super()
+    this.state = {
+      numPages: 0
+    }
+  }
+
   componentDidMount () {
-    PDFJS.getDocument('http://www.londoncityvoices.co.uk/resources/sheetmusic/50-Ways-To-Leave-Your-Lover-Bass.pdf').
-      promise.then(pdfDocument => {
-        return pdfDocument.getPage(1).then(pdfPage => {
-          // Display page on the existing canvas with 100% scale.
-          let viewport = pdfPage.getViewport(1.0)
-          let canvas = this.refs.canvas
-          canvas.width = viewport.width
-          canvas.height = viewport.height
-          let ctx = canvas.getContext('2d')
-          let renderTask = pdfPage.render({
-            canvasContext: ctx,
-            viewport: viewport
-          })
-          return renderTask.promise
+    this.loadPDF(this.props.pdfURL)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.pdfURL !== nextProps.pdfURL) {
+      this.loadPDF(nextProps.pdfURL)
+    }
+  }
+
+  componentDidUpdate () {
+    Array(this.state.numPages).fill().map((_, i) => {
+      this.pdfDocument.getPage(i + 1).then(pdfPage => {
+        let viewport = pdfPage.getViewport(1.0)
+        let canvas = this.refs[`page-${i + 1}`]
+        let scale = canvas.parentNode.offsetWidth / viewport.width
+        viewport = pdfPage.getViewport(scale)
+        canvas.width = viewport.width
+        canvas.height = viewport.height
+        let ctx = canvas.getContext('2d')
+        let renderTask = pdfPage.render({
+          canvasContext: ctx,
+          viewport: viewport
+        })
+        return renderTask.promise
+      })
+    })
+  }
+
+  loadPDF (pdfURL) {
+    if (pdfURL === '') return
+
+    PDFJS.getDocument(pdfURL)
+      .then(pdfDocument => {
+        this.pdfDocument = pdfDocument
+        this.setState({
+          numPages: this.pdfDocument.numPages
         })
       }).catch(console.error)
   }
@@ -27,8 +57,22 @@ export default class Sheet extends React.Component {
   render () {
     return (
       <div className={classnames(this.props.className, 'sheet')}>
-        <canvas ref='canvas' />
+        {Array(this.state.numPages).fill().map((_, i) => (
+          <div key={`page-${i + 1}`} className='sheet__page'>
+            <canvas ref={`page-${i + 1}`} />
+          </div>
+        ))}
       </div>
     )
   }
 }
+
+function mapStateToProps (state) {
+  let selectedSong = state.songs.find(s => s.title === state.selectedSong)
+
+  return {
+    pdfURL: `http://www.londoncityvoices.co.uk${selectedSong.voices['Tenor'].sheet}`
+  }
+}
+
+export default connect(mapStateToProps)(Sheet)

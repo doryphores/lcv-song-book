@@ -1,8 +1,8 @@
-import { RESTORE, LOAD_RESOURCES } from '../actions'
+import { LOAD_RESOURCES } from '../actions'
 
 let initialState = []
 
-export const resources = (state = initialState, { type, payload }) => {
+export const songs = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOAD_RESOURCES:
       var songs = payload.reduce((songs, r) => {
@@ -34,6 +34,6 @@ const ALIASES = {
   'waking in a winter wonderland': 'Walking In A Winter Wonderland'
 }
 
-function sortSongs(songs) {
+function sortSongs (songs) {
   return songs.sort((a, b) => a.title.localeCompare(b.title))
 }
