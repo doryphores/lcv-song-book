@@ -15,7 +15,6 @@ class Sheet extends React.Component {
       pageWidth: 0,
       pdfURL: ''
     }
-    this.renderers = Promise.resolve()
   }
 
   componentDidMount () {
@@ -67,19 +66,17 @@ class Sheet extends React.Component {
   renderPDF () {
     if (this.state.numPages === 0) return
 
-    this.renderers = this.renderers.then(() => {
-      return range(this.state.numPages).map(i => {
-        return this.pdfDocument.getPage(i + 1).then(pdfPage => {
-          let viewport = pdfPage.getViewport(1.0)
-          let canvas = this.refs[`page-${i + 1}`]
-          let scale = this.state.pageWidth / viewport.width
-          viewport = pdfPage.getViewport(scale)
-          canvas.width = viewport.width
-          canvas.height = viewport.height
-          return pdfPage.render({
-            canvasContext: canvas.getContext('2d'),
-            viewport: viewport
-          })
+    range(this.state.numPages).forEach(i => {
+      this.pdfDocument.getPage(i + 1).then(pdfPage => {
+        let viewport = pdfPage.getViewport(1.0)
+        let canvas = this.refs[`page-${i + 1}`]
+        let scale = this.state.pageWidth / viewport.width
+        viewport = pdfPage.getViewport(scale)
+        canvas.width = viewport.width
+        canvas.height = viewport.height
+        pdfPage.render({
+          canvasContext: canvas.getContext('2d'),
+          viewport: viewport
         })
       })
     })
