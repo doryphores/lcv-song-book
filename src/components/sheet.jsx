@@ -3,18 +3,30 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { PDFJS } from 'pdfjs-dist'
 
+import { debounce, range } from '../utils'
+
 PDFJS.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js'
 
 class Sheet extends React.Component {
   constructor () {
     super()
     this.state = {
-      numPages: 0
+      numPages: 0,
+      pageWidth: 0,
+      pdfURL: ''
     }
+    this.renderers = Promise.resolve()
   }
 
   componentDidMount () {
     this.loadPDF(this.props.pdfURL)
+    this.onResize = debounce(this.handleResize.bind(this), 100)
+    this.setState({ pageWidth: this.refs.container.clientWidth })
+    window.addEventListener('resize', this.onResize)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.onResize)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -23,23 +35,14 @@ class Sheet extends React.Component {
     }
   }
 
-  componentDidUpdate () {
-    Array(this.state.numPages).fill().map((_, i) => {
-      this.pdfDocument.getPage(i + 1).then(pdfPage => {
-        let viewport = pdfPage.getViewport(1.0)
-        let canvas = this.refs[`page-${i + 1}`]
-        let scale = canvas.parentNode.offsetWidth / viewport.width
-        viewport = pdfPage.getViewport(scale)
-        canvas.width = viewport.width
-        canvas.height = viewport.height
-        let ctx = canvas.getContext('2d')
-        let renderTask = pdfPage.render({
-          canvasContext: ctx,
-          viewport: viewport
-        })
-        return renderTask.promise
-      })
-    })
+  componentDidUpdate (prevProps, prevState) {
+    if (
+      prevState.pdfURL !== this.state.pdfURL ||
+      prevState.numPages !== this.state.numPages ||
+      prevState.pageWidth !== this.state.pageWidth
+    ) {
+      this.renderPDF()
+    }
   }
 
   loadPDF (pdfURL) {
@@ -50,18 +53,48 @@ class Sheet extends React.Component {
     PDFJS.getDocument(pdfURL)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
-        this.setState({ numPages: this.pdfDocument.numPages })
+        this.setState({
+          pdfURL: pdfURL,
+          numPages: this.pdfDocument.numPages
+        })
       }).catch(console.error)
+  }
+
+  handleResize () {
+    this.setState({ pageWidth: this.refs.container.clientWidth })
+  }
+
+  renderPDF () {
+    if (this.state.numPages === 0) return
+
+    this.renderers = this.renderers.then(() => {
+      return range(this.state.numPages).map(i => {
+        return this.pdfDocument.getPage(i + 1).then(pdfPage => {
+          let viewport = pdfPage.getViewport(1.0)
+          let canvas = this.refs[`page-${i + 1}`]
+          let scale = this.state.pageWidth / viewport.width
+          viewport = pdfPage.getViewport(scale)
+          canvas.width = viewport.width
+          canvas.height = viewport.height
+          return pdfPage.render({
+            canvasContext: canvas.getContext('2d'),
+            viewport: viewport
+          })
+        })
+      })
+    })
   }
 
   render () {
     return (
       <div className={classnames(this.props.className, 'sheet')}>
-        {Array(this.state.numPages).fill().map((_, i) => (
-          <div key={`page-${i + 1}`} className='sheet__page'>
-            <canvas ref={`page-${i + 1}`} />
-          </div>
-        ))}
+        <div ref='container'>
+          {range(this.state.numPages).map(i => (
+            <div key={`page-${i + 1}`} className='sheet__page'>
+              <canvas ref={`page-${i + 1}`} />
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
