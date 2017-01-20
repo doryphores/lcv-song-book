@@ -3,15 +3,21 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { configureStore } from './store'
-import { adapter, connect } from './player/adapter'
-import App from './components/app'
+import Toolbar from './components/toolbar'
+import Sidebar from './components/sidebar'
+import SelectedSong from './components/selected_song'
 
 export function start (container) {
-  configureStore(adapter).then(store => {
-    connect(store)
+  configureStore().then(store => {
     ReactDOM.render(
       <Provider store={store}>
-        <App />
+        <div className='u-flex u-flex--full u-flex--vertical'>
+          <Toolbar className='u-flex__panel' />
+          <div className='u-flex__panel u-flex__panel--grow u-flex u-flex--full u-flex--horizontal'>
+            <Sidebar className='u-flex__panel' />
+            <SelectedSong className='u-flex__panel u-flex__panel--grow' />
+          </div>
+        </div>
       </Provider>,
       container
     )
