@@ -5,35 +5,36 @@ let initialState = []
 export const songs = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOAD_RESOURCES:
-      var songs = payload.reduce((songs, r) => {
-        let title = ALIASES[r.title.toLowerCase()] || r.title
-        let index = songs.findIndex(s => s.title.toLowerCase() === title.toLowerCase())
-        let voices = {}
-        if (index > -1) {
-          voices = songs[index].voices
-        } else {
-          songs.push({
-            title: title,
-            voices: voices
-          })
-        }
-        voices[r.voice] = Object.assign({}, voices[r.voice], {
-          [/pdf$/.test(r.url) ? 'sheet' : 'recording']: r.url
-        })
+      return sortSongs(payload.reduce((songs, r) => {
+        let song = addSong(songs, r.title)
+        song[/pdf$/.test(r.url) ? 'sheets' : 'recordings'][r.voice] = r.url
         return songs
-      }, [])
-      return sortSongs(songs)
+      }, []))
     default:
       return state
   }
+}
+
+function addSong (songs, title) {
+  title = ALIASES[title.toLowerCase()] || title
+  let idx = songs.findIndex(s => s.title.toLowerCase() === title.toLowerCase())
+  if (idx === -1) {
+    songs.push({
+      title: title,
+      recordings: {},
+      sheets: {}
+    })
+    idx = songs.length - 1
+  }
+  return songs[idx]
+}
+
+function sortSongs (songs) {
+  return songs.sort((a, b) => a.title.localeCompare(b.title))
 }
 
 const ALIASES = {
   'chirstmas in la': 'Christmas in LA',
   'if you don\'t know me': 'If you don\'t know me by now',
   'waking in a winter wonderland': 'Walking In A Winter Wonderland'
-}
-
-function sortSongs (songs) {
-  return songs.sort((a, b) => a.title.localeCompare(b.title))
 }

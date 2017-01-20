@@ -2,13 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { SELECT_SONG } from '../actions'
+import { selectSong } from '../actions'
 
-const Sidebar = ({ className, songs, onSelect }) => (
+const Sidebar = ({ className, songs, selectedSong, onSelect }) => (
   <ul className={classnames(className, 'sidebar')}>
     {songs.map(s => (
       <li key={s.title}
-        className={classnames('sidebar__item', { 'sidebar__item--selected': s.selected })}
+        className={itemClassNames(s.title, s.title === selectedSong.title)}
         onClick={() => onSelect(s.title)}>
         {s.title}
       </li>
@@ -16,20 +16,20 @@ const Sidebar = ({ className, songs, onSelect }) => (
   </ul>
 )
 
+function itemClassNames (title, selected) {
+  return classnames('sidebar__item', { 'sidebar__item--selected': selected })
+}
+
 function mapDispatchToProps (dispatch) {
   return {
-    onSelect: (title) => dispatch({
-      type: SELECT_SONG,
-      payload: title
-    })
+    onSelect: (title) => dispatch(selectSong(title))
   }
 }
 
 function mapStateToProps (state) {
   return {
-    songs: state.songs.map(s => Object.assign(s, {
-      selected: s.title === state.selectedSong
-    }))
+    selectedSong: state.selectedSong,
+    songs: state.songs
   }
 }
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { PDFJS } from 'pdfjs-dist'
 
@@ -7,7 +6,7 @@ import { debounce, range } from '../utils'
 
 PDFJS.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js'
 
-class Sheet extends React.Component {
+export default class Sheet extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -47,9 +46,10 @@ class Sheet extends React.Component {
   loadPDF (pdfURL) {
     if (pdfURL === '') {
       this.setState({ numPages: 0 })
+      return
     }
 
-    PDFJS.getDocument(pdfURL)
+    PDFJS.getDocument(`http://www.londoncityvoices.co.uk${pdfURL}`)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
         this.setState({
@@ -96,18 +96,3 @@ class Sheet extends React.Component {
     )
   }
 }
-
-function mapStateToProps (state) {
-  if (state.selectedVoice === '' || state.selectedSong === '') {
-    return { pdfURL: '' }
-  }
-
-  let selectedSong = state.songs.find(s => s.title === state.selectedSong)
-  let voice = selectedSong.voices[state.selectedVoice.replace(/ [12]/, '')] || selectedSong.voices['All parts']
-
-  return {
-    pdfURL: `http://www.londoncityvoices.co.uk${voice.sheet}`
-  }
-}
-
-export default connect(mapStateToProps)(Sheet)

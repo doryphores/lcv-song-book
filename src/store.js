@@ -1,7 +1,8 @@
 import { remote } from 'electron'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { outputJSONSync, readJSON } from 'fs-extra'
 import path from 'path'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 
 import * as reducers from './reducers'
 import { RESTORE } from './actions'
@@ -19,7 +20,7 @@ export function configureStore (...middleware) {
         let store = createStore(
           reducer,
           reducer(data, { type: RESTORE }),
-          applyMiddleware(...middleware)
+          applyMiddleware(...middleware, thunk)
         )
 
         window.addEventListener('beforeunload', () => {

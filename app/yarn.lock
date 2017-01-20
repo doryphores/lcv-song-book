@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+add-zero@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/add-zero/-/add-zero-1.0.0.tgz#88e221696717f66db467672f3f9aa004de9f1a2c"
+
 asap@~2.0.3:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.5.tgz#522765b50c3510490e52d7dcfe085ef9ba96958f"
@@ -114,9 +118,20 @@ fbjs@^0.8.1, fbjs@^0.8.4:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
+format-duration@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/format-duration/-/format-duration-1.0.0.tgz#27a6f14639e743e25ab4d4f14f0dc43e5323ecc3"
+  dependencies:
+    add-zero "^1.0.0"
+    parse-ms "^1.0.1"
+
 hoist-non-react-statics@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
+
+howler@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/howler/-/howler-2.0.2.tgz#74862fdc86db5130c861f7528b1b06f21b16bcbf"
 
 htmlparser2@^3.9.1:
   version "3.9.2"
@@ -245,6 +260,10 @@ object-assign@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.0.tgz#7a3b3d0e98063d43f4c03f2e8ae6cd51a86883a0"
 
+parse-ms@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/parse-ms/-/parse-ms-1.0.1.tgz#56346d4749d78f23430ca0c713850aef91aa361d"
+
 pdfjs-dist@^1.6.458:
   version "1.6.458"
   resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.6.458.tgz#2c2c9d9143fd03b85f3e37d199c468c512fadaf3"
@@ -304,6 +323,10 @@ readable-stream@^2.0.2:
     process-nextick-args "~1.0.6"
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
+
+redux-thunk@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.2.0.tgz#e615a16e16b47a19a515766133d1e3e99b7852e5"
 
 redux@^3.6.0:
   version "3.6.0"
