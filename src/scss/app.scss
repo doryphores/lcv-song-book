@@ -1,7 +1,9 @@
 @import 'flex_utils',
         'forms',
+        'toolbar',
         'sidebar',
-        'sheet';
+        'sheet',
+        'player';
 
 * {
   box-sizing: border-box;
@@ -22,4 +24,11 @@ body {
 
 .app-container {
   height: 100%;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
 }

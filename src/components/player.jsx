@@ -3,6 +3,8 @@ import classnames from 'classnames'
 import format from 'format-duration'
 import { Howl } from 'howler'
 
+import Icon from './icon'
+
 export default class Player extends React.Component {
   constructor () {
     super()
@@ -37,6 +39,7 @@ export default class Player extends React.Component {
     if (this.howl) this.howl.unload()
 
     this.setState({
+      duration: 0,
       progress: 0,
       loading: true,
       playing: false,
@@ -57,6 +60,7 @@ export default class Player extends React.Component {
           paused: false,
           loading: false
         })
+        this.step()
       },
       onpause: () => {
         this.setState({
@@ -69,9 +73,7 @@ export default class Player extends React.Component {
   }
 
   step () {
-    this.setState({
-      progress: this.howl.seek() || 0
-    })
+    this.setState({ progress: this.howl.seek() || 0 })
 
     if (this.howl.playing()) {
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
@@ -87,10 +89,12 @@ export default class Player extends React.Component {
   }
 
   render () {
+    if (!this.props.recordingURL) return null
+
     return (
       <div className={classnames(this.props.className, 'player')}>
         <button onClick={this.togglePlay.bind(this)}>
-          {this.state.playing ? 'Pause' : 'Play'}
+          <Icon icon={this.state.playing ? 'pause' : 'play_arrow'} />
         </button>
         <span>
           {format(this.state.progress * 1000)} / {format(this.state.duration * 1000)}
