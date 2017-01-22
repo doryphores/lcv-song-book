@@ -2,11 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { SELECT_VOICE } from '../actions'
+import { selectVoice } from '../actions'
 import Scraper from './scraper'
 import Icon from './icon'
 
-const VOICES = ['Soprano 1', 'Soprano 2', 'Alto 1', 'Alto 2', 'Tenor 1', 'Tenor 2', 'Bass']
+const VOICES = ['Soprano 1', 'Soprano 2', 'Alto 1', 'Alto 2', 'Tenor 1', 'Tenor 2', 'Bass 1', 'Bass 2']
 
 class Toolbar extends React.Component {
   constructor () {
@@ -46,10 +46,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    onSelect: (voice) => dispatch({
-      type: SELECT_VOICE,
-      payload: voice
-    })
+    onSelect: (voice) => dispatch(selectVoice(voice))
   }
 }
 

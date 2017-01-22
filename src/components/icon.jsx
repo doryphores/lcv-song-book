@@ -4,9 +4,10 @@ import classnames from 'classnames'
 const ICONS = {
   'settings': 'action',
   'play_arrow': 'av',
-  'paused': 'av',
+  'pause': 'av',
   'arrow_drop_down': 'navigation',
   'refresh': 'navigation',
+  'close': 'navigation',
   'check': 'navigation'
 }
 

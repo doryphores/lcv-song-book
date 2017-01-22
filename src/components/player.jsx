@@ -47,7 +47,7 @@ export default class Player extends React.Component {
     })
 
     this.howl = new Howl({
-      src: [`http://www.londoncityvoices.co.uk${src}`],
+      src: [src],
       onload: () => {
         this.setState({
           loading: false,
@@ -93,7 +93,7 @@ export default class Player extends React.Component {
 
     return (
       <div className={classnames(this.props.className, 'player')}>
-        <button onClick={this.togglePlay.bind(this)}>
+        <button className='player__button' onClick={this.togglePlay.bind(this)}>
           <Icon icon={this.state.playing ? 'pause' : 'play_arrow'} />
         </button>
         <span>

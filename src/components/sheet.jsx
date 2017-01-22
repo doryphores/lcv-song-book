@@ -49,7 +49,7 @@ export default class Sheet extends React.Component {
       return
     }
 
-    PDFJS.getDocument(`http://www.londoncityvoices.co.uk${pdfURL}`)
+    PDFJS.getDocument(pdfURL)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
         this.setState({

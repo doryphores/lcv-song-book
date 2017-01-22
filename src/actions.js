@@ -2,7 +2,6 @@ export const RESTORE = 'RESTORE'
 
 export const LOAD_RESOURCES = 'LOAD_RESOURCES'
 
-export const SELECT_SONG = 'SELECT_SONG'
 export const SELECT_VOICE = 'SELECT_VOICE'
 export const SONG_SELECTED = 'SONG_SELECTED'
 
@@ -12,6 +11,17 @@ export const PLAYER_LOADED = 'PLAYER_LOADED'
 export const PLAYER_PLAYING = 'PLAYER_PLAYING'
 export const PLAYER_PAUSED = 'PLAYER_PAUSED'
 export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
+
+export function selectVoice (voice) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: SELECT_VOICE,
+      payload: voice
+    })
+    let songTitle = getState().selectedSong.title
+    if (songTitle) dispatch(selectSong(songTitle))
+  }
+}
 
 export function selectSong (title) {
   return function (dispatch, getState) {

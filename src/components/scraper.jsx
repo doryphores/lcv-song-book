@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import WebView from 'react-electron-webview'
-import cheerio from 'cheerio'
 
 import { LOAD_RESOURCES } from '../actions'
 import Icon from './icon'
@@ -34,7 +33,7 @@ class Scraper extends React.Component {
 
     this.setState({
       started: true,
-      progress: 'Accessing LCV website...'
+      progress: 'Accessing LCV website…'
     })
   }
 
@@ -44,37 +43,39 @@ class Scraper extends React.Component {
         e.target.executeJavaScript(`
           document.querySelector('#smartPassword').value = '${this.state.password}'
           document.querySelector('#smartPWLogin').submit()
-        `, true, () => this.setState({ progress: 'Logging in to resources area...' }))
+        `, true, () => this.setState({ progress: 'Accessing resources area…' }))
         break
       case 'http://www.londoncityvoices.co.uk/choir-resources/choir-resources-2/':
-        this.setState({ progress: 'Retrieving LCV resource information...' })
         this.harvestData(e.target)
         break
     }
   }
 
   harvestData (webView) {
-    webView.executeJavaScript('document.querySelector("#downloads").innerHTML', true, html => {
-      let $ = cheerio.load(html)
-
-      let resources = $('a[href$=pdf], a[href$=mp3]').map((i, el) => {
+    webView.executeJavaScript(
+      `Array.prototype.slice.call(
+        document.querySelectorAll('#downloads a[href$=pdf], #downloads a[href$=mp3]'),
+        0
+      ).map(el => {
         return {
-          title: $(el).closest('tr').find('td:first-child').text().trim(),
-          voice: $(el).text().trim(),
-          url: $(el).attr('href').trim()
+          title: el.closest('tr').querySelector('td:first-child').innerHTML.trim(),
+          voice: el.innerHTML.trim(),
+          url: el.href
         }
-      }).toArray()
+      })`,
+      true,
+      resources => {
+        this.props.loadResources(resources)
 
-      this.props.loadResources(resources)
+        this.setState({
+          progress: `All resources retrieved`,
+          done: true
+        })
 
-      this.setState({
-        progress: `All resources retrieved`,
-        done: true
-      })
-
-      setTimeout(() => this.setState({ open: false }), 2000)
-      setTimeout(() => this.setState({ done: false }), 3000)
-    })
+        setTimeout(() => this.setState({ open: false }), 2000)
+        setTimeout(() => this.setState({ done: false }), 3000)
+      }
+    )
   }
 
   renderBrowser () {
@@ -130,13 +131,15 @@ class Scraper extends React.Component {
   render () {
     return (
       <div className={this.classNames()}>
-        <Icon icon='settings'
+        <Icon icon={this.state.open ? 'close' : 'settings'}
           className='scraper__toggle'
           onClick={this.toggle.bind(this)} />
 
         <div className='scraper__overlay u-flex u-flex--vertical u-flex--center'>
-          {this.renderContents()}
-          {this.renderBrowser()}
+          <div className='scraper__panel'>
+            {this.renderContents()}
+            {this.renderBrowser()}
+          </div>
         </div>
       </div>
     )

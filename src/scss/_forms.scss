@@ -10,7 +10,7 @@
 
 .field__icon {
   position: absolute;
-  right: 6px;
+  right: 0;
   top: 50%;
   margin-top: -12px;
   line-height: 24px;
@@ -25,19 +25,21 @@
   display: block;
   margin-bottom: 6px;
   font-size: 12px;
-  color: #fff;
+  color: rgba(#000, .54);
 }
 
 .field__input {
   width: 100%;
-  padding: 6px;
+  padding: 6px 0 4px;
   border: none;
   outline: none;
-  background-color: #fff;
+  background-color: transparent;
+  border-bottom: 1px solid #eee;
   font-family: inherit;
+  color: inherit;
   font-size: 16px;
-  border-radius: 2px;
 
+  &:focus,
   .field:hover & {
     border-color: #ddd;
   }
@@ -45,6 +47,10 @@
   .field--dropdown & {
     -webkit-appearance: none;
     cursor: pointer;
+  }
+
+  option {
+    color: #000;
   }
 }
 

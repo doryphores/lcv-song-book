@@ -1,37 +1,42 @@
 .scraper__toggle {
+  position: relative;
+  z-index: 2;
   cursor: pointer;
   fill: #fff;
 }
 
 .scraper__overlay {
   position: fixed;
-  z-index: 2;
+  z-index: 1;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   justify-content: center;
-  background-color: rgba(#000, .9);
-  transform: scale(.5);
-  opacity: 0;
-  transition: all .2s;
+  background-color: rgba(#000, .7);
+  transform: translateY(-100%);
+  transition: transform .4s;
 
   .scraper--open & {
-    transform: scale(1);
-    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.scraper__progress {
-  padding: 10px;
-  background-color: rgba(#fff, .7);
+.scraper__panel {
+  padding: 40px;
+  background-color: #fff;
   border-radius: 2px;
+  box-shadow: 0 4px 6px rgba(#000, .3);
+  color: rgba(#000, .87);
+  fill: rgba(#000, .87);
+}
+
+.scraper__progress {
   font-size: 22px;
 }
 
 .scraper__progress-icon {
   margin-right: 10px;
-  fill: rgba(#000, .87);
   animation: spin 1s infinite linear;
 
   .scraper--done & {
