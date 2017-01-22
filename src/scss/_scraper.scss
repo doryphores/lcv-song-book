@@ -1,0 +1,45 @@
+.scraper__toggle {
+  cursor: pointer;
+  fill: #fff;
+}
+
+.scraper__overlay {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  background-color: rgba(#000, .9);
+  transform: scale(.5);
+  opacity: 0;
+  transition: all .2s;
+
+  .scraper--open & {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.scraper__progress {
+  padding: 10px;
+  background-color: rgba(#fff, .7);
+  border-radius: 2px;
+  font-size: 22px;
+}
+
+.scraper__progress-icon {
+  margin-right: 10px;
+  fill: rgba(#000, .87);
+  animation: spin 1s infinite linear;
+
+  .scraper--done & {
+    animation: none;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

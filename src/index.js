@@ -8,9 +8,11 @@ app.on('ready', () => {
   // Window setup
 
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: false
+    minWidth: 800,
+    minHeight: 600,
+    center: true,
+    show: false,
+    autoHideMenuBar: true
   })
 
   win.once('ready-to-show', () => win.show())

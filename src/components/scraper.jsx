@@ -1,18 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import classnames from 'classnames'
 import WebView from 'react-electron-webview'
 import cheerio from 'cheerio'
 
 import { LOAD_RESOURCES } from '../actions'
+import Icon from './icon'
 
 class Scraper extends React.Component {
   constructor () {
     super()
     this.state = {
+      open: false,
+      started: false,
+      done: false,
       password: '',
-      progress: '',
-      started: false
+      progress: ''
     }
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (!prevState.open && this.state.open) {
+      this.refs.password.focus()
+    }
+  }
+
+  toggle () {
+    this.setState({ open: !this.state.open })
   }
 
   getResources (e) {
@@ -54,8 +68,12 @@ class Scraper extends React.Component {
       this.props.loadResources(resources)
 
       this.setState({
-        progress: `Retrieved ${resources.length} resources`
+        progress: `All resources retrieved`,
+        done: true
       })
+
+      setTimeout(() => this.setState({ open: false }), 2000)
+      setTimeout(() => this.setState({ done: false }), 3000)
     })
   }
 
@@ -69,23 +87,58 @@ class Scraper extends React.Component {
     )
   }
 
+  renderContents () {
+    if (this.state.started) {
+      return (
+        <div className='scraper__progress'>
+          <Icon className='scraper__progress-icon'
+            icon={this.state.done ? 'check' : 'refresh'} />
+          <span>{this.state.progress}</span>
+        </div>
+      )
+    } else {
+      return (
+        <form onSubmit={this.getResources.bind(this)}>
+          <label className='field'>
+            <span className='field__label'>LCV website password</span>
+            <input ref='password'
+              type='password'
+              className='field__input'
+              value={this.state.password}
+              required
+              onChange={(e) => this.setState({ password: e.target.value })} />
+          </label>
+          <div className='form-actions'>
+            <button className='button'>Get resources</button>
+          </div>
+        </form>
+      )
+    }
+  }
+
+  classNames () {
+    return classnames(
+      this.props.className,
+      'scraper',
+      {
+        'scraper--open': this.state.open,
+        'scraper--done': this.state.done
+      }
+    )
+  }
+
   render () {
     return (
-      <form className='scraper' onSubmit={this.getResources.bind(this)}>
-        <label className='field'>
-          <span className='field__label'>LCV website password</span>
-          <input type='password'
-            className='field__input'
-            value={this.state.password}
-            required
-            onChange={(e) => this.setState({ password: e.target.value })} />
-        </label>
-        <div className='form-actions'>
-          <button className='button'>Get resources</button>
+      <div className={this.classNames()}>
+        <Icon icon='settings'
+          className='scraper__toggle'
+          onClick={this.toggle.bind(this)} />
+
+        <div className='scraper__overlay u-flex u-flex--vertical u-flex--center'>
+          {this.renderContents()}
+          {this.renderBrowser()}
         </div>
-        <span>{this.state.progress}</span>
-        {this.renderBrowser()}
-      </form>
+      </div>
     )
   }
 }
