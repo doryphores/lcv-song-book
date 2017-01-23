@@ -7,7 +7,8 @@ export const songs = (state = initialState, { type, payload }) => {
     case LOAD_RESOURCES:
       return sortSongs(payload.reduce((songs, r) => {
         let song = addSong(songs, r.title)
-        song[/pdf$/.test(r.url) ? 'sheets' : 'recordings'][r.voice] = r.url
+        let type = /pdf$/.test(r.url) ? 'sheets' : 'recordings'
+        song[type][r.voice.toLowerCase()] = r.url
         return songs
       }, []))
     default:

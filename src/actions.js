@@ -36,7 +36,7 @@ export function selectSong (title) {
         sheet: selectSheet(song, voice),
         recordings: {
           voice: selectVoiceRecording(song, voice),
-          full: song.recordings['Full song']
+          full: song.recordings['full song']
         }
       }
     })
@@ -44,14 +44,16 @@ export function selectSong (title) {
 }
 
 function selectSheet (song, voice) {
+  voice = voice.toLowerCase()
   return song.sheets[voice] ||
     song.sheets[voice.replace(/ [12]/, '')] ||
     song.sheets[voice.replace(/ 1/, ' 2')] ||
     song.sheets[voice.replace(/ 2/, ' 1')] ||
-    song.sheets['All parts']
+    song.sheets['all parts']
 }
 
 function selectVoiceRecording (song, voice) {
+  voice = voice.toLowerCase()
   return song.recordings[voice] ||
     song.recordings[voice.replace(/ [12]/, '')] ||
     song.recordings[voice.replace(/ [12]/, '') + ' 1 + 2']
