@@ -6,7 +6,6 @@
   "license": "MIT",
   "main": "js/index.js",
   "dependencies": {
-    "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
     "format-duration": "^1.0.0",
     "howler": "^2.0.2",
