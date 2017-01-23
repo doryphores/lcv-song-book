@@ -23,10 +23,11 @@
 }
 
 .scraper__panel {
+  min-width: 400px;
   padding: 40px;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 4px 6px rgba(#000, .3);
+  @include card-shadow(4);
   color: rgba(#000, .87);
   fill: rgba(#000, .87);
 }
