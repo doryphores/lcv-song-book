@@ -1,10 +1,11 @@
 .player {
-  padding: 10px;
+  padding: 10px 20px 10px 10px;
   border-top: 1px solid #ddd;
   align-items: center;
 }
 
 .player__button {
+  padding: 0;
   margin-right: 20px;
   -webkit-appearance: none;
   border: none;

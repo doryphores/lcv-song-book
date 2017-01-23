@@ -18,7 +18,7 @@ export default class Player extends React.Component {
       loading: false
     }
     this.cancelSeek = this.cancelSeek.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
   componentDidMount () {
@@ -26,14 +26,14 @@ export default class Player extends React.Component {
       this.loadRecording(this.props.recordingURL)
     }
     window.addEventListener('mouseup', this.cancelSeek)
-    window.addEventListener('keypress', this.handleKeyPress)
+    window.addEventListener('keydown', this.handleKeyDown)
   }
 
   componentWillUnmount () {
     if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame)
     if (this.howl) this.howl.unload()
     window.removeEventListener('mouseup', this.cancelSeek)
-    window.removeEventListener('keypress', this.handleKeyPress)
+    window.removeEventListener('keydown', this.handleKeyDown)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -90,17 +90,20 @@ export default class Player extends React.Component {
     }
   }
 
-  handleKeyPress (e) {
+  handleKeyDown (e) {
     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
     switch (e.which) {
       case 32:
         this.togglePlay()
         e.preventDefault()
         break
+      case 37:
+        if (this.howl) this.howl.seek(0)
+        break
     }
   }
 
-  togglePlay () {
+  togglePlay (e) {
     if (this.state.playing) {
       this.howl.pause()
     } else {
@@ -138,7 +141,9 @@ export default class Player extends React.Component {
 
     return (
       <div className={classnames(this.props.className, 'player u-flex u-flex--horizontal')}>
-        <button className='u-flex__panel player__button' onClick={this.togglePlay.bind(this)}>
+        <button className='u-flex__panel player__button'
+          onClick={this.togglePlay.bind(this)}
+          onKeyUp={(e) => e.preventDefault()}>
           <Icon className='player__button-icon' icon={this.state.playing ? 'pause_circle_filled' : 'play_circle_filled'} />
         </button>
         <span className='u-flex__panel player__time'>
