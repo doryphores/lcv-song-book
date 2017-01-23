@@ -3,8 +3,8 @@ import classnames from 'classnames'
 
 const ICONS = {
   'settings': 'action',
-  'play_arrow': 'av',
-  'pause': 'av',
+  'play_circle_filled': 'av',
+  'pause_circle_filled': 'av',
   'arrow_drop_down': 'navigation',
   'refresh': 'navigation',
   'close': 'navigation',

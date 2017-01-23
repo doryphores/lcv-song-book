@@ -52,6 +52,7 @@ export default class Sheet extends React.Component {
     PDFJS.getDocument(pdfURL)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
+        this.refs.container.parentNode.scrollTop = 0
         this.setState({
           pdfURL: pdfURL,
           numPages: this.pdfDocument.numPages

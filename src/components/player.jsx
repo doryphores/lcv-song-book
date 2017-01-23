@@ -14,19 +14,26 @@ export default class Player extends React.Component {
       progress: 0,
       playing: false,
       paused: false,
+      seeking: false,
       loading: false
     }
+    this.cancelSeek = this.cancelSeek.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   componentDidMount () {
     if (this.props.recordingURL) {
       this.loadRecording(this.props.recordingURL)
     }
+    window.addEventListener('mouseup', this.cancelSeek)
+    window.addEventListener('keypress', this.handleKeyPress)
   }
 
   componentWillUnmount () {
     if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame)
     if (this.howl) this.howl.unload()
+    window.removeEventListener('mouseup', this.cancelSeek)
+    window.removeEventListener('keypress', this.handleKeyPress)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -43,7 +50,8 @@ export default class Player extends React.Component {
       progress: 0,
       loading: true,
       playing: false,
-      paused: false
+      paused: false,
+      seeking: false
     })
 
     this.howl = new Howl({
@@ -73,10 +81,22 @@ export default class Player extends React.Component {
   }
 
   step () {
-    this.setState({ progress: this.howl.seek() || 0 })
+    if (!this.state.seeking) {
+      this.setState({ progress: this.howl.seek() || 0 })
+    }
 
     if (this.howl.playing()) {
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
+    }
+  }
+
+  handleKeyPress (e) {
+    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
+    switch (e.which) {
+      case 32:
+        this.togglePlay()
+        e.preventDefault()
+        break
     }
   }
 
@@ -88,16 +108,50 @@ export default class Player extends React.Component {
     }
   }
 
+  seekFromMouseEvent (e) {
+    return (e.clientX - e.target.offsetLeft) / e.target.offsetWidth * this.state.duration
+  }
+
+  startSeek (e) {
+    this.setState({
+      progress: this.seekFromMouseEvent(e),
+      seeking: true
+    })
+  }
+
+  updateSeek (e) {
+    if (!this.state.seeking) return
+    this.setState({ progress: this.seekFromMouseEvent(e) })
+  }
+
+  stopSeek (e) {
+    this.setState({ seeking: false })
+    this.howl.seek(this.state.progress)
+  }
+
+  cancelSeek (e) {
+    this.setState({ seeking: false })
+  }
+
   render () {
     if (!this.props.recordingURL) return null
 
     return (
-      <div className={classnames(this.props.className, 'player')}>
-        <button className='player__button' onClick={this.togglePlay.bind(this)}>
-          <Icon icon={this.state.playing ? 'pause' : 'play_arrow'} />
+      <div className={classnames(this.props.className, 'player u-flex u-flex--horizontal')}>
+        <button className='u-flex__panel player__button' onClick={this.togglePlay.bind(this)}>
+          <Icon className='player__button-icon' icon={this.state.playing ? 'pause_circle_filled' : 'play_circle_filled'} />
         </button>
-        <span>
-          {format(this.state.progress * 1000)} / {format(this.state.duration * 1000)}
+        <span className='u-flex__panel player__time'>
+          {format(this.state.progress * 1000)}
+        </span>
+        <progress className='player__progress u-flex__panel u-flex__panel--grow'
+          onMouseMove={(e) => this.updateSeek(e)}
+          onMouseDown={(e) => this.startSeek(e)}
+          onMouseUp={(e) => this.stopSeek(e)}
+          value={this.state.progress}
+          max={this.state.duration} />
+        <span className='u-flex__panel player__duration'>
+          {format(this.state.duration * 1000)}
         </span>
       </div>
     )
