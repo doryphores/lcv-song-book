@@ -46,10 +46,13 @@ export function selectSong (title) {
 function selectSheet (song, voice) {
   return song.sheets[voice] ||
     song.sheets[voice.replace(/ [12]/, '')] ||
+    song.sheets[voice.replace(/ 1/, ' 2')] ||
+    song.sheets[voice.replace(/ 2/, ' 1')] ||
     song.sheets['All parts']
 }
 
 function selectVoiceRecording (song, voice) {
   return song.recordings[voice] ||
-    song.recordings[voice.replace(/ [12]/, '')]
+    song.recordings[voice.replace(/ [12]/, '')] ||
+    song.recordings[voice.replace(/ [12]/, '') + ' 1 + 2']
 }
