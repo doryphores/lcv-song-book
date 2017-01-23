@@ -6,19 +6,21 @@ import Sheet from './sheet'
 import Player from './player'
 import { TOGGLE_PLAY } from '../actions'
 
-const SelectedSong = ({ className, sheetMusicURL, recordingURL }) => (
+const SelectedSong = ({ className, sheetMusicURL, fullRecordingURL, voiceRecordingURL }) => (
   <div className={classnames(className, 'u-flex u-flex--vertical')}>
     <Sheet className='u-flex__panel u-flex__panel--grow'
       pdfURL={sheetMusicURL} />
-    <Player className='u-flex__panel' recordingURL={recordingURL} />
+    <Player className='u-flex__panel'
+      fullRecordingURL={fullRecordingURL}
+      voiceRecordingURL={voiceRecordingURL} />
   </div>
 )
 
 function mapStateToProps (state) {
   return {
     sheetMusicURL: state.selectedSong.sheet,
-    recordingURL: state.selectedSong.recordings.voice,
-    player: state.player
+    fullRecordingURL: state.selectedSong.recordings.full,
+    voiceRecordingURL: state.selectedSong.recordings.voice
   }
 }
 

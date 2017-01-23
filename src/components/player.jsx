@@ -22,8 +22,8 @@ export default class Player extends React.Component {
   }
 
   componentDidMount () {
-    if (this.props.recordingURL) {
-      this.loadRecording(this.props.recordingURL)
+    if (this.props.voiceRecordingURL) {
+      this.loadRecording(this.props.voiceRecordingURL)
     }
     window.addEventListener('mouseup', this.cancelSeek)
     window.addEventListener('keydown', this.handleKeyDown)
@@ -37,8 +37,8 @@ export default class Player extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.recordingURL !== this.props.recordingURL) {
-      this.loadRecording(nextProps.recordingURL)
+    if (nextProps.voiceRecordingURL !== this.props.voiceRecordingURL) {
+      this.loadRecording(nextProps.voiceRecordingURL)
     }
   }
 
@@ -137,7 +137,7 @@ export default class Player extends React.Component {
   }
 
   render () {
-    if (!this.props.recordingURL) return null
+    if (!this.props.voiceRecordingURL) return null
 
     return (
       <div className={classnames(this.props.className, 'player u-flex u-flex--horizontal')}>
