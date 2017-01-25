@@ -1,5 +1,8 @@
 export const RESTORE = 'RESTORE'
 
+export const RESIZE_SIDEBAR = 'RESIZE_SIDEBAR'
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
+
 export const LOAD_RESOURCES = 'LOAD_RESOURCES'
 
 export const SELECT_VOICE = 'SELECT_VOICE'
