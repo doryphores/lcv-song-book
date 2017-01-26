@@ -7,9 +7,9 @@
 
 .sheet__page {
   background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,.3);
+  @include card-shadow(1);
 
   + .sheet__page {
-    margin-top: 2px;
+    margin-top: 4px;
   }
 }
