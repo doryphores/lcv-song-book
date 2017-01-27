@@ -98,7 +98,12 @@ export default class Player extends React.Component {
         e.preventDefault()
         break
       case 37:
-        if (this.howl) this.howl.seek(0)
+        if (this.howl) {
+          this.howl.seek(0)
+          if (!this.state.playing) {
+            this.setState({ progress: 0 })
+          }
+        }
         break
     }
   }
