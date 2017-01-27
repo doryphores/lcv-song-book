@@ -11,6 +11,12 @@ class Sidebar extends React.Component {
     this.stopResize = this.stopResize.bind(this)
   }
 
+  componentDidMount () {
+    if (this.props.selectedSong) {
+      document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
+    }
+  }
+
   startResize () {
     window.addEventListener('mousemove', this.handleResize)
     window.addEventListener('mouseup', this.stopResize)
