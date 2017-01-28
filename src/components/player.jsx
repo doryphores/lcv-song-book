@@ -10,12 +10,13 @@ export default class Player extends React.Component {
     super()
     this.howl = null
     this.state = {
+      track: 'voice',
+      recordingURL: '',
       duration: 0,
       progress: 0,
       previousProgress: 0,
       startMarker: 0,
       playing: false,
-      paused: false,
       seeking: false,
       loading: false
     }
@@ -25,7 +26,9 @@ export default class Player extends React.Component {
 
   componentDidMount () {
     if (this.props.voiceRecordingURL) {
-      this.loadRecording(this.props.voiceRecordingURL)
+      this.setState({
+        recordingURL: this.recordingURL()
+      })
     }
     window.addEventListener('mouseup', this.cancelSeek)
     window.addEventListener('keydown', this.handleKeyDown)
@@ -39,28 +42,47 @@ export default class Player extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.voiceRecordingURL !== this.props.voiceRecordingURL) {
-      this.loadRecording(nextProps.voiceRecordingURL)
+    if (this.props.voiceRecordingURL !== nextProps.voiceRecordingURL) {
+      this.setState({
+        recordingURL: this.recordingURL({ props: nextProps })
+      })
     }
   }
 
-  loadRecording (src) {
+  componentDidUpdate (prevProps, prevState) {
+    if (this.state.recordingURL !== prevState.recordingURL) {
+      this.loadRecording(prevProps.voiceRecordingURL === this.props.voiceRecordingURL)
+    }
+  }
+
+  recordingURL ({ track, props } = {}) {
+    return (props || this.props)[`${track || this.state.track}RecordingURL`]
+  }
+
+  loadRecording (retainProgress = false) {
     if (this.howl) this.howl.unload()
 
-    this.setState({
-      duration: 0,
-      progress: 0,
-      previousProgress: 0,
-      startMarker: 0,
+    let stateReset = {
       loading: true,
       playing: false,
-      paused: false,
       seeking: false
-    })
+    }
+
+    if (!retainProgress) {
+      Object.assign(stateReset, {
+        duration: 0,
+        progress: 0,
+        previousProgress: 0,
+        startMarker: 0
+      })
+    }
+
+    this.setState(stateReset)
 
     this.howl = new Howl({
-      src: [src],
+      src: [this.state.recordingURL],
       onload: () => {
+        this.howl.seek(this.state.progress)
         this.setState({
           loading: false,
           duration: this.howl.duration()
@@ -69,7 +91,6 @@ export default class Player extends React.Component {
       onplay: () => {
         this.setState({
           playing: true,
-          paused: false,
           loading: false
         })
         this.step()
@@ -77,7 +98,6 @@ export default class Player extends React.Component {
       onpause: () => {
         this.setState({
           playing: false,
-          paused: true,
           loading: false
         })
       }
@@ -148,15 +168,30 @@ export default class Player extends React.Component {
   }
 
   cancelSeek (e) {
+    if (!this.state.seeking) return
     this.setState({
       seeking: false,
       progress: this.state.previousProgress
     })
   }
 
+  selectTrack (track) {
+    this.setState({
+      track: track,
+      recordingURL: this.recordingURL({ track })
+    })
+  }
+
   classNames (classNames) {
     return classnames(this.props.className, classNames, {
-      'player--loading': this.state.loading
+      'player--loading': this.state.loading,
+      'player--empty': this.state.recordingURL === ''
+    })
+  }
+
+  toggleClassNames (t) {
+    return classnames('toggle', {
+      'toggle--selected': t === this.state.track
     })
   }
 
@@ -174,9 +209,20 @@ export default class Player extends React.Component {
       <div className={this.classNames('player u-flex u-flex--horizontal')}>
         <button className='u-flex__panel player__button'
           onClick={this.togglePlay.bind(this)}
+          disabled={this.state.loading}
           onKeyUp={(e) => e.preventDefault()}>
           <Icon className='player__button-icon' icon={this.state.playing ? 'pause_circle_filled' : 'play_circle_filled'} />
         </button>
+        <div className='player__track-switcher'>
+          {['voice', 'full'].map(t => (
+            <button key={t}
+              className={this.toggleClassNames(t)}
+              title={t}
+              onClick={this.selectTrack.bind(this, t)}>
+              {t.charAt(0)}
+            </button>
+          ))}
+        </div>
         <span className='u-flex__panel player__time'>
           {format(this.state.progress * 1000)}
         </span>

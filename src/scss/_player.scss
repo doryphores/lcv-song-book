@@ -5,9 +5,29 @@
   border-top: 1px solid #ddd;
   background-color: #fafafa;
   transition: margin .2s;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(#fff, .5);
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+  }
 }
 
-.player--loading {
+.player--loading::after {
+  pointer-events: auto;
+  cursor: default;
+  opacity: 1;
+}
+
+.player--empty {
   margin-bottom: -68px;
 }
  
@@ -100,4 +120,32 @@
     border-width: 0 0 8px 8px;
     border-left-color: inherit;
   }
+}
+
+.player__track-switcher {
+  margin-right: 20px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.toggle {
+  width: 2em;
+  padding: 5px 0;
+  -webkit-appearance: none;
+  border: none;
+  background-color: #B388FF;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+
+  + .toggle {
+    margin-left: 1px;
+  }
+}
+
+.toggle--selected {
+  background-color: #7C4DFF;
+  cursor: default;
 }
