@@ -123,6 +123,12 @@ export default class Player extends React.Component {
           }
         }
         break
+      case 70:
+        this.selectTrack('full')
+        break
+      case 86:
+        this.selectTrack('voice')
+        break
     }
   }
 
