@@ -12,6 +12,8 @@ export default class Player extends React.Component {
     this.state = {
       duration: 0,
       progress: 0,
+      previousProgress: 0,
+      startMarker: 0,
       playing: false,
       paused: false,
       seeking: false,
@@ -48,6 +50,8 @@ export default class Player extends React.Component {
     this.setState({
       duration: 0,
       progress: 0,
+      previousProgress: 0,
+      startMarker: 0,
       loading: true,
       playing: false,
       paused: false,
@@ -99,9 +103,9 @@ export default class Player extends React.Component {
         break
       case 37:
         if (this.howl) {
-          this.howl.seek(0)
+          this.howl.seek(this.state.startMarker)
           if (!this.state.playing) {
-            this.setState({ progress: 0 })
+            this.setState({ progress: this.state.startMarker })
           }
         }
         break
@@ -117,11 +121,12 @@ export default class Player extends React.Component {
   }
 
   seekFromMouseEvent (e) {
-    return (e.clientX - e.target.offsetLeft) / e.target.offsetWidth * this.state.duration
+    return (e.clientX - this.refs.progressBar.offsetLeft) / this.refs.progressBar.offsetWidth * this.state.duration
   }
 
   startSeek (e) {
     this.setState({
+      previousProgress: this.state.progress,
       progress: this.seekFromMouseEvent(e),
       seeking: true
     })
@@ -133,12 +138,26 @@ export default class Player extends React.Component {
   }
 
   stopSeek (e) {
-    this.setState({ seeking: false })
+    e.stopPropagation()
+    this.setState({
+      seeking: false,
+      startMarker: this.state.progress
+    })
     this.howl.seek(this.state.progress)
   }
 
   cancelSeek (e) {
-    this.setState({ seeking: false })
+    this.setState({
+      seeking: false,
+      progress: this.state.previousProgress
+    })
+  }
+
+  markerStyles () {
+    return {
+      display: (this.state.startMarker === 0) ? 'none' : 'block',
+      left: `${this.state.startMarker / this.state.duration * 100}%`
+    }
   }
 
   render () {
@@ -154,12 +173,17 @@ export default class Player extends React.Component {
         <span className='u-flex__panel player__time'>
           {format(this.state.progress * 1000)}
         </span>
-        <progress className='player__progress u-flex__panel u-flex__panel--grow'
+        <div ref='progressBar'
+          className='player__progress progress u-flex__panel u-flex__panel--grow'
           onMouseMove={(e) => this.updateSeek(e)}
           onMouseDown={(e) => this.startSeek(e)}
-          onMouseUp={(e) => this.stopSeek(e)}
-          value={this.state.progress}
-          max={this.state.duration} />
+          onMouseUp={(e) => this.stopSeek(e)}>
+          <progress className=' progress__bar'
+            value={this.state.progress}
+            max={this.state.duration} />
+          <span className='progress__marker'
+            style={this.markerStyles()} />
+        </div>
         <span className='u-flex__panel player__duration'>
           {format(this.state.duration * 1000)}
         </span>
