@@ -1,6 +1,7 @@
 .sheet {
   position: relative;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
   padding: 20px;
   background-color: #f0f0f0;
 }
