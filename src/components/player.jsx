@@ -71,6 +71,8 @@ export default class Player extends React.Component {
       })
     }
 
+    let resume = retainProgress && this.state.playing
+
     this.setState(stateReset)
 
     this.howl = new Howl({
@@ -81,6 +83,7 @@ export default class Player extends React.Component {
           loading: false,
           duration: this.howl.duration()
         })
+        if (resume) this.togglePlay()
       },
       onplay: () => {
         this.setState({
@@ -99,9 +102,8 @@ export default class Player extends React.Component {
   }
 
   step () {
-    this.setState({ progress: this.howl.seek() || 0 })
-
     if (this.howl.playing()) {
+      this.setState({ progress: this.howl.seek() || 0 })
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
     }
   }
