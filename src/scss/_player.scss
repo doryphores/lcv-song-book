@@ -1,10 +1,16 @@
 .player {
+  position: relative;
   padding: 10px 20px 10px 10px;
   align-items: center;
   border-top: 1px solid #ddd;
   background-color: #fafafa;
+  transition: margin .2s;
 }
 
+.player--loading {
+  margin-bottom: -68px;
+}
+ 
 .player__button {
   padding: 0;
   margin-right: 20px;

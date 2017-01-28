@@ -6,11 +6,41 @@
   background-color: #f0f0f0;
 }
 
+.sheet__loading-message {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  margin-top: 200px;
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+
+  span {
+    vertical-align: middle;
+  }
+}
+
+.sheet__loading-icon {
+  margin-right: 10px;
+  animation: spin 1s infinite linear;
+}
+
+.sheet__page-container {
+  position: relative;
+  z-index: 2;
+}
+
 .sheet__page {
   background-color: #fff;
   @include card-shadow(1);
+  opacity: 1;
+  transition: opacity .2s;
 
   + .sheet__page {
     margin-top: 4px;
+  }
+
+  .sheet--loading & {
+    opacity: 0;
   }
 }

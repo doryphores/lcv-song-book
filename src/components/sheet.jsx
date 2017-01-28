@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import { PDFJS } from 'pdfjs-dist'
 
 import { debounce, range } from '../utils'
+import Icon from './icon'
 
 PDFJS.workerSrc = '../node_modules/pdfjs-dist/build/pdf.worker.js'
 
@@ -12,7 +13,8 @@ export default class Sheet extends React.Component {
     this.state = {
       numPages: 0,
       pageWidth: 0,
-      pdfURL: ''
+      pdfURL: '',
+      loading: true
     }
   }
 
@@ -35,9 +37,12 @@ export default class Sheet extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
     if (
-      prevState.pdfURL !== this.state.pdfURL ||
-      prevState.numPages !== this.state.numPages ||
-      prevState.pageWidth !== this.state.pageWidth
+      this.state.pdfURL !== '' &&
+      (
+        prevState.pdfURL !== this.state.pdfURL ||
+        prevState.numPages !== this.state.numPages ||
+        prevState.pageWidth !== this.state.pageWidth
+      )
     ) {
       this.renderPDF()
     }
@@ -49,10 +54,12 @@ export default class Sheet extends React.Component {
       return
     }
 
+    this.setState({ loading: true })
+    this.refs.container.parentNode.scrollTop = 0
+
     PDFJS.getDocument(pdfURL)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
-        this.refs.container.parentNode.scrollTop = 0
         this.setState({
           pdfURL: pdfURL,
           numPages: this.pdfDocument.numPages
@@ -67,32 +74,42 @@ export default class Sheet extends React.Component {
   renderPDF () {
     if (this.state.numPages === 0) return
 
-    range(this.state.numPages).forEach(i => {
-      this.pdfDocument.getPage(i + 1).then(pdfPage => {
+    Promise.all(range(this.state.numPages).map(i => {
+      return this.pdfDocument.getPage(i + 1).then(pdfPage => {
         let viewport = pdfPage.getViewport(1.0)
         let canvas = this.refs[`page-${i + 1}`]
         let scale = this.state.pageWidth / viewport.width
         viewport = pdfPage.getViewport(scale)
         canvas.width = viewport.width
         canvas.height = viewport.height
-        pdfPage.render({
+        return pdfPage.render({
           canvasContext: canvas.getContext('2d'),
           viewport: viewport
         })
       })
+    })).then(() => this.setState({ loading: false }))
+  }
+
+  classNames (classNames) {
+    return classnames(this.props.className, classNames, {
+      'sheet--loading': this.state.loading
     })
   }
 
   render () {
     return (
-      <div className={classnames(this.props.className, 'sheet')}>
-        <div ref='container'>
+      <div className={this.classNames('sheet')}>
+        <div className='sheet__page-container' ref='container'>
           {range(this.state.numPages).map(i => (
             <div key={`page-${i + 1}`} className='sheet__page'>
               <canvas ref={`page-${i + 1}`} />
             </div>
           ))}
         </div>
+        <span className='sheet__loading-message'>
+          <Icon icon='refresh' className='sheet__loading-icon' />
+          <span>LOADING…</span>
+        </span>
       </div>
     )
   }

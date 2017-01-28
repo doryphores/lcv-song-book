@@ -154,6 +154,12 @@ export default class Player extends React.Component {
     })
   }
 
+  classNames (classNames) {
+    return classnames(this.props.className, classNames, {
+      'player--loading': this.state.loading
+    })
+  }
+
   markerStyles () {
     return {
       display: (this.state.startMarker === 0) ? 'none' : 'block',
@@ -165,7 +171,7 @@ export default class Player extends React.Component {
     if (!this.props.voiceRecordingURL) return null
 
     return (
-      <div className={classnames(this.props.className, 'player u-flex u-flex--horizontal')}>
+      <div className={this.classNames('player u-flex u-flex--horizontal')}>
         <button className='u-flex__panel player__button'
           onClick={this.togglePlay.bind(this)}
           onKeyUp={(e) => e.preventDefault()}>
