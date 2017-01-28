@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import format from 'format-duration'
 import { Howl } from 'howler'
 
+import ProgressBar from './progress_bar'
 import Icon from './icon'
 
 export default class Player extends React.Component {
@@ -14,13 +15,10 @@ export default class Player extends React.Component {
       recordingURL: '',
       duration: 0,
       progress: 0,
-      previousProgress: 0,
       startMarker: 0,
       playing: false,
-      seeking: false,
       loading: false
     }
-    this.cancelSeek = this.cancelSeek.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
@@ -30,14 +28,12 @@ export default class Player extends React.Component {
         recordingURL: this.recordingURL()
       })
     }
-    window.addEventListener('mouseup', this.cancelSeek)
     window.addEventListener('keydown', this.handleKeyDown)
   }
 
   componentWillUnmount () {
     if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame)
     if (this.howl) this.howl.unload()
-    window.removeEventListener('mouseup', this.cancelSeek)
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
@@ -64,15 +60,13 @@ export default class Player extends React.Component {
 
     let stateReset = {
       loading: true,
-      playing: false,
-      seeking: false
+      playing: false
     }
 
     if (!retainProgress) {
       Object.assign(stateReset, {
         duration: 0,
         progress: 0,
-        previousProgress: 0,
         startMarker: 0
       })
     }
@@ -105,9 +99,7 @@ export default class Player extends React.Component {
   }
 
   step () {
-    if (!this.state.seeking) {
-      this.setState({ progress: this.howl.seek() || 0 })
-    }
+    this.setState({ progress: this.howl.seek() || 0 })
 
     if (this.howl.playing()) {
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
@@ -140,39 +132,12 @@ export default class Player extends React.Component {
     }
   }
 
-  seekFromMouseEvent (e) {
-    let rect = this.refs.progressBar.getBoundingClientRect()
-    return (e.clientX - rect.left) / rect.width * this.state.duration
-  }
-
-  startSeek (e) {
+  onSeek (value) {
     this.setState({
-      previousProgress: this.state.progress,
-      progress: this.seekFromMouseEvent(e),
-      seeking: true
+      startMarker: value,
+      progress: value
     })
-  }
-
-  updateSeek (e) {
-    if (!this.state.seeking) return
-    this.setState({ progress: this.seekFromMouseEvent(e) })
-  }
-
-  stopSeek (e) {
-    e.stopPropagation()
-    this.setState({
-      seeking: false,
-      startMarker: this.state.progress
-    })
-    this.howl.seek(this.state.progress)
-  }
-
-  cancelSeek (e) {
-    if (!this.state.seeking) return
-    this.setState({
-      seeking: false,
-      progress: this.state.previousProgress
-    })
+    this.howl.seek(value)
   }
 
   selectTrack (track) {
@@ -193,13 +158,6 @@ export default class Player extends React.Component {
     return classnames('toggle', {
       'toggle--selected': t === this.state.track
     })
-  }
-
-  markerStyles () {
-    return {
-      display: (this.state.startMarker === 0) ? 'none' : 'block',
-      left: `${this.state.startMarker / this.state.duration * 100}%`
-    }
   }
 
   render () {
@@ -226,17 +184,11 @@ export default class Player extends React.Component {
         <span className='u-flex__panel player__time'>
           {format(this.state.progress * 1000)}
         </span>
-        <div ref='progressBar'
-          className='player__progress progress u-flex__panel u-flex__panel--grow'
-          onMouseMove={(e) => this.updateSeek(e)}
-          onMouseDown={(e) => this.startSeek(e)}
-          onMouseUp={(e) => this.stopSeek(e)}>
-          <progress className=' progress__bar'
-            value={this.state.progress}
-            max={this.state.duration} />
-          <span className='progress__marker'
-            style={this.markerStyles()} />
-        </div>
+        <ProgressBar className='player__progress u-flex__panel u-flex__panel--grow'
+          duration={this.state.duration}
+          value={this.state.progress}
+          marker={this.state.startMarker}
+          onSeek={this.onSeek.bind(this)} />
         <span className='u-flex__panel player__duration'>
           {format(this.state.duration * 1000)}
         </span>
