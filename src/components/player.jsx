@@ -121,7 +121,8 @@ export default class Player extends React.Component {
   }
 
   seekFromMouseEvent (e) {
-    return (e.clientX - this.refs.progressBar.offsetLeft) / this.refs.progressBar.offsetWidth * this.state.duration
+    let rect = this.refs.progressBar.getBoundingClientRect()
+    return (e.clientX - rect.left) / rect.width * this.state.duration
   }
 
   startSeek (e) {
