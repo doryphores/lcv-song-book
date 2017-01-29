@@ -53,6 +53,10 @@
   option {
     color: #000;
   }
+
+  &::-webkit-input-placeholder {
+    color: rgba(#000, .38);
+  }
 }
 
 .form-actions {

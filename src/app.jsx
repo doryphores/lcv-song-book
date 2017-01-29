@@ -11,10 +11,10 @@ export function start (container) {
   configureStore().then(store => {
     ReactDOM.render(
       <Provider store={store}>
-        <div className='u-flex u-flex--full u-flex--vertical'>
-          <Toolbar className='u-flex__panel' />
-          <div className='u-flex__panel u-flex__panel--grow u-flex u-flex--horizontal'>
-            <Sidebar className='u-flex__panel' />
+        <div className='u-flex u-flex--full u-flex--horizontal'>
+          <Sidebar className='u-flex__panel' />
+          <div className='u-flex__panel u-flex__panel--grow u-flex u-flex--vertical'>
+            <Toolbar className='u-flex__panel' />
             <SelectedSong className='u-flex__panel u-flex__panel--grow' />
           </div>
         </div>

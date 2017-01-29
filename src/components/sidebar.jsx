@@ -2,34 +2,40 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { selectSong, RESIZE_SIDEBAR } from '../actions'
+import { selectSong } from '../actions'
+import Icon from './icon'
 
 class Sidebar extends React.Component {
   constructor () {
     super()
-    this.handleResize = this.handleResize.bind(this)
-    this.stopResize = this.stopResize.bind(this)
+    this.state = { search: '' }
+    this.handleKeyup = this.handleKeyup.bind(this)
   }
 
   componentDidMount () {
     if (this.props.selectedSong) {
       document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
     }
+    window.addEventListener('keyup', this.handleKeyup)
   }
 
-  startResize () {
-    window.addEventListener('mousemove', this.handleResize)
-    window.addEventListener('mouseup', this.stopResize)
+  componentWillUnmount () {
+    window.removeEventListener('keyup', this.handleKeyup)
   }
 
-  stopResize () {
-    window.removeEventListener('mousemove', this.handleResize)
-    window.removeEventListener('mouseup', this.stopResize)
+  handleKeyup (e) {
+    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
+    switch (e.which) {
+      case 83:
+        this.refs.searchInput.focus()
+        break
+    }
   }
 
-  handleResize (e) {
-    this.props.onResize(e.clientX)
-    window.dispatchEvent(new window.Event('resize'))
+  filterSongs () {
+    if (this.state.search === '') return this.props.songs
+    let pattern = new RegExp(`${this.state.search}`, 'i')
+    return this.props.songs.filter(s => pattern.test(s.title))
   }
 
   classNames (classNames) {
@@ -46,10 +52,22 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div className={this.classNames('sidebar')}>
-        <ul className='sidebar__menu'
-          style={{ width: this.props.width }}>
-          {this.props.songs.map(s => (
+      <div className={this.classNames('sidebar u-flex u-flex--vertical')}>
+        <div className='sidebar__search u-flex__panel'>
+          <input ref='searchInput'
+            type='text'
+            placeholder='Search'
+            className='sidebar__search-field field__input'
+            value={this.state.search}
+            onChange={(e) => this.setState({ search: e.target.value })} />
+          <Icon icon='search' className='sidebar__icon sidebar__search-icon' />
+          <Icon icon='close'
+            className='sidebar__icon sidebar__close-icon'
+            style={{ display: this.state.search === '' ? 'none' : 'block' }}
+            onClick={() => this.setState({ search: '' })} />
+        </div>
+        <ul className='sidebar__menu u-flex__panel u-flex__panel--grow'>
+          {this.filterSongs().map(s => (
             <li key={s.title}
               className={this.itemClassNames(s.title)}
               onClick={() => this.props.onSelect(s.title)}>
@@ -57,8 +75,6 @@ class Sidebar extends React.Component {
             </li>
           ))}
         </ul>
-        <div className='sidebar__resizer u-flex__panel'
-          onMouseDown={this.startResize.bind(this)} />
       </div>
     )
   }
@@ -66,13 +82,7 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    onSelect: (title) => dispatch(selectSong(title)),
-    onResize: (width) => {
-      dispatch({
-        type: RESIZE_SIDEBAR,
-        payload: width
-      })
-    }
+    onSelect: (title) => dispatch(selectSong(title))
   }
 }
 
@@ -80,7 +90,6 @@ function mapStateToProps (state) {
   return {
     selectedSong: state.selectedSong,
     songs: state.songs,
-    width: state.ui.sidebarWidth,
     visible: state.ui.sidebarVisible
   }
 }
