@@ -1,7 +1,7 @@
 .field {
   position: relative;
-  display: block;
-  max-width: 200px;
+  display: flex;
+  flex-direction: column-reverse;
 
   + .field {
     margin-top: 30px;
@@ -35,14 +35,18 @@
   border-radius: 0;
   outline: none;
   background-color: transparent;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(#000, .12);
   font-family: inherit;
   color: inherit;
   font-size: 16px;
 
-  &:focus,
-  .field:hover & {
-    border-color: #ddd;
+  .theme--dark & {
+    color: rgba(#fff, .5);
+    border-color: rgba(#fff, .12);
+
+    &:hover {
+      color: rgba(#fff, .7);
+    }
   }
 
   .field--dropdown & {
@@ -56,6 +60,22 @@
 
   &::-webkit-input-placeholder {
     color: rgba(#000, .38);
+  }
+}
+
+.field__label::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #7C4DFF;
+  transform: scale(0);
+  transition: transform .2s;
+
+  .field__input:focus + & {
+    transform: scale(1);
   }
 }
 

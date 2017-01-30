@@ -101,13 +101,13 @@ class Scraper extends React.Component {
       return (
         <form onSubmit={this.getResources.bind(this)}>
           <label className='field'>
-            <span className='field__label'>LCV website password</span>
             <input ref='password'
               type='password'
               className='field__input'
               value={this.state.password}
               required
               onChange={(e) => this.setState({ password: e.target.value })} />
+            <span className='field__label'>LCV website password</span>
           </label>
           <div className='form-actions'>
             <button className='button'>Get resources</button>
