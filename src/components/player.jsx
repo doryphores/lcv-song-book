@@ -5,6 +5,7 @@ import { Howl } from 'howler'
 
 import ProgressBar from './progress_bar'
 import Icon from './icon'
+import KeyCapture from '../key_capture'
 
 export default class Player extends React.Component {
   constructor () {
@@ -19,22 +20,32 @@ export default class Player extends React.Component {
       playing: false,
       loading: false
     }
-    this.handleKeyDown = this.handleKeyDown.bind(this)
+
+    this.keyCapture = new KeyCapture()
+    this.keyCapture.register('space', () => this.togglePlay())
+    this.keyCapture.register('left', () => {
+      if (!this.howl) return
+      this.howl.seek(this.state.startMarker)
+      this.setState({ progress: this.state.startMarker })
+    })
+    this.keyCapture.register('M', () => this.setState({
+      startMarker: this.state.progress
+    }))
+    this.keyCapture.register('F', () => this.selectTrack('full'))
+    this.keyCapture.register('V', () => this.selectTrack('voice'))
   }
 
   componentDidMount () {
     if (this.props.voiceRecordingURL) {
-      this.setState({
-        recordingURL: this.recordingURL()
-      })
+      this.setState({ recordingURL: this.recordingURL() })
     }
-    window.addEventListener('keydown', this.handleKeyDown)
+    this.keyCapture.activate()
   }
 
   componentWillUnmount () {
     if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame)
     if (this.howl) this.howl.unload()
-    window.removeEventListener('keydown', this.handleKeyDown)
+    this.keyCapture.deactivate()
   }
 
   componentWillReceiveProps (nextProps) {
@@ -105,30 +116,6 @@ export default class Player extends React.Component {
     if (this.howl.playing()) {
       this.setState({ progress: this.howl.seek() || 0 })
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
-    }
-  }
-
-  handleKeyDown (e) {
-    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
-    switch (e.which) {
-      case 32:
-        this.togglePlay()
-        e.preventDefault()
-        break
-      case 37:
-        if (this.howl) {
-          this.howl.seek(this.state.startMarker)
-          if (!this.state.playing) {
-            this.setState({ progress: this.state.startMarker })
-          }
-        }
-        break
-      case 70:
-        this.selectTrack('full')
-        break
-      case 86:
-        this.selectTrack('voice')
-        break
     }
   }
 

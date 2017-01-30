@@ -4,6 +4,7 @@ import classnames from 'classnames'
 
 import { selectSong } from '../actions'
 import Icon from './icon'
+import KeyCapture from '../key_capture'
 
 class Sidebar extends React.Component {
   constructor () {
@@ -13,18 +14,37 @@ class Sidebar extends React.Component {
       highlighted: -1,
       searching: false
     }
-    this.handleKeyDown = this.handleKeyDown.bind(this)
+
+    this.keyCapture = new KeyCapture()
+    this.keyCapture.register('S', () => this.refs.searchInput.focus())
+
+    this.searchKeyListeners = [
+      this.keyCapture.register('enter', () => {
+        if (this.state.highlighted > -1) {
+          this.props.onSelect(this.filterSongs()[this.state.highlighted].title)
+        }
+      }, { active: false }),
+      this.keyCapture.register('escape', () => {
+        this.refs.searchInput.blur()
+      }, { active: false }),
+      this.keyCapture.register('down', () => {
+        this.updateHighlighted(this.state.highlighted + 1)
+      }, { active: false }),
+      this.keyCapture.register('up', () => {
+        this.updateHighlighted(this.state.highlighted - 1)
+      }, { active: false })
+    ]
   }
 
   componentDidMount () {
     if (this.props.selectedSong) {
       document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
     }
-    window.addEventListener('keydown', this.handleKeyDown)
+    this.keyCapture.activate()
   }
 
   componentWillUnmount () {
-    window.removeEventListener('keydown', this.handleKeyDown)
+    this.keyCapture.deactivate()
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -37,34 +57,6 @@ class Sidebar extends React.Component {
       } else if (itemRect.top < listRect.top) {
         highlightedElement.scrollIntoView(true)
       }
-    }
-  }
-
-  handleKeyDown (e) {
-    switch (e.which) {
-      case 83: // S
-        if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
-        this.refs.searchInput.focus()
-        e.preventDefault()
-        break
-      case 40: // Down arrow
-        if (!this.state.searching) return
-        e.preventDefault()
-        this.updateHighlighted(this.state.highlighted + 1)
-        break
-      case 38: // Up arrow
-        if (!this.state.searching) return
-        e.preventDefault()
-        this.updateHighlighted(this.state.highlighted - 1)
-        break
-      case 13: // Enter
-        if (!this.state.searching || this.state.highlighted === -1) return
-        this.props.onSelect(this.filterSongs()[this.state.highlighted].title)
-        break
-      case 27: // Escape
-        if (!this.state.searching) return
-        this.refs.searchInput.blur()
-        break
     }
   }
 
@@ -88,6 +80,7 @@ class Sidebar extends React.Component {
     this.setState({
       searching: true
     })
+    this.searchKeyListeners.forEach(l => l.activate())
   }
 
   stopSearch () {
@@ -95,6 +88,7 @@ class Sidebar extends React.Component {
       searching: false,
       highlighted: -1
     })
+    this.searchKeyListeners.forEach(l => l.deactivate())
   }
 
   handleSearch (e) {
