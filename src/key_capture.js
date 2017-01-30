@@ -1,10 +1,11 @@
 const SPECIAL_KEYS = {
+  'enter': 13,
+  'escape': 27,
   'space': 32,
   'left': 37,
   'up': 38,
-  'down': 40,
-  'enter': 13,
-  'escape': 27
+  'right': 39,
+  'down': 40
 }
 
 export default class KeyCapture {
@@ -16,18 +17,12 @@ export default class KeyCapture {
 
   register (key, handler) {
     let listener = this.listeners[this.keyCode(key)] = Object.assign({
-      active: true,
-      ignoreInForms: typeof key === 'string' && key.length === 1
+      ignoreInForms: this.isChar(key) || ['left', 'right', 'space'].includes(key)
     }, { handler })
-
-    return {
-      activate () { listener.active = true },
-      deactivate () { listener.active = false }
-    }
   }
 
   registerMany (handlers) {
-    return Object.keys(handlers).map(k => this.register(k, handlers[k]))
+    Object.keys(handlers).forEach(k => this.register(k, handlers[k]))
   }
 
   activate () {
@@ -47,7 +42,6 @@ export default class KeyCapture {
   shouldIgnore (listener, e) {
     return (
       typeof listener === 'undefined' ||
-      !listener.active ||
       (
         listener.ignoreInForms &&
         ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
@@ -57,10 +51,12 @@ export default class KeyCapture {
 
   keyCode (key) {
     if (typeof key === 'number') return key
-    if (typeof key === 'string') {
-      if (key.length === 1) return key.toUpperCase().charCodeAt()
-      if (SPECIAL_KEYS[key]) return SPECIAL_KEYS[key]
-    }
+    if (this.isChar(key)) return key.toUpperCase().charCodeAt()
+    if (SPECIAL_KEYS[key]) return SPECIAL_KEYS[key]
     throw new Error(`Unknown key: "${key}"`)
+  }
+
+  isChar (s) {
+    return (typeof s === 'string' && s.length === 1)
   }
 }
