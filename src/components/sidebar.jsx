@@ -15,40 +15,38 @@ class Sidebar extends React.Component {
       searching: false
     }
 
-    this.keyCapture = new KeyCapture()
-    this.keyCapture.register('S', () => this.refs.searchInput.focus())
+    this.toggleKeyCapture = new KeyCapture({
+      'S': () => this.refs.searchInput.focus()
+    })
 
-    this.searchKeyListeners = [
-      this.keyCapture.register('enter', () => {
+    this.searchingKeyCapture = new KeyCapture({
+      'enter': () => {
         if (this.state.highlighted > -1) {
           this.props.onSelect(this.filterSongs()[this.state.highlighted].title)
+          this.refs.searchInput.blur()
         }
-      }, { active: false }),
-      this.keyCapture.register('escape', () => {
-        this.refs.searchInput.blur()
-      }, { active: false }),
-      this.keyCapture.register('down', () => {
-        this.updateHighlighted(this.state.highlighted + 1)
-      }, { active: false }),
-      this.keyCapture.register('up', () => {
-        this.updateHighlighted(this.state.highlighted - 1)
-      }, { active: false })
-    ]
+      },
+      'escape': () => this.refs.searchInput.blur(),
+      'up': () => this.updateHighlighted(this.state.highlighted - 1),
+      'down': () => this.updateHighlighted(this.state.highlighted + 1)
+    })
   }
 
   componentDidMount () {
     if (this.props.selectedSong) {
       document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
     }
-    this.keyCapture.activate()
+    this.toggleKeyCapture.activate()
+    this.searchingKeyCapture.activate()
   }
 
   componentWillUnmount () {
-    this.keyCapture.deactivate()
+    this.toggleKeyCapture.deactivate()
+    this.searchingKeyCapture.deactivate()
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (prevState.highlighted - this.state.highlighted) {
+    if (this.state.highlighted > -1 && prevState.highlighted !== this.state.highlighted) {
       let highlightedElement = this.refs[`item-${this.state.highlighted}`]
       let listRect = this.refs.songList.getBoundingClientRect()
       let itemRect = highlightedElement.getBoundingClientRect()
@@ -77,10 +75,8 @@ class Sidebar extends React.Component {
   }
 
   startSearch () {
-    this.setState({
-      searching: true
-    })
-    this.searchKeyListeners.forEach(l => l.activate())
+    this.setState({ searching: true })
+    this.searchingKeyCapture.activate()
   }
 
   stopSearch () {
@@ -88,7 +84,7 @@ class Sidebar extends React.Component {
       searching: false,
       highlighted: -1
     })
-    this.searchKeyListeners.forEach(l => l.deactivate())
+    this.searchingKeyCapture.deactivate()
   }
 
   handleSearch (e) {

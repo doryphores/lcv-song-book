@@ -8,25 +8,26 @@ const SPECIAL_KEYS = {
 }
 
 export default class KeyCapture {
-  constructor () {
+  constructor (handlers) {
     this.listeners = {}
+    if (handlers) this.registerMany(handlers)
     this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
-  register (key, handler, opts = {}) {
+  register (key, handler) {
     let listener = this.listeners[this.keyCode(key)] = Object.assign({
       active: true,
-      preventDefault: true,
       ignoreInForms: typeof key === 'string' && key.length === 1
-    }, opts, { handler })
+    }, { handler })
 
     return {
-      activate () {
-        listener.active = true
-        console.log(listener)
-      },
+      activate () { listener.active = true },
       deactivate () { listener.active = false }
     }
+  }
+
+  registerMany (handlers) {
+    return Object.keys(handlers).map(k => this.register(k, handlers[k]))
   }
 
   activate () {
@@ -37,16 +38,10 @@ export default class KeyCapture {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  destroy () {
-    this.deactivate()
-    delete this.listeners
-  }
-
   handleKeyDown (e) {
     let listener = this.listeners[e.which]
     if (this.shouldIgnore(listener, e)) return
-    if (listener.preventDefault) e.preventDefault()
-    this.listeners[e.which].handler()
+    if (!this.listeners[e.which].handler()) e.preventDefault()
   }
 
   shouldIgnore (listener, e) {

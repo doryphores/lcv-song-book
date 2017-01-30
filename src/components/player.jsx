@@ -21,18 +21,17 @@ export default class Player extends React.Component {
       loading: false
     }
 
-    this.keyCapture = new KeyCapture()
-    this.keyCapture.register('space', () => this.togglePlay())
-    this.keyCapture.register('left', () => {
-      if (!this.howl) return
-      this.howl.seek(this.state.startMarker)
-      this.setState({ progress: this.state.startMarker })
+    this.keyCapture = new KeyCapture({
+      'space': () => this.togglePlay(),
+      'left': () => {
+        if (!this.howl) return
+        this.howl.seek(this.state.startMarker)
+        this.setState({ progress: this.state.startMarker })
+      },
+      'M': () => this.setState({ startMarker: this.state.progress }),
+      'F': () => this.selectTrack('full'),
+      'V': () => this.selectTrack('voice')
     })
-    this.keyCapture.register('M', () => this.setState({
-      startMarker: this.state.progress
-    }))
-    this.keyCapture.register('F', () => this.selectTrack('full'))
-    this.keyCapture.register('V', () => this.selectTrack('voice'))
   }
 
   componentDidMount () {
