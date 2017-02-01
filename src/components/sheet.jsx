@@ -14,14 +14,14 @@ export default class Sheet extends React.Component {
       numPages: 0,
       pageWidth: 0,
       pdfURL: '',
-      loading: true
+      loading: false
     }
   }
 
   componentDidMount () {
     this.loadPDF(this.props.pdfURL)
-    this.onResize = debounce(this.handleResize.bind(this), 100)
-    this.setState({ pageWidth: this.refs.container.clientWidth })
+    this.onResize = debounce(this.updatePageWidth.bind(this))
+    this.updatePageWidth()
     window.addEventListener('resize', this.onResize)
   }
 
@@ -48,6 +48,10 @@ export default class Sheet extends React.Component {
     }
   }
 
+  updatePageWidth () {
+    this.setState({ pageWidth: this.refs.container.clientWidth })
+  }
+
   loadPDF (pdfURL) {
     if (pdfURL === '') {
       this.setState({ numPages: 0 })
@@ -65,10 +69,6 @@ export default class Sheet extends React.Component {
           numPages: this.pdfDocument.numPages
         })
       }).catch(console.error)
-  }
-
-  handleResize () {
-    this.setState({ pageWidth: this.refs.container.clientWidth })
   }
 
   renderPDF () {
@@ -99,17 +99,19 @@ export default class Sheet extends React.Component {
   render () {
     return (
       <div className={this.classNames('sheet')}>
-        <div className='sheet__page-container' ref='container'>
-          {range(this.state.numPages).map(i => (
-            <div key={`page-${i + 1}`} className='sheet__page'>
-              <canvas ref={`page-${i + 1}`} />
-            </div>
-          ))}
+        <div className='sheet__scroller'>
+          <div className='sheet__page-container' ref='container'>
+            {range(this.state.numPages).map(i => (
+              <div key={`page-${i + 1}`} className='sheet__page'>
+                <canvas ref={`page-${i + 1}`} />
+              </div>
+            ))}
+          </div>
+          <span className='sheet__loading-message'>
+            <Icon icon='refresh' className='sheet__loading-icon' />
+            <span>LOADING…</span>
+          </span>
         </div>
-        <span className='sheet__loading-message'>
-          <Icon icon='refresh' className='sheet__loading-icon' />
-          <span>LOADING…</span>
-        </span>
       </div>
     )
   }

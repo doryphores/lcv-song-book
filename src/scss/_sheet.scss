@@ -1,9 +1,17 @@
 .sheet {
   position: relative;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  padding: 20px;
   background-color: #f0f0f0;
+}
+
+.sheet__scroller {
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
 }
 
 .sheet__loading-message {
@@ -37,6 +45,10 @@
   @include card-shadow(1);
   opacity: 1;
   transition: opacity .2s;
+
+  canvas {
+    display: block;
+  }
 
   + .sheet__page {
     margin-top: 4px;
