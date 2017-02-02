@@ -70,8 +70,10 @@ class Sidebar extends React.Component {
 
   filterSongs () {
     if (this.state.search === '') return this.props.songs
-    let pattern = new RegExp(`${this.state.search}`, 'i')
-    return this.props.songs.filter(s => pattern.test(s.title))
+    let searchString = this.state.search.toLowerCase()
+    return this.props.songs.filter(s => {
+      return s.title.toLowerCase().includes(searchString)
+    })
   }
 
   startSearch () {
