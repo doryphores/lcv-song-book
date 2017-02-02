@@ -35,9 +35,6 @@ export default class Player extends React.Component {
   }
 
   componentDidMount () {
-    if (this.props.voiceRecordingURL) {
-      this.setState({ recordingURL: this.recordingURL() })
-    }
     this.keyCapture.activate()
   }
 
