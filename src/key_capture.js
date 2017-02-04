@@ -16,7 +16,7 @@ export default class KeyCapture {
   }
 
   register (key, handler) {
-    let listener = this.listeners[this.keyCode(key)] = Object.assign({
+    this.listeners[this.keyCode(key)] = Object.assign({
       ignoreInForms: this.isChar(key) || ['left', 'right', 'space'].includes(key)
     }, { handler })
   }
