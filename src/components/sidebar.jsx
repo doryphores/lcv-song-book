@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { selectSong } from '../actions'
+import { selectSong, RESIZE_SIDEBAR } from '../actions'
 import Icon from './icon'
+import Resizer from './resizer'
 import KeyCapture from '../key_capture'
 
 class Sidebar extends React.Component {
@@ -109,7 +110,8 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div className={this.classNames('sidebar u-flex u-flex--vertical')}>
+      <div className={this.classNames('sidebar u-flex u-flex--vertical')}
+        style={{ width: this.props.width }}>
         <div className='sidebar__search u-flex__panel'>
           <input ref='searchInput'
             type='text'
@@ -136,6 +138,8 @@ class Sidebar extends React.Component {
             </li>
           ))}
         </ul>
+        <Resizer className='sidebar__resizer'
+          onResize={this.props.onResize} />
       </div>
     )
   }
@@ -143,7 +147,11 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    onSelect: (title) => dispatch(selectSong(title))
+    onSelect: (title) => dispatch(selectSong(title)),
+    onResize: (width) => dispatch({
+      type: RESIZE_SIDEBAR,
+      payload: width
+    })
   }
 }
 
@@ -151,7 +159,8 @@ function mapStateToProps (state) {
   return {
     selectedSong: state.selectedSong,
     songs: state.songs,
-    visible: state.ui.sidebarVisible
+    visible: state.ui.sidebarVisible,
+    width: state.ui.sidebarWidth
   }
 }
 
