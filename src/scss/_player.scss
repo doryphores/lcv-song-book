@@ -5,7 +5,7 @@
   border-top: 1px solid #ddd;
   background-color: #fafafa;
   transition: margin .2s;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -30,7 +30,7 @@
 .player--empty {
   margin-bottom: -68px;
 }
- 
+
 .player__button {
   padding: 0;
   margin-right: 20px;
@@ -44,16 +44,16 @@
 .player__button-icon {
   width: 48px;
   height: 48px;
-  fill: #7C4DFF;
+  fill: pink(300);
   color: #fff;
   cursor: pointer;
 
   &:hover {
-    fill: #651FFF;
+    fill: pink(500);
   }
 
   &:active {
-    fill: #6200EA;
+    fill: pink(700);
   }
 }
 
@@ -84,11 +84,11 @@
   }
 
   &::-webkit-progress-value {
-    background-color: #B388FF;
+    background-color: pink(300);
   }
 
   .progress:hover &::-webkit-progress-value {
-    background-color: #7C4DFF;
+    background-color: pink(500);
   }
 }
 
@@ -99,13 +99,13 @@
   bottom: 19px;
   width: 1px;
   margin-left: -1px;
-  background-color: #B388FF;
-  border-left-color: #B388FF;
+  background-color: pink(300);
+  border-left-color: pink(300);
   transition: left .2s;
 
   .progress:hover & {
-    background-color: #7C4DFF;
-    border-left-color: #7C4DFF;
+    background-color: pink(500);
+    border-left-color: pink(500);
   }
 
   &::after {
@@ -133,7 +133,7 @@
   padding: 5px 0;
   -webkit-appearance: none;
   border: none;
-  background-color: #B388FF;
+  background-color: pink(300);
   color: #fff;
   font-weight: bold;
   text-transform: uppercase;
@@ -146,6 +146,6 @@
 }
 
 .toggle--selected {
-  background-color: #7C4DFF;
+  background-color: pink(500);
   cursor: default;
 }

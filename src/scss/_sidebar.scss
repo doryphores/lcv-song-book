@@ -2,6 +2,7 @@
   position: relative;
   max-width: 50%;
   min-width: 100px;
+  background-color: #fff;
   border-right: 1px solid rgba(#000, .38);
 }
 
@@ -15,9 +16,9 @@
   padding: 10px 10px 10px 44px;
   -webkit-appearance: none;
   border: none;
-  background-color: #757575;
+  background-color: purple(500);
   color: rgba(#fff, .87);
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid purple(500);
   transition: background-color .2s;
 
   &:focus {
@@ -74,24 +75,25 @@
   padding: 8px 10px;
   margin: 0;
   cursor: pointer;
+  transition: background-color .1s;
 
   &:hover {
-    background-color: #EDE7F6;
+    background-color: pink(100);
   }
 }
 
 .sidebar__menu-item--highlighted {
-  background-color: #EDE7F6;
+  background-color: pink(100);
 }
 
 .sidebar__menu-item--selected {
-  background-color: #7C4DFF;
+  background-color: pink(500);
   color: white;
   cursor: default;
 
   &:hover,
   &:focus {
-    background-color: #7C4DFF;
+    background-color: pink(500);
     color: white;
   }
 }
