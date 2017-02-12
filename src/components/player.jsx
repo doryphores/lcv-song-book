@@ -107,6 +107,13 @@ export default class Player extends React.Component {
           playing: false,
           loading: false
         })
+      },
+      onend: () => {
+        this.setState({
+          progress: 0,
+          playing: false,
+          loading: false
+        })
       }
     })
   }
@@ -127,6 +134,7 @@ export default class Player extends React.Component {
   }
 
   onSeek (value) {
+    if (value === this.state.duration) value = 0
     this.setState({
       startMarker: value,
       progress: value
