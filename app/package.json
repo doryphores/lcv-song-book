@@ -8,6 +8,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "format-duration": "^1.0.0",
+    "fs-extra": "^2.0.0",
     "howler": "^2.0.2",
     "pdfjs-dist": "^1.6.458",
     "react": "^15.4.2",
