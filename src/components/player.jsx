@@ -8,12 +8,12 @@ import Icon from './icon'
 import KeyCapture from '../key_capture'
 
 export default class Player extends React.Component {
-  constructor () {
+  constructor (props) {
     super()
     this.howl = null
     this.state = {
       track: 'voice',
-      recordingURL: '',
+      recordingURL: this.recordingURL({ props, track: 'voice' }),
       duration: 0,
       progress: 0,
       startMarker: 0,
