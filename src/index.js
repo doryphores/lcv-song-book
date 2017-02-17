@@ -18,7 +18,8 @@ app.on('ready', () => {
     minHeight: 600,
     center: true,
     show: false,
-    autoHideMenuBar: true
+    autoHideMenuBar: true,
+    icon: path.join(app.getAppPath(), 'static', 'icon.png')
   }
 
   readJSON(CONFIG_PATH, (_, config) => {
