@@ -2,35 +2,23 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import WebView from 'react-electron-webview'
+import ReactCSSTransistionGroup from 'react-addons-css-transition-group'
 
 import { LOAD_RESOURCES } from '../actions'
 import Icon from './icon'
+import FirstChild from './first_child'
 
 class Scraper extends React.Component {
   constructor () {
     super()
     this.state = {
-      open: false,
       started: false,
       done: false,
-      password: '',
       progress: ''
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    if (!prevState.open && this.state.open) {
-      this.refs.password.focus()
-    }
-  }
-
-  toggle () {
-    this.setState({ open: !this.state.open })
-  }
-
-  getResources (e) {
-    e.preventDefault()
-
+  start () {
     this.setState({
       started: true,
       progress: 'Accessing LCV website…'
@@ -41,7 +29,7 @@ class Scraper extends React.Component {
     switch (e.target.getURL()) {
       case 'http://www.londoncityvoices.co.uk/choir-resources/':
         e.target.executeJavaScript(`
-          document.querySelector('#smartPassword').value = '${this.state.password}'
+          document.querySelector('#smartPassword').value = '${this.props.password}'
           document.querySelector('#smartPWLogin').submit()
         `, true, () => this.setState({ progress: 'Accessing resources area…' }))
         break
@@ -69,11 +57,14 @@ class Scraper extends React.Component {
 
         this.setState({
           progress: `All resources retrieved`,
-          done: true
+          done: true,
+          started: false
         })
 
-        setTimeout(() => this.setState({ open: false }), 2000)
-        setTimeout(() => this.setState({ done: false }), 3000)
+        setTimeout(() => this.setState({
+          done: false,
+          progress: ''
+        }), 2000)
       }
     )
   }
@@ -88,41 +79,12 @@ class Scraper extends React.Component {
     )
   }
 
-  renderContents () {
-    if (this.state.started) {
-      return (
-        <div className='scraper__progress'>
-          <Icon className='scraper__progress-icon'
-            icon={this.state.done ? 'check' : 'refresh'} />
-          <span>{this.state.progress}</span>
-        </div>
-      )
-    } else {
-      return (
-        <form onSubmit={this.getResources.bind(this)}>
-          <label className='field'>
-            <input ref='password'
-              type='password'
-              className='field__input'
-              value={this.state.password}
-              required
-              onChange={(e) => this.setState({ password: e.target.value })} />
-            <span className='field__label'>LCV website password</span>
-          </label>
-          <div className='form-actions'>
-            <button className='button'>Get resources</button>
-          </div>
-        </form>
-      )
-    }
-  }
-
   classNames () {
     return classnames(
       this.props.className,
       'scraper',
       {
-        'scraper--open': this.state.open,
+        'scraper--working': this.state.started && !this.state.done,
         'scraper--done': this.state.done
       }
     )
@@ -131,18 +93,26 @@ class Scraper extends React.Component {
   render () {
     return (
       <div className={this.classNames()}>
-        <Icon icon={this.state.open ? 'close' : 'settings'}
-          className='scraper__toggle'
-          onClick={this.toggle.bind(this)} />
-
-        <div className='scraper__overlay u-flex u-flex--vertical u-flex--center'>
-          <div className='scraper__panel'>
-            {this.renderContents()}
-            {this.renderBrowser()}
-          </div>
-        </div>
+        <ReactCSSTransistionGroup component={FirstChild}
+          transitionName='fade-right'
+          transitionEnterTimeout={400}
+          transitionLeaveTimeout={400}>
+          {this.state.progress ? (
+            <span className='scraper__message'>{this.state.progress}</span>
+          ) : null}
+        </ReactCSSTransistionGroup>
+        <Icon icon={this.state.done ? 'check' : 'refresh'}
+          className='scraper__icon'
+          onClick={this.start.bind(this)} />
+        {this.renderBrowser()}
       </div>
     )
+  }
+}
+
+function mapStateToProps (state) {
+  return {
+    password: state.settings.password
   }
 }
 
@@ -155,4 +125,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(Scraper)
+export default connect(mapStateToProps, mapDispatchToProps)(Scraper)

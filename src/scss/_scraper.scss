@@ -1,46 +1,21 @@
-.scraper__toggle {
-  position: relative;
-  z-index: 11;
+.scraper {
+  margin: 0 20px 0 auto;
+}
+
+.scraper__icon {
   cursor: pointer;
   fill: #fff;
-}
 
-.scraper__overlay {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  justify-content: center;
-  background-color: rgba(#000, .7);
-  transform: translateY(-100%);
-  transition: transform .4s;
-
-  .scraper--open & {
-    transform: translateY(0);
+  .scraper--working & {
+    animation: spin 1s infinite linear;
   }
 }
 
-.scraper__panel {
-  min-width: 400px;
-  padding: 40px;
-  background-color: #fff;
+.scraper__message {
+  display: inline-block;
+  margin: -10px 10px -10px 0;
+  padding: 10px 16px;
+  vertical-align: middle;
+  background-color: purple(300);
   border-radius: 2px;
-  @include card-shadow(4);
-  color: rgba(#000, .87);
-  fill: rgba(#000, .87);
-}
-
-.scraper__progress {
-  font-size: 22px;
-}
-
-.scraper__progress-icon {
-  margin-right: 10px;
-  animation: spin 1s infinite linear;
-
-  .scraper--done & {
-    animation: none;
-  }
 }
