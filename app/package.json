@@ -1,6 +1,6 @@
 {
-  "name": "lcv",
-  "productName": "LCV Choir resource browser",
+  "name": "lcv-choir-resources",
+  "productName": "LCV Choir Resources",
   "version": "0.0.1",
   "author": "Martin Laine <martin.laine@gmail.com>",
   "license": "MIT",

@@ -1,8 +1,9 @@
 {
-  "name": "lcv",
+  "name": "lcv-choir-resources",
   "version": "0.0.1",
-  "description": "Browse and listen to LCV Choir recordings",
+  "description": "A desktop app to view LCV Choir recordings and sheet music",
   "author": "Martin Laine <martin.laine@gmail.com>",
+  "repository": "https://github.com/doryphores/lcv-choir-resources",
   "license": "MIT",
   "scripts": {
     "postinstall": "cd app && yarn install",

@@ -2,6 +2,8 @@ import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import { outputJSON, readJSON } from 'fs-extra'
 
+import './application_menu'
+
 let win
 
 const CONFIG_PATH = path.join(
