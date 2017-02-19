@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
     }
 
     this.toggleKeyCapture = new KeyCapture({
-      'S': () => this.focus()
+      'S': () => this.refs.searchInput.focus()
     })
 
     this.searchingKeyCapture = new KeyCapture({
@@ -38,7 +38,6 @@ class Sidebar extends React.Component {
       document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
     }
     this.toggleKeyCapture.activate()
-    this.searchingKeyCapture.activate()
   }
 
   componentWillUnmount () {
@@ -75,15 +74,11 @@ class Sidebar extends React.Component {
     return this.props.songs.filter(s => pattern.test(s.title))
   }
 
-  focus () {
-    this.refs.searchInput.select()
+  startSearch () {
     this.setState({
+      searching: true,
       highlighted: this.filterSongs().findIndex(s => s.title === this.props.selectedSong.title)
     })
-  }
-
-  startSearch () {
-    this.setState({ searching: true })
     this.searchingKeyCapture.activate()
   }
 
