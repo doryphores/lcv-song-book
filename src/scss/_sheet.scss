@@ -28,6 +28,10 @@
   span {
     vertical-align: middle;
   }
+
+  .sheet--empty & {
+    display: none;
+  }
 }
 
 .sheet__loading-icon {

@@ -34,7 +34,7 @@ class Sidebar extends React.Component {
   }
 
   componentDidMount () {
-    if (this.props.selectedSong) {
+    if (this.props.selectedSongTitle) {
       document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
     }
     this.toggleKeyCapture.activate()
@@ -77,7 +77,7 @@ class Sidebar extends React.Component {
   startSearch () {
     this.setState({
       searching: true,
-      highlighted: this.filterSongs().findIndex(s => s.title === this.props.selectedSong.title)
+      highlighted: this.filterSongs().findIndex(s => s.title === this.props.selectedSongTitle)
     })
     this.searchingKeyCapture.activate()
   }
@@ -105,7 +105,7 @@ class Sidebar extends React.Component {
 
   itemClassNames (title, index) {
     return classnames('sidebar__menu-item', {
-      'sidebar__menu-item--selected': title === this.props.selectedSong.title,
+      'sidebar__menu-item--selected': title === this.props.selectedSongTitle,
       'sidebar__menu-item--highlighted': index === this.state.highlighted
     })
   }
@@ -159,7 +159,7 @@ function mapDispatchToProps (dispatch) {
 
 function mapStateToProps (state) {
   return {
-    selectedSong: state.selectedSong,
+    selectedSongTitle: state.selectedSong.title,
     songs: state.songs,
     visible: state.ui.sidebarVisible,
     width: state.ui.sidebarWidth

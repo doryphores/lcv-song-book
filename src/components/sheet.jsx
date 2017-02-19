@@ -92,7 +92,8 @@ export default class Sheet extends React.Component {
 
   classNames (classNames) {
     return classnames(this.props.className, classNames, {
-      'sheet--loading': this.state.loading
+      'sheet--loading': this.state.loading,
+      'sheet--empty': !this.props.sheetMusicURL
     })
   }
 
