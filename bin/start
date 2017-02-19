@@ -7,4 +7,8 @@ babel src --source-maps --out-dir app/js
 node-sass --source-map app/css src/scss --output app/css
 
 # Start app
-electron app
+if [[ `uname -s` == 'Linux' ]]; then
+  electron app --disable-gpu
+else
+  electron app
+fi
