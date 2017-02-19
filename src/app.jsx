@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { configureStore } from './store'
-import { TOGGLE_SIDEBAR } from './actions'
+import { TOGGLE_SETTINGS } from './actions'
 import Toolbar from './components/toolbar'
 import Sidebar from './components/sidebar'
 import SelectedSong from './components/selected_song'
@@ -23,6 +23,10 @@ export function start (container) {
       </Provider>,
       container
     )
+
+    if (store.getState().settings.password === '') {
+      store.dispatch({ type: TOGGLE_SETTINGS })
+    }
 
     ipcRenderer.on('dispatch-action', (e, actionType) => {
       store.dispatch({ type: actionType })
