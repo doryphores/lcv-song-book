@@ -24,8 +24,8 @@ export function start (container) {
       container
     )
 
-    ipcRenderer.on('toggle-sidebar', () => {
-      store.dispatch({ type: TOGGLE_SIDEBAR })
+    ipcRenderer.on('dispatch-action', (e, actionType) => {
+      store.dispatch({ type: actionType })
     })
   })
 }

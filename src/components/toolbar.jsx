@@ -3,10 +3,19 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 
 import { selectVoice } from '../actions'
-import Scraper from './scraper'
+import Settings from './settings'
 import Icon from './icon'
 
-const VOICES = ['Soprano 1', 'Soprano 2', 'Alto 1', 'Alto 2', 'Tenor 1', 'Tenor 2', 'Bass 1', 'Bass 2']
+const VOICES = [
+  'Soprano 1',
+  'Soprano 2',
+  'Alto 1',
+  'Alto 2',
+  'Tenor 1',
+  'Tenor 2',
+  'Bass 1',
+  'Bass 2'
+]
 
 class Toolbar extends React.Component {
   constructor () {
@@ -32,7 +41,7 @@ class Toolbar extends React.Component {
           <Icon className='field__icon' icon='arrow_drop_down' />
         </label>
 
-        <Scraper className='u-flex__panel' open={this.state.open} />
+        <Settings className='u-flex__panel' />
       </div>
     )
   }

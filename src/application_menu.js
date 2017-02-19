@@ -1,5 +1,7 @@
 import { app, Menu, shell } from 'electron'
 
+import { TOGGLE_SIDEBAR, TOGGLE_SETTINGS } from './actions'
+
 let win
 
 const template = [
@@ -12,6 +14,16 @@ const template = [
     ]
   },
   {
+    label: 'Edit',
+    submenu: [
+      {
+        label: 'Preferences',
+        click: () => win.webContents.send('dispatch-action', TOGGLE_SETTINGS),
+        accelerator: 'CmdOrCtrl+,'
+      }
+    ]
+  },
+  {
     label: 'View',
     submenu: [
       {
@@ -19,7 +31,7 @@ const template = [
       },
       {
         label: 'Toggle Sidebar',
-        click: () => win.webContents.send('toggle-sidebar'),
+        click: () => win.webContents.send('dispatch-action', TOGGLE_SIDEBAR),
         accelerator: 'CmdOrCtrl+\\'
       },
       {

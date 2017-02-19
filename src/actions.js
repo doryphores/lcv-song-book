@@ -2,6 +2,9 @@ export const RESTORE = 'RESTORE'
 
 export const RESIZE_SIDEBAR = 'RESIZE_SIDEBAR'
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
+export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS'
+
+export const SAVE_SETTINGS = 'SAVE_SETTINGS'
 
 export const LOAD_RESOURCES = 'LOAD_RESOURCES'
 

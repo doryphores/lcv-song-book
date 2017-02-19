@@ -1,8 +1,9 @@
-import { RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR } from '../actions'
+import { RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR, TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
 
-let initiaState = {
+const initiaState = {
   sidebarVisible: true,
-  sidebarWidth: 300
+  sidebarWidth: 300,
+  settingsVisible: false
 }
 
 export const ui = (state = initiaState, { type, payload }) => {
@@ -15,8 +16,15 @@ export const ui = (state = initiaState, { type, payload }) => {
       return Object.assign({}, state, {
         sidebarWidth: payload
       })
+    case TOGGLE_SETTINGS:
+    case SAVE_SETTINGS:
+      return Object.assign({}, state, {
+        settingsVisible: !state.settingsVisible
+      })
     case RESTORE:
-      return Object.assign({}, initiaState, state)
+      return Object.assign({}, initiaState, state, {
+        settingsVisible: false
+      })
     default:
       return state
   }

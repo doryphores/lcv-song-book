@@ -1,3 +1,4 @@
+export { settings } from './settings'
 export { ui } from './ui'
 export { songs } from './songs'
 export { selectedVoice } from './selected_voice'

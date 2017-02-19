@@ -1,6 +1,6 @@
 import { LOAD_RESOURCES } from '../actions'
 
-let initialState = []
+const initialState = []
 
 export const songs = (state = initialState, { type, payload }) => {
   switch (type) {

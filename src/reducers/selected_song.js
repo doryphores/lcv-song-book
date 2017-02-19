@@ -1,6 +1,6 @@
 import { RESTORE, SONG_SELECTED } from '../actions'
 
-let initialState = {
+const initialState = {
   title: '',
   sheet: '',
   recordings: {
