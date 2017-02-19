@@ -1,8 +1,10 @@
+import { ipcRenderer } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { configureStore } from './store'
+import { TOGGLE_SIDEBAR } from './actions'
 import Toolbar from './components/toolbar'
 import Sidebar from './components/sidebar'
 import SelectedSong from './components/selected_song'
@@ -21,5 +23,9 @@ export function start (container) {
       </Provider>,
       container
     )
+
+    ipcRenderer.on('toggle-sidebar', () => {
+      store.dispatch({ type: TOGGLE_SIDEBAR })
+    })
   })
 }

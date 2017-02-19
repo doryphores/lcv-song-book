@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import { outputJSON, readJSON } from 'fs-extra'
 
-import './application_menu'
+import { setApplicationMenu } from './application_menu'
 
 let win
 
@@ -28,6 +28,8 @@ app.on('ready', () => {
     if (config) Object.assign(opts, config)
 
     win = new BrowserWindow(opts)
+
+    setApplicationMenu(win)
 
     win.once('ready-to-show', () => win.show())
 

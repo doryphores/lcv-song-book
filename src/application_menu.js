@@ -1,5 +1,7 @@
 import { app, Menu, shell } from 'electron'
 
+let win
+
 const template = [
   {
     label: 'File',
@@ -14,6 +16,11 @@ const template = [
     submenu: [
       {
         role: 'togglefullscreen'
+      },
+      {
+        label: 'Toggle Sidebar',
+        click: () => win.webContents.send('toggle-sidebar'),
+        accelerator: 'CmdOrCtrl+\\'
       },
       {
         type: 'separator'
@@ -94,4 +101,7 @@ if (process.platform === 'darwin') {
   })
 }
 
-Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+export function setApplicationMenu (activeWindow) {
+  win = activeWindow
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+}
