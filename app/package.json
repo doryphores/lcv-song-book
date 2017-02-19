@@ -12,6 +12,7 @@
     "howler": "^2.0.2",
     "pdfjs-dist": "^1.7.294",
     "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-electron-webview": "^2.0.2",
     "react-redux": "^5.0.2",

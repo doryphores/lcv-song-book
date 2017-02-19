@@ -1,0 +1,39 @@
+.slide-down-enter {
+  transform: translateY(-100%);
+}
+
+.slide-down-enter-active {
+  transform: translateY(0);
+  transition: transform .4s;
+}
+
+.slide-down-leave {
+  transform: translateY(0);
+}
+
+.slide-down-leave-active {
+  transform: translateY(-100%);
+  transition: transform .4s;
+}
+
+.fade-right-enter {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.fade-right-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all .2s;
+}
+
+.fade-right-leave {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-right-leave-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all .2s;
+}

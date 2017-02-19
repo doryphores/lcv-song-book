@@ -1,21 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
 import Icon from './icon'
+import FirstChild from './first_child'
 
 class Settings extends React.Component {
   constructor (props) {
     super()
     this.state = {
       password: props.password
-    }
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (!prevProps.open && this.props.open) {
-      this.refs.password.focus()
     }
   }
 
@@ -29,10 +25,31 @@ class Settings extends React.Component {
   classNames () {
     return classnames(
       this.props.className,
-      'settings',
-      {
-        'settings--open': this.props.open
-      }
+      'settings'
+    )
+  }
+
+  renderPanel () {
+    return (
+      <div className='settings__overlay u-flex u-flex--vertical u-flex--center'>
+        <form className='settings__panel' onSubmit={this.handleSubmit.bind(this)}>
+          <h2 className='settings__heading'>Preferences</h2>
+
+          <label className='field'>
+            <input ref='password'
+              type='password'
+              className='field__input'
+              value={this.state.password}
+              required
+              autoFocus
+              onChange={(e) => this.setState({ password: e.target.value })} />
+            <span className='field__label'>LCV website password</span>
+          </label>
+          <div className='form-actions'>
+            <button className='button'>Apply</button>
+          </div>
+        </form>
+      </div>
     )
   }
 
@@ -43,22 +60,12 @@ class Settings extends React.Component {
           className='settings__toggle'
           onClick={this.props.onToggle} />
 
-        <div className='settings__overlay u-flex u-flex--vertical u-flex--center'>
-          <form className='settings__panel' onSubmit={this.handleSubmit.bind(this)}>
-            <label className='field'>
-              <input ref='password'
-                type='password'
-                className='field__input'
-                value={this.state.password}
-                required
-                onChange={(e) => this.setState({ password: e.target.value })} />
-              <span className='field__label'>LCV website password</span>
-            </label>
-            <div className='form-actions'>
-              <button className='button'>Save</button>
-            </div>
-          </form>
-        </div>
+        <ReactCSSTransitionGroup component={FirstChild}
+          transitionName='slide-down'
+          transitionEnterTimeout={400}
+          transitionLeaveTimeout={400}>
+          {this.props.open ? this.renderPanel() : null}
+        </ReactCSSTransitionGroup>
       </div>
     )
   }
