@@ -56,6 +56,10 @@ class Sidebar extends React.Component {
         highlightedElement.scrollIntoView(true)
       }
     }
+
+    if (prevProps.visible !== this.props.visible) {
+      window.dispatchEvent(new window.Event('resize'))
+    }
   }
 
   updateHighlighted (value) {
