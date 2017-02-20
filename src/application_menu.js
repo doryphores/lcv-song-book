@@ -6,14 +6,6 @@ let win
 
 const template = [
   {
-    label: 'File',
-    submenu: [
-      {
-        role: 'quit'
-      }
-    ]
-  },
-  {
     label: 'Edit',
     submenu: [
       {
@@ -106,6 +98,15 @@ if (process.platform === 'darwin') {
       {
         type: 'separator'
       },
+      {
+        role: 'quit'
+      }
+    ]
+  })
+} else {
+  template.unshift({
+    label: 'File',
+    submenu: [
       {
         role: 'quit'
       }
