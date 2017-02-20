@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "cd app && yarn install",
-    "package": "bin/build && electron-packager app --out dist --overwrite --asar",
+    "package": "bin/build && electron-packager app --out dist --overwrite --asar --icon ./app/static/icon.icns",
     "start": "foreman s",
     "build": "bin/build",
     "test": "snazzy 'src/**/*.{js,jsx}'"
