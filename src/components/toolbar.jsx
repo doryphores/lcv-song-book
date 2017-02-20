@@ -30,13 +30,19 @@ class Toolbar extends React.Component {
     this.setState({ open: !this.state.open })
   }
 
+  selectVoice (e) {
+    this.props.onSelect(e.target.value)
+    this.refs.voiceDropdown.blur()
+  }
+
   render () {
     return (
       <div className={classnames(this.props.className, 'toolbar u-flex u-flex--horizontal')}>
         <label className='toolbar__voice-selector field field--dropdown u-flex__panel theme--dark'>
-          <select className='field__input field__input--select'
+          <select ref='voiceDropdown'
+            className='field__input field__input--select'
             value={this.props.selectedVoice}
-            onChange={(e) => this.props.onSelect(e.target.value)}>
+            onChange={this.selectVoice.bind(this)}>
             {VOICES.map(v => <option key={v}>{v}</option>)}
           </select>
           <Icon className='field__icon' icon='arrow_drop_down' />

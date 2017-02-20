@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
     }
 
     this.toggleKeyCapture = new KeyCapture({
-      'S': () => this.refs.searchInput.focus()
+      'S': () => this.refs.searchInput.select()
     })
 
     this.searchingKeyCapture = new KeyCapture({
