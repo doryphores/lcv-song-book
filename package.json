@@ -17,11 +17,11 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.23.0",
     "babel-preset-react": "^6.23.0",
     "chokidar": "^1.6.1",
-    "electron": "^1.4.15",
-    "electron-packager": "^8.5.1",
+    "electron": "^1.6.1",
+    "electron-packager": "^8.5.2",
     "node-sass": "^4.5.0",
     "snazzy": "^6.0.0",
-    "standard": "^8.6.0"
+    "standard": "^9.0.0"
   },
   "babel": {
     "presets": [
