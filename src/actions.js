@@ -18,6 +18,17 @@ export const PLAYER_PLAYING = 'PLAYER_PLAYING'
 export const PLAYER_PAUSED = 'PLAYER_PAUSED'
 export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 
+export function loadResources (resources) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: LOAD_RESOURCES,
+      payload: resources
+    })
+    let selectedSongTitle = getState().selectedSong.title
+    if (selectedSongTitle) dispatch(selectSong(selectedSongTitle))
+  }
+}
+
 export function selectVoice (voice) {
   return function (dispatch, getState) {
     dispatch({

@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import WebView from 'react-electron-webview'
 import ReactCSSTransistionGroup from 'react-addons-css-transition-group'
 
-import { LOAD_RESOURCES } from '../actions'
+import { loadResources } from '../actions'
 import Icon from './icon'
 import FirstChild from './first_child'
 
@@ -118,10 +118,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    loadResources: resources => dispatch({
-      type: LOAD_RESOURCES,
-      payload: resources
-    })
+    loadResources: resources => dispatch(loadResources(resources))
   }
 }
 
