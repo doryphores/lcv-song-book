@@ -36,6 +36,7 @@ export default class Player extends React.Component {
 
   componentDidMount () {
     this.keyCapture.activate()
+    if (this.state.recordingURL) this.loadRecording()
   }
 
   componentWillUnmount () {
