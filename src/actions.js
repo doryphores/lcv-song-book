@@ -22,7 +22,10 @@ export function loadResources (resources) {
   return function (dispatch, getState) {
     dispatch({
       type: LOAD_RESOURCES,
-      payload: resources
+      payload: {
+        timestamp: Date.now(),
+        resources
+      }
     })
     let selectedSongTitle = getState().selectedSong.title
     if (selectedSongTitle) dispatch(selectSong(selectedSongTitle))

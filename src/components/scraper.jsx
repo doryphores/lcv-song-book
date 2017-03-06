@@ -18,6 +18,11 @@ class Scraper extends React.Component {
     }
   }
 
+  componentDidMount () {
+    let oneDay = 1000 * 60 * 60 * 24 // in milliseconds
+    if (this.props.lastUpdate < (Date.now() - oneDay)) this.start()
+  }
+
   start () {
     this.setState({
       started: true,
@@ -112,7 +117,8 @@ class Scraper extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    password: state.settings.password
+    password: state.settings.password,
+    lastUpdate: state.settings.lastResourceUpdate
   }
 }
 
