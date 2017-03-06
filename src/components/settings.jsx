@@ -11,14 +11,25 @@ class Settings extends React.Component {
   constructor (props) {
     super()
     this.state = {
-      password: props.password
+      password: props.password,
+      hideScrollbars: props.hideScrollbars
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.open && !this.props.open) {
+      this.state = {
+        password: nextProps.password,
+        hideScrollbars: nextProps.hideScrollbars
+      }
     }
   }
 
   handleSubmit (e) {
     e.preventDefault()
     this.props.onSubmit({
-      password: this.state.password
+      password: this.state.password,
+      hideScrollbars: this.state.hideScrollbars
     })
   }
 
@@ -29,6 +40,25 @@ class Settings extends React.Component {
     )
   }
 
+  renderHideScrollbarsSetting () {
+    if (process.platform === 'darwin') return null
+
+    return (
+      <label className='field checkbox'>
+        <input className='checkbox__input'
+          type='checkbox'
+          checked={this.state.hideScrollbars}
+          onChange={(e) => this.setState({ hideScrollbars: e.target.checked })} />
+        <span className='checkbox__check'>
+          <Icon icon='check' className='checkbox__check-icon' />
+        </span>
+        <span className='field__label checkbox__label'>
+          Hide scrollbars (restart to apply)
+        </span>
+      </label>
+    )
+  }
+
   renderPanel () {
     return (
       <div className='settings__overlay u-flex u-flex--vertical u-flex--center'>
@@ -36,8 +66,7 @@ class Settings extends React.Component {
           <h2 className='settings__heading'>Preferences</h2>
 
           <label className='field'>
-            <input ref='password'
-              type='password'
+            <input type='password'
               className='field__input'
               value={this.state.password}
               required
@@ -45,6 +74,9 @@ class Settings extends React.Component {
               onChange={(e) => this.setState({ password: e.target.value })} />
             <span className='field__label'>LCV website password</span>
           </label>
+
+          {this.renderHideScrollbarsSetting()}
+
           <div className='form-actions'>
             <button className='button'>Apply</button>
           </div>
@@ -74,7 +106,8 @@ class Settings extends React.Component {
 function mapStateToProps (state) {
   return {
     open: state.ui.settingsVisible,
-    password: state.settings.password
+    password: state.settings.password,
+    hideScrollbars: state.ui.hideScrollbars
   }
 }
 

@@ -33,3 +33,9 @@ body {
 .app-container {
   height: 100%;
 }
+
+html:not(.u-darwin) .u-hide-scrollbars {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}

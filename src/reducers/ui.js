@@ -3,7 +3,8 @@ import { RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR, TOGGLE_SETTINGS, SAVE_SETTINGS
 const initiaState = {
   sidebarVisible: true,
   sidebarWidth: 300,
-  settingsVisible: false
+  settingsVisible: false,
+  hideScrollbars: false
 }
 
 export const ui = (state = initiaState, { type, payload }) => {
@@ -17,9 +18,13 @@ export const ui = (state = initiaState, { type, payload }) => {
         sidebarWidth: payload
       })
     case TOGGLE_SETTINGS:
-    case SAVE_SETTINGS:
       return Object.assign({}, state, {
         settingsVisible: !state.settingsVisible
+      })
+    case SAVE_SETTINGS:
+      return Object.assign({}, state, {
+        settingsVisible: false,
+        hideScrollbars: payload.hideScrollbars
       })
     case RESTORE:
       return Object.assign({}, initiaState, state, {
