@@ -32,7 +32,6 @@ class Toolbar extends React.Component {
 
   selectVoice (e) {
     this.props.onSelect(e.target.value)
-
   }
 
   render () {

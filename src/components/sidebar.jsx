@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { selectSong, RESIZE_SIDEBAR } from '../actions'
+import { selectSong, RESIZE_SIDEBAR, TOGGLE_SIDEBAR } from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
 import KeyCapture from '../key_capture'
@@ -17,7 +17,10 @@ class Sidebar extends React.Component {
     }
 
     this.toggleKeyCapture = new KeyCapture({
-      'S': () => this.refs.searchInput.select()
+      'S': () => {
+        if (!this.props.visible) this.props.toggleSidebar()
+        this.refs.searchInput.select()
+      }
     })
 
     this.searchingKeyCapture = new KeyCapture({
@@ -155,6 +158,7 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps (dispatch) {
   return {
+    toggleSidebar: () => dispatch({ type: TOGGLE_SIDEBAR }),
     onSelect: (title) => dispatch(selectSong(title)),
     onResize: (width) => dispatch({
       type: RESIZE_SIDEBAR,
