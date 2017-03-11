@@ -823,9 +823,9 @@ electron-packager@^8.5.2:
     sanitize-filename "^1.6.0"
     semver "^5.3.0"
 
-electron@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-1.6.1.tgz#aa426e83bfb5919c3a492297eff368b67e66f1ae"
+electron@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-1.6.2.tgz#b0ccd7703f86d09c4d2a7273455c3f993f158994"
   dependencies:
     electron-download "^3.0.1"
     extract-zip "^1.0.3"
@@ -929,6 +929,10 @@ eslint-config-standard-jsx@3.3.0:
 eslint-config-standard@7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-7.0.0.tgz#4f161bc65695e4bc61331c55b9eeaca458cd99c6"
+
+eslint-config-standard@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-7.0.1.tgz#6cec96084de9ac862c33ccb953d13a7c59872342"
 
 eslint-plugin-promise@~3.4.0:
   version "3.4.0"
@@ -2684,12 +2688,24 @@ standard-json@^1.0.0:
   dependencies:
     concat-stream "^1.5.0"
 
-standard@*, standard@^9.0.0:
+standard@*:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/standard/-/standard-9.0.0.tgz#58b2acad4dc33823a7477568033c973fc5b6a995"
   dependencies:
     eslint "~3.15.0"
     eslint-config-standard "7.0.0"
+    eslint-config-standard-jsx "3.3.0"
+    eslint-plugin-promise "~3.4.0"
+    eslint-plugin-react "~6.9.0"
+    eslint-plugin-standard "~2.0.1"
+    standard-engine "~5.4.0"
+
+standard@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/standard/-/standard-9.0.1.tgz#c053e9009bb1a8b4c6b03bf12df4784185bb5899"
+  dependencies:
+    eslint "~3.15.0"
+    eslint-config-standard "7.0.1"
     eslint-config-standard-jsx "3.3.0"
     eslint-plugin-promise "~3.4.0"
     eslint-plugin-react "~6.9.0"

@@ -151,9 +151,9 @@ parse-ms@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parse-ms/-/parse-ms-1.0.1.tgz#56346d4749d78f23430ca0c713850aef91aa361d"
 
-pdfjs-dist@^1.7.341:
-  version "1.7.341"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.7.341.tgz#91ea9f0fe82ce25d63422cb62733a5f6b4f90ba7"
+pdfjs-dist@^1.7.361:
+  version "1.7.361"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.7.361.tgz#9488e428ee3a20f81b17117bbbef8dba49d66376"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^0.7.1"
