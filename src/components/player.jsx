@@ -7,128 +7,161 @@ import ProgressBar from './progress_bar'
 import Icon from './icon'
 import KeyCapture from '../key_capture'
 
+const TRACK_SETTINGS = {
+  voice: {
+    voice: {
+      stereo: 0,
+      volume: 1
+    },
+    full: {
+      stereo: 0,
+      volume: 0
+    },
+    both: {
+      stereo: -1,
+      volume: 0.5
+    }
+  },
+  full: {
+    voice: {
+      stereo: 0,
+      volume: 0
+    },
+    full: {
+      stereo: 0,
+      volume: 1
+    },
+    both: {
+      stereo: 1,
+      volume: 0.5
+    }
+  }
+}
+
 export default class Player extends React.Component {
   constructor (props) {
     super()
-    this.howl = null
+    this.howls = {}
     this.state = {
       track: 'voice',
-      recordingURL: this.recordingURL({ props, track: 'voice' }),
       duration: 0,
       progress: 0,
       startMarker: 0,
       playing: false,
-      loading: false
+      loading: 0
     }
 
     this.keyCapture = new KeyCapture({
       'space': () => this.togglePlay(),
       'left': () => {
         if (!this.howl) return
-        this.howl.seek(this.state.startMarker)
+        this.forEachHowl(h => h.seek(this.state.startMarker))
         this.setState({ progress: this.state.startMarker })
       },
       'M': () => this.setState({ startMarker: this.state.progress }),
       'F': () => this.selectTrack('full'),
-      'V': () => this.selectTrack('voice')
+      'V': () => this.selectTrack('voice'),
+      'B': () => this.selectTrack('both')
     })
   }
 
   componentDidMount () {
     this.keyCapture.activate()
-    if (this.state.recordingURL) this.loadRecording()
+    this.loadRecordings()
   }
 
   componentWillUnmount () {
     if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame)
-    if (this.howl) this.howl.unload()
+    this.unloadRecordings()
     this.keyCapture.deactivate()
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentDidUpdate (nextProps) {
     if (this.props.voiceRecordingURL !== nextProps.voiceRecordingURL) {
-      this.setState({
-        recordingURL: this.recordingURL({ props: nextProps })
-      })
+      this.loadRecordings()
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    if (this.state.recordingURL !== prevState.recordingURL) {
-      this.loadRecording(prevProps.voiceRecordingURL === this.props.voiceRecordingURL)
-    }
+  forEachHowl (func) {
+    Object.keys(this.howls).forEach(k => func(this.howls[k]))
   }
 
-  recordingURL ({ track, props } = {}) {
-    return (props || this.props)[`${track || this.state.track}RecordingURL`]
+  unloadRecordings () {
+    this.forEachHowl(h => h.unload())
   }
 
-  loadRecording (retainProgress = false) {
-    if (this.howl) this.howl.unload()
+  loadRecordings () {
+    this.unloadRecordings()
 
-    let stateReset = {
-      loading: true,
-      playing: false
-    }
+    this.setState({
+      loading: 2,
+      playing: false,
+      duration: 0,
+      progress: 0,
+      startMarker: 0
+    })
 
-    if (!retainProgress) {
-      Object.assign(stateReset, {
-        duration: 0,
-        progress: 0,
-        startMarker: 0
-      })
-    }
-
-    let resume = retainProgress && this.state.playing
-
-    this.setState(stateReset)
-
-    this.howl = new Howl({
-      src: [this.state.recordingURL],
+    this.howls.voice = new Howl({
+      src: [this.props.voiceRecordingURL],
       onload: () => {
-        this.howl.seek(this.state.progress)
+        this.configureTrack('voice')
+        this.howls.voice.seek(this.state.progress)
         this.setState({
-          loading: false,
-          duration: this.howl.duration()
+          loading: this.state.loading - 1,
+          duration: this.howls.voice.duration()
         })
-        if (resume) this.togglePlay()
       },
       onplay: () => {
         this.setState({
-          playing: true,
-          loading: false
+          playing: true
         })
         this.step()
       },
       onpause: () => {
         this.setState({
-          playing: false,
-          loading: false
+          playing: false
         })
       },
       onend: () => {
         this.setState({
           progress: 0,
-          playing: false,
-          loading: false
+          playing: false
+        })
+      }
+    })
+
+    this.howls.full = new Howl({
+      src: [this.props.fullRecordingURL],
+      onload: () => {
+        this.configureTrack('full')
+        this.howls.full.seek(this.state.progress)
+        this.setState({
+          loading: this.state.loading - 1
         })
       }
     })
   }
 
   step () {
-    if (this.howl.playing()) {
-      this.setState({ progress: this.howl.seek() || 0 })
+    if (this.howls.voice.playing()) {
+      this.setState({ progress: this.howls.voice.seek() || 0 })
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
     }
   }
 
   togglePlay (e) {
     if (this.state.playing) {
-      this.howl.pause()
+      this.forEachHowl(h => h.pause())
     } else {
-      this.howl.play()
+      this.forEachHowl(h => h.play())
     }
+  }
+
+  configureTrack (...tracks) {
+    tracks.forEach(track => {
+      this.howls[track].stereo(TRACK_SETTINGS[track][this.state.track].stereo)
+      this.howls[track].volume(TRACK_SETTINGS[track][this.state.track].volume)
+    })
   }
 
   onSeek (value) {
@@ -137,20 +170,22 @@ export default class Player extends React.Component {
       startMarker: value,
       progress: value
     })
-    this.howl.seek(value)
+    this.forEachHowl(h => h.seek(value))
   }
 
   selectTrack (track) {
-    this.setState({
-      track: track,
-      recordingURL: this.recordingURL({ track })
-    })
+    this.setState({ track: track })
+    this.configureTrack('full', 'voice')
+  }
+
+  isEmpty () {
+    return this.props.voiceRecordingURL === ''
   }
 
   classNames (classNames) {
     return classnames(this.props.className, classNames, {
-      'player--loading': this.state.loading,
-      'player--empty': this.state.recordingURL === ''
+      'player--loading': this.state.loading > 0,
+      'player--empty': this.isEmpty()
     })
   }
 
@@ -161,18 +196,18 @@ export default class Player extends React.Component {
   }
 
   render () {
-    if (!this.props.voiceRecordingURL) return null
+    if (this.isEmpty()) return null
 
     return (
       <div className={this.classNames('player u-flex u-flex--horizontal')}>
         <button className='u-flex__panel player__button'
           onClick={this.togglePlay.bind(this)}
-          disabled={this.state.loading}
+          disabled={this.state.loading > 0}
           onKeyUp={(e) => e.preventDefault()}>
           <Icon className='player__button-icon' icon={this.state.playing ? 'pause_circle_filled' : 'play_circle_filled'} />
         </button>
         <div className='player__track-switcher'>
-          {['voice', 'full'].map(t => (
+          {['voice', 'full', 'both'].map(t => (
             <button key={t}
               className={this.toggleClassNames(t)}
               title={t}
