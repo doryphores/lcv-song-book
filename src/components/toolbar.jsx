@@ -32,6 +32,7 @@ class Toolbar extends React.Component {
 
   selectVoice (e) {
     this.props.onSelect(e.target.value)
+    e.target.blur()
   }
 
   render () {
@@ -41,8 +42,7 @@ class Toolbar extends React.Component {
           <label className='field field--dropdown'>
             <select className='field__input field__input--select'
               value={this.props.selectedVoice}
-              onChange={this.selectVoice.bind(this)}
-              onClick={(e) => e.target.blur()}>
+              onChange={this.selectVoice.bind(this)}>
               {VOICES.map(v => <option key={v}>{v}</option>)}
             </select>
             <Icon className='field__icon' icon='arrow_drop_down' />
