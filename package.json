@@ -19,7 +19,7 @@
     "chokidar": "^1.6.1",
     "electron": "^1.6.2",
     "electron-packager": "^8.6.0",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.5.1",
     "snazzy": "^6.0.0",
     "standard": "^9.0.2"
   },
