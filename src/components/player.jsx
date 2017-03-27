@@ -54,7 +54,6 @@ export default class Player extends React.Component {
     this.keyCapture = new KeyCapture({
       'space': () => this.togglePlay(),
       'left': () => {
-        if (!this.howl) return
         this.forEachHowl(h => h.seek(this.state.startMarker))
         this.setState({ progress: this.state.startMarker })
       },
@@ -66,14 +65,12 @@ export default class Player extends React.Component {
   }
 
   componentDidMount () {
-    this.keyCapture.activate()
     this.loadRecordings()
   }
 
   componentWillUnmount () {
     if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame)
     this.unloadRecordings()
-    this.keyCapture.deactivate()
   }
 
   componentDidUpdate (nextProps) {
@@ -87,11 +84,16 @@ export default class Player extends React.Component {
   }
 
   unloadRecordings () {
+    this.keyCapture.deactivate()
     this.forEachHowl(h => h.unload())
   }
 
   loadRecordings () {
     this.unloadRecordings()
+
+    if (this.props.fullRecordingURL === '') return
+
+    this.keyCapture.activate()
 
     this.setState({
       loading: 2,
