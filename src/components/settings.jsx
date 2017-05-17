@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
 import Icon from './icon'
@@ -92,12 +92,12 @@ class Settings extends React.Component {
           className='settings__toggle'
           onClick={this.props.onToggle} />
 
-        <ReactCSSTransitionGroup component={FirstChild}
+        <CSSTransitionGroup component={FirstChild}
           transitionName='slide-down'
           transitionEnterTimeout={400}
           transitionLeaveTimeout={400}>
           {this.props.open ? this.renderPanel() : null}
-        </ReactCSSTransitionGroup>
+        </CSSTransitionGroup>
       </div>
     )
   }

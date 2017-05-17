@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import WebView from 'react-electron-webview'
-import ReactCSSTransistionGroup from 'react-addons-css-transition-group'
+import CSSTransistionGroup from 'react-transition-group/CSSTransitionGroup'
 
 import { loadResources } from '../actions'
 import Icon from './icon'
@@ -98,14 +98,14 @@ class Scraper extends React.Component {
   render () {
     return (
       <div className={this.classNames()}>
-        <ReactCSSTransistionGroup component={FirstChild}
+        <CSSTransistionGroup component={FirstChild}
           transitionName='fade-right'
           transitionEnterTimeout={400}
           transitionLeaveTimeout={400}>
           {this.state.progress ? (
             <span className='scraper__message'>{this.state.progress}</span>
           ) : null}
-        </ReactCSSTransistionGroup>
+        </CSSTransistionGroup>
         <Icon icon={this.state.done ? 'check' : 'refresh'}
           className='scraper__icon'
           onClick={this.start.bind(this)} />
