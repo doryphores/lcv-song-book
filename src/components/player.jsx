@@ -181,7 +181,7 @@ export default class Player extends React.Component {
   }
 
   isEmpty () {
-    return this.props.voiceRecordingURL === ''
+    return !this.props.voiceRecordingURL
   }
 
   classNames (classNames) {
