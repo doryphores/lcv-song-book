@@ -32,13 +32,13 @@ class Scraper extends React.Component {
 
   handleFinishLoad (e) {
     switch (e.target.getURL()) {
-      case 'http://www.londoncityvoices.co.uk/choir-resources/':
+      case 'https://www.londoncityvoices.co.uk/choir-resources/':
         e.target.executeJavaScript(`
           document.querySelector('#smartPassword').value = '${this.props.password}'
           document.querySelector('#smartPWLogin').submit()
         `, true, () => this.setState({ progress: 'Accessing resources area…' }))
         break
-      case 'http://www.londoncityvoices.co.uk/choir-resources/choir-resources-2/':
+      case 'https://www.londoncityvoices.co.uk/choir-resources/choir-resources-2/':
         this.harvestData(e.target)
         break
     }
@@ -80,7 +80,7 @@ class Scraper extends React.Component {
     return (
       <WebView style={{ width: 0, height: 0 }}
         onDidFinishLoad={this.handleFinishLoad.bind(this)}
-        src='http://www.londoncityvoices.co.uk/choir-resources/' />
+        src='https://www.londoncityvoices.co.uk/choir-resources/' />
     )
   }
 
