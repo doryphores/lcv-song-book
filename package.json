@@ -10,18 +10,18 @@
     "package": "bin/build && electron-packager app --out dist --overwrite --asar --icon ./app/static/icon.icns",
     "start": "foreman s",
     "build": "bin/build",
-    "test": "snazzy 'src/**/*.{js,jsx}'"
+    "test": "standard 'src/**/*.{js,jsx}' | snazzy"
   },
   "dependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
-    "babel-preset-react": "^6.23.0",
-    "chokidar": "^1.6.1",
-    "electron": "^1.6.2",
-    "electron-packager": "^8.6.0",
-    "node-sass": "^4.5.1",
-    "snazzy": "^6.0.0",
-    "standard": "^9.0.2"
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "chokidar": "^1.7.0",
+    "electron": "^1.6.8",
+    "electron-packager": "^8.7.0",
+    "node-sass": "^4.5.3",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.2"
   },
   "babel": {
     "presets": [
