@@ -16,7 +16,6 @@
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "chokidar": "^1.7.0",
     "electron": "^1.6.8",
     "electron-packager": "^8.7.0",
     "node-sass": "^4.5.3",
