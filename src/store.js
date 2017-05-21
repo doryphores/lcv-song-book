@@ -1,5 +1,5 @@
 import { remote } from 'electron'
-import { outputJSONSync, readJSON } from 'fs-extra'
+import { outputJsonSync, readJSON } from 'fs-extra'
 import path from 'path'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
@@ -24,7 +24,7 @@ export function configureStore (...middleware) {
         )
 
         window.addEventListener('beforeunload', () => {
-          outputJSONSync(CACHE_PATH, store.getState())
+          outputJsonSync(CACHE_PATH, store.getState())
         })
 
         resolve(store)
