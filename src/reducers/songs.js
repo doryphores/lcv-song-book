@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import { LOAD_RESOURCES } from '../actions'
 
 const initialState = []
@@ -18,16 +20,13 @@ export const songs = (state = initialState, { type, payload }) => {
 
 function addSong (songs, title) {
   title = ALIASES[title.toLowerCase()] || title
-  let idx = songs.findIndex(s => s.title.toLowerCase() === title.toLowerCase())
-  if (idx === -1) {
-    songs.push({
-      title: title,
-      recordings: {},
-      sheets: {}
-    })
-    idx = songs.length - 1
-  }
-  return songs[idx]
+  let song = songs.find(s => s.title.toLowerCase() === title.toLowerCase())
+  if (song) return song
+  return songs.push({
+    title: title,
+    recordings: {},
+    sheets: {}
+  }) && _.last(songs)
 }
 
 function sortSongs (songs) {
