@@ -1,8 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
+import { remote } from 'electron'
 
-import { selectSong, RESIZE_SIDEBAR, TOGGLE_SIDEBAR } from '../actions'
+import {
+  selectSong, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
+  ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST
+} from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
 import KeyCapture from '../key_capture'
@@ -13,7 +17,8 @@ class Sidebar extends React.Component {
     this.state = {
       search: '',
       highlighted: -1,
-      searching: false
+      searching: false,
+      selectedPlaylist: 'ALL'
     }
 
     this.toggleKeyCapture = new KeyCapture({
@@ -76,9 +81,14 @@ class Sidebar extends React.Component {
   }
 
   filterSongs () {
-    if (this.state.search === '') return this.props.songs
+    let songs = this.props.songs
+    if (this.state.selectedPlaylist !== 'ALL') {
+      let playlist = this.props.playlists[this.state.selectedPlaylist]
+      songs = this.props.songs.filter(s => playlist.includes(s.title))
+    }
+    if (this.state.search === '') return songs
     let searchString = this.state.search.toLowerCase()
-    return this.props.songs.filter(s => {
+    return songs.filter(s => {
       return s.title.toLowerCase().includes(searchString)
     })
   }
@@ -104,6 +114,40 @@ class Sidebar extends React.Component {
       search: e.target.value,
       highlighted: -1
     })
+  }
+
+  selectPlaylist (e) {
+    this.stopSearch()
+    this.setState({
+      search: '',
+      selectedPlaylist: e.target.value
+    })
+  }
+
+  popupMenu (title) {
+    let template = [{
+      label: 'Add to new playlist',
+      click () { console.log(`Add ${title}`) }
+    }]
+
+    let playlistLabels = Object.keys(this.props.playlists)
+
+    if (playlistLabels.length) {
+      template.push({ type: 'separator' })
+      playlistLabels.forEach(playlist => {
+        let inPlaylist = this.props.playlists[playlist].includes(title)
+        template.push({
+          label: inPlaylist ? `Remove from "${playlist}"` : `Add to "${playlist}"`,
+          type: 'checkbox',
+          checked: inPlaylist,
+          click: () => {
+            this.props[inPlaylist ? 'removeFromPlaylist' : 'addToPlaylist'](playlist, title)
+          }
+        })
+      })
+    }
+
+    remote.Menu.buildFromTemplate(template).popup()
   }
 
   classNames (classNames) {
@@ -144,11 +188,25 @@ class Sidebar extends React.Component {
             <li key={s.title}
               ref={`item-${i}`}
               className={this.itemClassNames(s.title, i)}
-              onClick={() => this.props.onSelect(s.title)}>
+              onClick={() => this.props.onSelect(s.title)}
+              onContextMenu={() => this.popupMenu(s.title)}>
               {s.title}
             </li>
           ))}
         </ul>
+        <div className='sidebar__playlist-selector theme--dark u-flex__panel'>
+          <label className='field field--dropdown'>
+            <select className='field__input field__input--select'
+              value={this.state.selectedPlaylist}
+              onChange={this.selectPlaylist.bind(this)}>
+              <option value='ALL'>All songs</option>
+              {Object.keys(this.props.playlists).map((p, i) => (
+                <option key={i}>{p}</option>
+              ))}
+            </select>
+            <Icon className='field__icon' icon='arrow_drop_down' />
+          </label>
+        </div>
         <Resizer className='sidebar__resizer'
           onResize={this.props.onResize} />
       </div>
@@ -158,6 +216,14 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps (dispatch) {
   return {
+    addToPlaylist: (playlist, song) => dispatch({
+      type: ADD_TO_PLAYLIST,
+      payload: { playlist, song }
+    }),
+    removeFromPlaylist: (playlist, song) => dispatch({
+      type: REMOVE_FROM_PLAYLIST,
+      payload: { playlist, song }
+    }),
     toggleSidebar: () => dispatch({ type: TOGGLE_SIDEBAR }),
     onSelect: (title) => dispatch(selectSong(title)),
     onResize: (width) => dispatch({
@@ -171,6 +237,7 @@ function mapStateToProps (state) {
   return {
     selectedSongTitle: state.selectedSong.title,
     songs: state.songs,
+    playlists: state.playlists,
     visible: state.ui.sidebarVisible,
     width: state.ui.sidebarWidth
   }
