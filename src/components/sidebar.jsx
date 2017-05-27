@@ -158,6 +158,10 @@ class Sidebar extends React.Component {
   createPlaylist (e) {
     e.preventDefault()
     this.props.addToPlaylist(this.state.newPlaylistLabel, this.state.songToAdd)
+    this.resetNewplaylist()
+  }
+
+  resetNewplaylist () {
     this.setState({
       newPlaylistLabel: '',
       songToAdd: ''
@@ -170,7 +174,7 @@ class Sidebar extends React.Component {
         title='New playlist'
         buttonLabel='Create playlist'
         onSubmit={this.createPlaylist.bind(this)}
-        onCancel={() => this.setState({ songToAdd: '' })}>
+        onCancel={this.resetNewplaylist.bind(this)}>
         <label className='field'>
           <input type='text'
             className='field__input'
