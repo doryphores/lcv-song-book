@@ -9,6 +9,7 @@ import {
 } from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
+import Modal from './modal'
 import KeyCapture from '../key_capture'
 
 class Sidebar extends React.Component {
@@ -18,7 +19,9 @@ class Sidebar extends React.Component {
       search: '',
       highlighted: -1,
       searching: false,
-      selectedPlaylist: 'ALL'
+      selectedPlaylist: 'ALL',
+      newPlaylistLabel: '',
+      songToAdd: ''
     }
 
     this.toggleKeyCapture = new KeyCapture({
@@ -127,7 +130,9 @@ class Sidebar extends React.Component {
   popupMenu (title) {
     let template = [{
       label: 'Add to new playlist',
-      click () { console.log(`Add ${title}`) }
+      click: () => {
+        this.setState({ songToAdd: title })
+      }
     }]
 
     let playlistLabels = Object.keys(this.props.playlists)
@@ -148,6 +153,35 @@ class Sidebar extends React.Component {
     }
 
     remote.Menu.buildFromTemplate(template).popup()
+  }
+
+  createPlaylist (e) {
+    e.preventDefault()
+    this.props.addToPlaylist(this.state.newPlaylistLabel, this.state.songToAdd)
+    this.setState({
+      newPlaylistLabel: '',
+      songToAdd: ''
+    })
+  }
+
+  renderNewPlaylistPanel () {
+    return (
+      <Modal open={!!this.state.songToAdd}
+        title='New playlist'
+        buttonLabel='Create playlist'
+        onSubmit={this.createPlaylist.bind(this)}
+        onCancel={() => this.setState({ songToAdd: '' })}>
+        <label className='field'>
+          <input type='text'
+            className='field__input'
+            value={this.state.newPlaylistLabel}
+            required
+            autoFocus
+            onChange={(e) => this.setState({ newPlaylistLabel: e.target.value })} />
+          <span className='field__label'>Playlist name</span>
+        </label>
+      </Modal>
+    )
   }
 
   classNames (classNames) {
@@ -207,6 +241,7 @@ class Sidebar extends React.Component {
             <Icon className='field__icon' icon='arrow_drop_down' />
           </label>
         </div>
+        {this.renderNewPlaylistPanel()}
         <Resizer className='sidebar__resizer'
           onResize={this.props.onResize} />
       </div>

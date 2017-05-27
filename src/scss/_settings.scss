@@ -4,30 +4,3 @@
   cursor: pointer;
   fill: #fff;
 }
-
-.settings__overlay {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  justify-content: center;
-  background-color: rgba(#000, .7);
-}
-
-.settings__panel {
-  min-width: 400px;
-  padding: 40px;
-  background-color: #fff;
-  border-radius: 2px;
-  @include card-shadow(4);
-  color: rgba(#000, .87);
-  fill: rgba(#000, .87);
-}
-
-.settings__heading {
-  font-weight: normal;
-  font-size: 20px;
-  margin: 0 0 40px;
-}

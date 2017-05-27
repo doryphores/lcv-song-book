@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
 import Icon from './icon'
-import FirstChild from './first_child'
+import Modal from './modal'
 
 class Settings extends React.Component {
   constructor (props) {
@@ -59,12 +58,17 @@ class Settings extends React.Component {
     )
   }
 
-  renderPanel () {
+  render () {
     return (
-      <div className='settings__overlay u-flex u-flex--vertical u-flex--center'>
-        <form className='settings__panel' onSubmit={this.handleSubmit.bind(this)}>
-          <h2 className='settings__heading'>Preferences</h2>
+      <div className={this.classNames()}>
+        <Icon icon={this.props.open ? 'close' : 'settings'}
+          className='settings__toggle'
+          onClick={this.props.onToggle} />
 
+        <Modal open={this.props.open}
+          title='Preferences'
+          buttonLabel='Apply'
+          onSubmit={this.handleSubmit.bind(this)}>
           <label className='field'>
             <input type='password'
               className='field__input'
@@ -76,28 +80,7 @@ class Settings extends React.Component {
           </label>
 
           {this.renderHideScrollbarsSetting()}
-
-          <div className='form-actions'>
-            <button className='button'>Apply</button>
-          </div>
-        </form>
-      </div>
-    )
-  }
-
-  render () {
-    return (
-      <div className={this.classNames()}>
-        <Icon icon={this.props.open ? 'close' : 'settings'}
-          className='settings__toggle'
-          onClick={this.props.onToggle} />
-
-        <CSSTransitionGroup component={FirstChild}
-          transitionName='slide-down'
-          transitionEnterTimeout={400}
-          transitionLeaveTimeout={400}>
-          {this.props.open ? this.renderPanel() : null}
-        </CSSTransitionGroup>
+        </Modal>
       </div>
     )
   }

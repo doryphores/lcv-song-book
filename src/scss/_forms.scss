@@ -139,8 +139,6 @@ option {
 // Form actions
 
 .form-actions {
-  width: 100%;
-  max-width: 200px;
   margin-top: 40px;
 }
 
@@ -156,6 +154,10 @@ option {
   background-color: #7C4DFF;
   color: #fff;
   cursor: pointer;
+
+  + .button {
+    margin-left: 10px;
+  }
 
   &:hover,
   &:focus {
