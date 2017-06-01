@@ -1,0 +1,25 @@
+.notifications {
+  position: fixed;
+  top: 58px;
+  right: 10px;
+  z-index: 10;
+}
+
+.notifications__item {
+  width: 300px;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  background-color: pink(300);
+  color: #fff;
+  @include card-shadow(1);
+  cursor: pointer;
+
+  &:hover {
+    background-color: pink(400);
+  }
+
+  &:active {
+    background-color: pink(500);
+  }
+}

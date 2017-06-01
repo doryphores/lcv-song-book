@@ -32,35 +32,9 @@ class Settings extends React.Component {
     })
   }
 
-  classNames () {
-    return classnames(
-      this.props.className,
-      'settings'
-    )
-  }
-
-  renderHideScrollbarsSetting () {
-    if (process.platform === 'darwin') return null
-
-    return (
-      <label className='field checkbox'>
-        <input className='checkbox__input'
-          type='checkbox'
-          checked={this.state.hideScrollbars}
-          onChange={(e) => this.setState({ hideScrollbars: e.target.checked })} />
-        <span className='checkbox__check'>
-          <Icon icon='check' className='checkbox__check-icon' />
-        </span>
-        <span className='field__label checkbox__label'>
-          Hide scrollbars (restart to apply)
-        </span>
-      </label>
-    )
-  }
-
   render () {
     return (
-      <div className={this.classNames()}>
+      <div className={classnames(this.props.className, 'settings')}>
         <Icon icon={this.props.open ? 'close' : 'settings'}
           className='settings__toggle'
           onClick={this.props.onToggle} />
@@ -79,7 +53,20 @@ class Settings extends React.Component {
             <span className='field__label'>LCV website password</span>
           </label>
 
-          {this.renderHideScrollbarsSetting()}
+          {process.platform !== 'darwin' && (
+            <label className='field checkbox'>
+              <input className='checkbox__input'
+                type='checkbox'
+                checked={this.state.hideScrollbars}
+                onChange={(e) => this.setState({ hideScrollbars: e.target.checked })} />
+              <span className='checkbox__check'>
+                <Icon icon='check' className='checkbox__check-icon' />
+              </span>
+              <span className='field__label checkbox__label'>
+                Hide scrollbars (restart to apply)
+              </span>
+            </label>
+          )}
         </Modal>
       </div>
     )

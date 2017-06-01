@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import Sidebar from './sidebar'
 import Toolbar from './toolbar'
 import SelectedSong from './selected_song'
+import Notifications from './notifications'
 
 const App = ({ hideScrollbars }) => (
   <div className={classnames('u-flex u-flex--full u-flex--horizontal', { 'u-hide-scrollbars': hideScrollbars })}>
@@ -13,6 +14,7 @@ const App = ({ hideScrollbars }) => (
       <Toolbar className='u-flex__panel' />
       <SelectedSong className='u-flex__panel u-flex__panel--grow' />
     </div>
+    <Notifications />
   </div>
 )
 

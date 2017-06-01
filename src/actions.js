@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const RESTORE = 'RESTORE'
 
 export const RESIZE_SIDEBAR = 'RESIZE_SIDEBAR'
@@ -7,6 +9,9 @@ export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS'
 export const SAVE_SETTINGS = 'SAVE_SETTINGS'
 
 export const LOAD_RESOURCES = 'LOAD_RESOURCES'
+
+export const NOTIFY = 'NOTIFY'
+export const DISMISS = 'DISMISS'
 
 export const SELECT_VOICE = 'SELECT_VOICE'
 export const SONG_SELECTED = 'SONG_SELECTED'
@@ -23,6 +28,9 @@ export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 
 export function loadResources (resources) {
   return function (dispatch, getState) {
+    let songsBefore = getState().songs.map(s => s.title)
+    let recordingsBefore = gatherRecordings(getState().songs)
+
     dispatch({
       type: LOAD_RESOURCES,
       payload: {
@@ -30,6 +38,19 @@ export function loadResources (resources) {
         resources
       }
     })
+
+    let notifications = [].concat(
+      _.difference(getState().songs.map(s => s.title), songsBefore).map(song => `New song added: "${song}"`),
+      _.difference(gatherRecordings(getState().songs), recordingsBefore).map(song => {
+        return `New recording added for "${song}"`
+      })
+    )
+
+    dispatch({
+      type: NOTIFY,
+      payload: notifications
+    })
+
     let selectedSongTitle = getState().selectedSong.title
     if (selectedSongTitle) dispatch(selectSong(selectedSongTitle))
   }
@@ -80,4 +101,8 @@ function selectVoiceRecording (song, voice) {
   return song.recordings[voice] ||
     song.recordings[voice.replace(/ [12]/, '')] ||
     song.recordings[voice.replace(/ [12]/, '') + ' 1 + 2']
+}
+
+function gatherRecordings (songs) {
+  return _.compact(songs.map(s => !_.isEmpty(s.recordings) && s.title))
 }
