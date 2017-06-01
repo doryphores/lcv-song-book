@@ -12,6 +12,7 @@ export const LOAD_RESOURCES = 'LOAD_RESOURCES'
 
 export const NOTIFY = 'NOTIFY'
 export const DISMISS = 'DISMISS'
+export const DISMISS_AND_NOTIFY = 'DISMISS_AND_NOTIFY'
 
 export const SELECT_VOICE = 'SELECT_VOICE'
 export const SONG_SELECTED = 'SONG_SELECTED'
@@ -26,10 +27,10 @@ export const PLAYER_PLAYING = 'PLAYER_PLAYING'
 export const PLAYER_PAUSED = 'PLAYER_PAUSED'
 export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 
-export function notify (notification) {
+export function notify (notification, dismiss = false) {
   return {
-    type: NOTIFY,
-    payload: _.castArray(notification)
+    type: dismiss ? DISMISS_AND_NOTIFY : NOTIFY,
+    payload: notification
   }
 }
 

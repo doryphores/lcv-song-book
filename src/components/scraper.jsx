@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import WebView from 'react-electron-webview'
 
-import { loadResources, notify, dismiss } from '../actions'
+import { loadResources, notify } from '../actions'
 import Icon from './icon'
 
 class Scraper extends React.Component {
@@ -38,7 +38,6 @@ class Scraper extends React.Component {
           `document.body.textContent.includes("You've entered an invalid password")`,
           true, invalidPassword => {
             if (invalidPassword) {
-              this.props.dismiss('Accessing resources area…')
               this.props.notify('Invalid LCV website password. Check your password and try again.')
               this.setState({ started: false })
             } else {
@@ -46,7 +45,6 @@ class Scraper extends React.Component {
                 document.querySelector('#smartPassword').value = '${this.props.password}'
                 document.querySelector('#smartPWLogin').submit()
               `, true, () => {
-                this.props.dismiss('Accessing LCV website…')
                 this.props.notify('Accessing resources area…')
               })
             }
@@ -73,10 +71,8 @@ class Scraper extends React.Component {
       })`,
       true,
       resources => {
-        this.props.loadResources(resources)
-        this.props.dismiss('Accessing resources area…')
         this.props.notify('All resources retrieved')
-
+        this.props.loadResources(resources)
         this.setState({ started: false })
       }
     )
@@ -123,8 +119,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    notify: message => dispatch(notify(message)),
-    dismiss: message => dispatch(dismiss(message)),
+    notify: message => dispatch(notify(message, true)),
     loadResources: resources => dispatch(loadResources(resources))
   }
 }
