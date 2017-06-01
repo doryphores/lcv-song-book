@@ -26,6 +26,20 @@ export const PLAYER_PLAYING = 'PLAYER_PLAYING'
 export const PLAYER_PAUSED = 'PLAYER_PAUSED'
 export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 
+export function notify (notification) {
+  return {
+    type: NOTIFY,
+    payload: _.castArray(notification)
+  }
+}
+
+export function dismiss (notification) {
+  return {
+    type: DISMISS,
+    payload: notification
+  }
+}
+
 export function loadResources (resources) {
   return function (dispatch, getState) {
     let songsBefore = getState().songs.map(s => s.title)
@@ -39,17 +53,14 @@ export function loadResources (resources) {
       }
     })
 
-    let notifications = [].concat(
+    if (_.isEmpty(songsBefore)) return
+
+    dispatch(notify(_.concat(
       _.difference(getState().songs.map(s => s.title), songsBefore).map(song => `New song added: "${song}"`),
       _.difference(gatherRecordings(getState().songs), recordingsBefore).map(song => {
         return `New recording added for "${song}"`
       })
-    )
-
-    dispatch({
-      type: NOTIFY,
-      payload: notifications
-    })
+    )))
 
     let selectedSongTitle = getState().selectedSong.title
     if (selectedSongTitle) dispatch(selectSong(selectedSongTitle))

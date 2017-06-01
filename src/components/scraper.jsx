@@ -2,41 +2,56 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import WebView from 'react-electron-webview'
-import CSSTransistionGroup from 'react-transition-group/CSSTransitionGroup'
 
-import { loadResources } from '../actions'
+import { loadResources, notify, dismiss } from '../actions'
 import Icon from './icon'
-import FirstChild from './first_child'
 
 class Scraper extends React.Component {
   constructor () {
     super()
-    this.state = {
-      started: false,
-      done: false,
-      progress: ''
-    }
+    this.state = { started: false }
   }
 
   componentDidMount () {
-    let oneDay = 1000 * 60 * 60 * 24 // in milliseconds
-    if (this.props.lastUpdate < (Date.now() - oneDay)) this.start()
+    if (this.props.password) {
+      let oneDay = 1000 * 60 * 60 * 24 // in milliseconds
+      if (this.props.lastUpdate < (Date.now() - oneDay)) this.start()
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.password === '' && nextProps.password !== '') {
+      this.start()
+    }
   }
 
   start () {
-    this.setState({
-      started: true,
-      progress: 'Accessing LCV website…'
-    })
+    if (this.state.started) return
+    this.props.notify('Accessing LCV website…')
+    this.setState({ started: true })
   }
 
   handleFinishLoad (e) {
     switch (e.target.getURL()) {
       case 'https://www.londoncityvoices.co.uk/choir-resources/':
-        e.target.executeJavaScript(`
-          document.querySelector('#smartPassword').value = '${this.props.password}'
-          document.querySelector('#smartPWLogin').submit()
-        `, true, () => this.setState({ progress: 'Accessing resources area…' }))
+        e.target.executeJavaScript(
+          `document.body.textContent.includes("You've entered an invalid password")`,
+          true, invalidPassword => {
+            if (invalidPassword) {
+              this.props.dismiss('Accessing resources area…')
+              this.props.notify('Invalid LCV website password. Check your password and try again.')
+              this.setState({ started: false })
+            } else {
+              e.target.executeJavaScript(`
+                document.querySelector('#smartPassword').value = '${this.props.password}'
+                document.querySelector('#smartPWLogin').submit()
+              `, true, () => {
+                this.props.dismiss('Accessing LCV website…')
+                this.props.notify('Accessing resources area…')
+              })
+            }
+          }
+        )
         break
       case 'https://www.londoncityvoices.co.uk/choir-resources/choir-resources-2/':
         this.harvestData(e.target)
@@ -59,17 +74,10 @@ class Scraper extends React.Component {
       true,
       resources => {
         this.props.loadResources(resources)
+        this.props.dismiss('Accessing resources area…')
+        this.props.notify('All resources retrieved')
 
-        this.setState({
-          progress: `All resources retrieved`,
-          done: true,
-          started: false
-        })
-
-        setTimeout(() => this.setState({
-          done: false,
-          progress: ''
-        }), 2000)
+        this.setState({ started: false })
       }
     )
   }
@@ -89,8 +97,7 @@ class Scraper extends React.Component {
       this.props.className,
       'scraper',
       {
-        'scraper--working': this.state.started && !this.state.done,
-        'scraper--done': this.state.done
+        'scraper--working': this.state.started
       }
     )
   }
@@ -98,15 +105,7 @@ class Scraper extends React.Component {
   render () {
     return (
       <div className={this.classNames()}>
-        <CSSTransistionGroup component={FirstChild}
-          transitionName='fade-right'
-          transitionEnterTimeout={400}
-          transitionLeaveTimeout={400}>
-          {this.state.progress ? (
-            <span className='scraper__message'>{this.state.progress}</span>
-          ) : null}
-        </CSSTransistionGroup>
-        <Icon icon={this.state.done ? 'check' : 'refresh'}
+        <Icon icon='refresh'
           className='scraper__icon'
           onClick={this.start.bind(this)} />
         {this.renderBrowser()}
@@ -124,6 +123,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    notify: message => dispatch(notify(message)),
+    dismiss: message => dispatch(dismiss(message)),
     loadResources: resources => dispatch(loadResources(resources))
   }
 }
