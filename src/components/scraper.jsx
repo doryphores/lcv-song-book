@@ -87,21 +87,11 @@ class Scraper extends React.Component {
     )
   }
 
-  classNames () {
-    return classnames(
-      this.props.className,
-      'scraper',
-      {
-        'scraper--working': this.state.started
-      }
-    )
-  }
-
   render () {
     return (
-      <div className={this.classNames()}>
+      <div className={this.props.className}>
         <Icon icon='refresh'
-          className='scraper__icon'
+          className={classnames('toolbar__button', { 'toolbar__button--spinning': this.state.started })}
           onClick={this.start.bind(this)} />
         {this.renderBrowser()}
       </div>

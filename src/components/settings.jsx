@@ -34,12 +34,9 @@ class Settings extends React.Component {
 
   render () {
     return (
-      <div className={classnames(this.props.className, 'settings')}>
-        <Icon icon={this.props.open ? 'close' : 'settings'}
-          className='settings__toggle'
-          onClick={this.props.onToggle} />
-
+      <div className={this.props.className}>
         <Modal open={this.props.open}
+          className='toolbar__panel'
           title='Preferences'
           buttonLabel='Apply'
           onSubmit={this.handleSubmit.bind(this)}>
@@ -68,6 +65,10 @@ class Settings extends React.Component {
             </label>
           )}
         </Modal>
+
+        <Icon icon={this.props.open ? 'close' : 'settings'}
+          className='toolbar__button'
+          onClick={this.props.onToggle} />
       </div>
     )
   }

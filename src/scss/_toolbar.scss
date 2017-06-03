@@ -9,4 +9,29 @@
 
 .toolbar__voice-selector {
   width: 200px;
+  margin-right: auto;
+}
+
+.toolbar__button {
+  position: relative;
+  margin-left: 20px;
+  cursor: pointer;
+  fill: #fff;
+  border-radius: 50%;
+  transition: all .2s;
+
+  .toolbar__panel + & {
+    z-index: 11;
+  }
+
+  &:hover {
+    background-color: #fff;
+    fill: purple(500);
+    box-shadow: 0 0 0 5px #fff;
+  }
+}
+
+.toolbar__button--spinning {
+  cursor: default;
+  animation: spin 1s infinite linear;
 }
