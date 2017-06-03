@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { selectVoice } from '../actions'
 import Scraper from './scraper'
 import Settings from './settings'
+import Shortcuts from './shortcuts'
 import Icon from './icon'
 
 const VOICES = [
@@ -51,6 +52,7 @@ class Toolbar extends React.Component {
 
         <Scraper className='u-flex__panel' />
         <Settings className='u-flex__panel' />
+        <Shortcuts className='u-flex__panel' />
       </div>
     )
   }

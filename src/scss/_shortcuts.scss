@@ -1,0 +1,26 @@
+.shortcuts {
+  width: 100%;
+  max-width: 400px;
+  font-size: 12px;
+  line-height: 18px;
+  border-collapse: collapse;
+
+  th {
+    padding: 8px 16px 8px 0;
+    vertical-align: top;
+    text-align: left;
+    font-weight: normal;
+    border-right: 1px solid #ccc;
+  }
+
+  td {
+    padding: 8px 0 8px 16px;
+    vertical-align: top;
+  }
+}
+
+.shortcuts__keystroke {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}

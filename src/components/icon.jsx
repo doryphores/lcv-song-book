@@ -7,6 +7,8 @@ const ICONS = {
   'check': 'navigation',
   'close': 'navigation',
   'error': 'alert',
+  'help': 'action',
+  'help_outline': 'action',
   'info': 'action',
   'info_outline': 'action',
   'pause_circle_filled': 'av',

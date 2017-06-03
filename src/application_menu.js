@@ -1,6 +1,6 @@
 import { app, Menu, shell } from 'electron'
 
-import { TOGGLE_SIDEBAR, TOGGLE_SETTINGS } from './actions'
+import { TOGGLE_SIDEBAR, TOGGLE_SETTINGS, TOGGLE_SHORTCUTS } from './actions'
 
 let win
 
@@ -64,6 +64,12 @@ const template = [
       {
         label: 'Learn More',
         click () { shell.openExternal('https://github.com/doryphores/lcv_resources') }
+      },
+      { type: 'separator' },
+      {
+        label: 'Keyboard shortcuts',
+        click: () => win.webContents.send('dispatch-action', TOGGLE_SHORTCUTS),
+        accelerator: '?'
       }
     ]
   }
