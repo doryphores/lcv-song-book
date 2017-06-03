@@ -13,6 +13,7 @@ export const LOAD_RESOURCES = 'LOAD_RESOURCES'
 export const NOTIFY = 'NOTIFY'
 export const DISMISS = 'DISMISS'
 export const DISMISS_AND_NOTIFY = 'DISMISS_AND_NOTIFY'
+export const DISMISS_ALL = 'DISMISS_ALL'
 
 export const SELECT_VOICE = 'SELECT_VOICE'
 export const SONG_SELECTED = 'SONG_SELECTED'
@@ -27,10 +28,30 @@ export const PLAYER_PLAYING = 'PLAYER_PLAYING'
 export const PLAYER_PAUSED = 'PLAYER_PAUSED'
 export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 
-export function notify (notification, dismiss = false) {
+export function notify (notification) {
   return {
-    type: dismiss ? DISMISS_AND_NOTIFY : NOTIFY,
+    type: NOTIFY,
     payload: notification
+  }
+}
+
+export function alert (message) {
+  return {
+    type: NOTIFY,
+    payload: {
+      message,
+      icon: 'error'
+    }
+  }
+}
+
+export function success (message) {
+  return {
+    type: NOTIFY,
+    payload: {
+      message,
+      icon: 'check'
+    }
   }
 }
 
@@ -54,17 +75,38 @@ export function loadResources (resources) {
       }
     })
 
-    if (_.isEmpty(songsBefore)) return
-
-    dispatch(notify(_.concat(
-      _.difference(getState().songs.map(s => s.title), songsBefore).map(song => `New song added: "${song}"`),
-      _.difference(gatherRecordings(getState().songs), recordingsBefore).map(song => {
-        return `New recording added for "${song}"`
-      })
-    )))
-
     let selectedSongTitle = getState().selectedSong.title
     if (selectedSongTitle) dispatch(selectSong(selectedSongTitle))
+
+    let newSongs = _.difference(getState().songs.map(s => s.title), songsBefore)
+    let newRecordings = _.difference(gatherRecordings(getState().songs), recordingsBefore)
+
+    if (_.isEmpty(newSongs) && _.isEmpty(newRecordings)) {
+      dispatch(notify('No new songs or recordings'))
+      return
+    }
+
+    if (_.isEmpty(songsBefore)) {
+      dispatch(success(`Found ${newSongs.length} songs and ${newRecordings.length} recordings`))
+      return
+    }
+
+    dispatch(notify(_.concat(
+      newSongs.map(s => {
+        return {
+          message: 'New song:',
+          icon: 'audiotrack',
+          song: s
+        }
+      }),
+      newRecordings.map(s => {
+        return {
+          message: 'New recording for',
+          icon: 'voicemail',
+          song: s
+        }
+      })
+    )))
   }
 }
 

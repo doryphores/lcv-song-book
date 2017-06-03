@@ -1,25 +1,43 @@
-.notifications {
+.notification-container {
   position: fixed;
   top: 58px;
   right: 10px;
   z-index: 8;
 }
 
-.notifications__item {
-  width: 300px;
-  padding: 20px;
+.notification {
+  align-items: center;
+  width: 350px;
+  padding: 16px;
   margin-bottom: 10px;
+  line-height: 22px;
   border-radius: 2px;
-  background-color: pink(300);
+  background-color: pink(400);
   color: #fff;
-  @include card-shadow(1);
+  fill: #fff;
+  @include card-shadow(2);
   cursor: pointer;
 
   &:hover {
-    background-color: pink(400);
+    background-color: pink(500);
   }
 
   &:active {
-    background-color: pink(500);
+    background-color: pink(600);
+  }
+}
+
+.notification__icon {
+  width: 36px;
+  height: 36px;
+  margin-right: 16px;
+}
+
+.notification__song {
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
   }
 }

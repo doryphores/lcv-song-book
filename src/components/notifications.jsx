@@ -2,19 +2,28 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 
-import { DISMISS } from '../actions'
+import Icon from './icon'
+import { dismiss, selectSong } from '../actions'
 
-const Notifications = ({ notifications, onDismiss }) => (
+const Notifications = ({ notifications, onDismiss, onView }) => (
   <CSSTransitionGroup component='div'
-    className='notifications'
+    className='notification-container'
     transitionName='grow'
     transitionEnterTimeout={200}
     transitionLeaveTimeout={200}>
-    {notifications.map((notification, i) => (
-      <div key={notification}
-        className='notifications__item'
-        onClick={() => onDismiss(notification)}>
-        {notification}
+    {notifications.map(({ id, message, icon, song }) => (
+      <div key={id}
+        className='notification u-flex u-flex--horizontal'
+        onClick={() => onDismiss(id)}>
+        <Icon icon={icon} className='notification__icon u-flex__panel' />
+        <span className='u-flex__panel u-flex__panel--grow'>
+          {message + ' '}
+          {song && (
+            <span className='notification__song' onClick={() => onView(song)}>
+              {song}
+            </span>
+          )}
+        </span>
       </div>
     ))}
   </CSSTransitionGroup>
@@ -26,10 +35,8 @@ function mapStateToProps ({ notifications }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    onDismiss: (notification) => dispatch({
-      type: DISMISS,
-      payload: notification
-    })
+    onDismiss: (message) => dispatch(dismiss(message)),
+    onView: (song) => dispatch(selectSong(song))
   }
 }
 

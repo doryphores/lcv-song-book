@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import WebView from 'react-electron-webview'
 
-import { loadResources, notify } from '../actions'
+import { loadResources, alert, DISMISS_ALL } from '../actions'
 import Icon from './icon'
 
 class Scraper extends React.Component {
@@ -27,7 +27,7 @@ class Scraper extends React.Component {
 
   start () {
     if (this.state.started) return
-    this.props.notify('Accessing LCV website…')
+    this.props.dismissAllNotifications()
     this.setState({ started: true })
   }
 
@@ -35,18 +35,18 @@ class Scraper extends React.Component {
     switch (e.target.getURL()) {
       case 'https://www.londoncityvoices.co.uk/choir-resources/':
         e.target.executeJavaScript(
-          `document.body.textContent.includes("You've entered an invalid password")`,
-          true, invalidPassword => {
+          `(function () {
+            if (document.body.textContent.includes("You've entered an invalid password")) {
+              return true
+            }
+            document.querySelector('#smartPassword').value = '${this.props.password}'
+            document.querySelector('#smartPWLogin').submit()
+            return false
+          })()`,
+          true, (invalidPassword) => {
             if (invalidPassword) {
-              this.props.notify('Invalid LCV website password. Check your password and try again.')
+              this.props.alert('Invalid LCV website password. Check your password and try again.')
               this.setState({ started: false })
-            } else {
-              e.target.executeJavaScript(`
-                document.querySelector('#smartPassword').value = '${this.props.password}'
-                document.querySelector('#smartPWLogin').submit()
-              `, true, () => {
-                this.props.notify('Accessing resources area…')
-              })
             }
           }
         )
@@ -71,7 +71,6 @@ class Scraper extends React.Component {
       })`,
       true,
       resources => {
-        this.props.notify('All resources retrieved')
         this.props.loadResources(resources)
         this.setState({ started: false })
       }
@@ -119,7 +118,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    notify: message => dispatch(notify(message, true)),
+    dismissAllNotifications: () => dispatch({ type: DISMISS_ALL }),
+    alert: notification => dispatch(alert(notification)),
     loadResources: resources => dispatch(loadResources(resources))
   }
 }
