@@ -6,7 +6,7 @@
 
 You need [node](https://nodejs.org) and [yarn](https://yarnpkg.com/) installed first.
 
-Install dependencies node dependencies:
+Install dependencies:
 
     > yarn install
 
