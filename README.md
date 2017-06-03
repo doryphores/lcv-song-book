@@ -1,6 +1,6 @@
 # LCV Song Book
 
-![App icon](app/static/icon.png)
+![Screenshot](screenshot.png)
 
 ## Install and run for development
 
