@@ -1,7 +1,7 @@
 {
-  "name": "lcv-choir-resources",
-  "productName": "LCV Choir Resources",
-  "version": "0.0.1",
+  "name": "lcv-song-book",
+  "productName": "LCV Song Book",
+  "version": "1.0.0",
   "author": "Martin Laine <martin.laine@gmail.com>",
   "license": "MIT",
   "main": "js/index.js",
