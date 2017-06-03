@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 
 import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
 import Icon from './icon'
