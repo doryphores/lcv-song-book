@@ -2,14 +2,19 @@ import React from 'react'
 import classnames from 'classnames'
 
 const ICONS = {
-  'settings': 'action',
-  'search': 'action',
-  'play_circle_filled': 'av',
-  'pause_circle_filled': 'av',
   'arrow_drop_down': 'navigation',
-  'refresh': 'navigation',
+  'audiotrack': 'image',
+  'check': 'navigation',
   'close': 'navigation',
-  'check': 'navigation'
+  'error': 'alert',
+  'info': 'action',
+  'info_outline': 'action',
+  'pause_circle_filled': 'av',
+  'play_circle_filled': 'av',
+  'refresh': 'navigation',
+  'search': 'action',
+  'settings': 'action',
+  'voicemail': 'communication'
 }
 
 const Icon = ({ className, icon, style = {}, onClick }) => (
