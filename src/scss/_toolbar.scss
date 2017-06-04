@@ -14,21 +14,45 @@
 
 .toolbar__button {
   position: relative;
-  margin-left: 20px;
+  margin: -4px 0 -4px 10px;
+  padding: 4px;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
   fill: #fff;
-  border-radius: 50%;
-  transition: all .2s;
+  outline: none;
 
   .toolbar__panel + & {
     z-index: 11;
   }
 
-  &:hover {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: #fff;
-    fill: purple(500);
-    box-shadow: 0 0 0 5px #fff;
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    transition: all .2s;
   }
+
+  &:hover {
+    fill: purple(500);
+
+    &::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+.toolbar__button-icon {
+  position: relative;
+  transition: fill .2s;
 }
 
 .toolbar__button--spinning {

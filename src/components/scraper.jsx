@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 import WebView from 'react-electron-webview'
 
 import { loadResources, alert, DISMISS_ALL } from '../actions'
-import Icon from './icon'
+import ToolbarPanel from './toolbar_panel'
 
 class Scraper extends React.Component {
   constructor () {
@@ -89,12 +88,12 @@ class Scraper extends React.Component {
 
   render () {
     return (
-      <div className={this.props.className}>
-        <Icon icon='refresh'
-          className={classnames('toolbar__button', { 'toolbar__button--spinning': this.state.started })}
-          onClick={this.start.bind(this)} />
+      <ToolbarPanel className={this.props.className}
+        toggleIcon='refresh'
+        onToggle={this.start.bind(this)}
+        spinToggle={this.state.started}>
         {this.renderBrowser()}
-      </div>
+      </ToolbarPanel>
     )
   }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
+import ToolbarPanel from './toolbar_panel'
 import Icon from './icon'
 import Modal from './modal'
 
@@ -33,7 +34,9 @@ class Settings extends React.Component {
 
   render () {
     return (
-      <div className={this.props.className}>
+      <ToolbarPanel className={this.props.className}
+        toggleIcon={this.props.open ? 'close' : 'settings'}
+        onToggle={this.props.onToggle}>
         <Modal open={this.props.open}
           className='toolbar__panel'
           title='Preferences'
@@ -64,11 +67,7 @@ class Settings extends React.Component {
             </label>
           )}
         </Modal>
-
-        <Icon icon={this.props.open ? 'close' : 'settings'}
-          className='toolbar__button'
-          onClick={this.props.onToggle} />
-      </div>
+      </ToolbarPanel>
     )
   }
 }
