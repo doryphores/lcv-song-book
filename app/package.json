@@ -1,7 +1,7 @@
 {
   "name": "lcv-song-book",
   "productName": "LCV Song Book",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Martin Laine <martin.laine@gmail.com>",
   "license": "MIT",
   "main": "js/index.js",
