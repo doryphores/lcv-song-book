@@ -4,17 +4,25 @@ import { outputJSON, readJSON } from 'fs-extra'
 
 import { setApplicationMenu } from './application_menu'
 
-let win
+let appWindow
 
 const CONFIG_PATH = path.join(
   app.getPath('userData'),
   'window.json'
 )
 
-app.on('ready', () => {
-  // ========================================================
-  // Window setup
+const shouldQuit = app.makeSingleInstance(() => {
+  if (appWindow) {
+    if (appWindow.isMinimized()) appWindow.restore()
+    appWindow.focus()
+  }
+})
 
+if (shouldQuit) {
+  app.quit()
+}
+
+app.on('ready', () => {
   let opts = {
     minWidth: 800,
     minHeight: 600,
@@ -27,15 +35,15 @@ app.on('ready', () => {
   readJSON(CONFIG_PATH, (_, config) => {
     if (config) Object.assign(opts, config)
 
-    win = new BrowserWindow(opts)
+    appWindow = new BrowserWindow(opts)
 
-    setApplicationMenu(win)
+    setApplicationMenu(appWindow)
 
-    win.once('ready-to-show', () => win.show())
+    appWindow.once('ready-to-show', () => appWindow.show())
 
-    win.on('close', () => {
-      let [ width, height ] = win.getSize()
-      let [ x, y ] = win.getPosition()
+    appWindow.on('close', () => {
+      let [ width, height ] = appWindow.getSize()
+      let [ x, y ] = appWindow.getPosition()
       outputJSON(CONFIG_PATH, {
         width,
         height,
@@ -44,6 +52,6 @@ app.on('ready', () => {
       })
     })
 
-    win.loadURL(`file://${path.join(app.getAppPath(), 'static', 'index.html')}`)
+    appWindow.loadURL(`file://${path.join(app.getAppPath(), 'static', 'index.html')}`)
   })
 })
