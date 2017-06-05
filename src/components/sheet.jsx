@@ -57,9 +57,13 @@ export default class Sheet extends React.Component {
     PDFJS.getDocument(pdfURL)
       .then(pdfDocument => {
         this.pdfDocument = pdfDocument
-        this.setState({
-          pdfURL: pdfURL,
-          numPages: this.pdfDocument.numPages
+        this.pdfDocument.getPage(1).then(pdfPage => {
+          let viewport = pdfPage.getViewport(1.0)
+          this.setState({
+            pdfURL: pdfURL,
+            pageRatio: viewport.height / viewport.width,
+            numPages: this.pdfDocument.numPages
+          })
         })
       }).catch(console.error)
   }
@@ -91,12 +95,16 @@ export default class Sheet extends React.Component {
   }
 
   render () {
+    let paddingBottom = (this.state.pageRatio * 100) + '%'
+
     return (
       <div className={this.classNames('sheet')}>
         <div className='sheet__scroller'>
           <div className='sheet__page-container' ref='container'>
             {range(this.state.numPages).map(i => (
-              <div key={`page-${i + 1}`} className='sheet__page'>
+              <div key={`page-${i + 1}`}
+                className='sheet__page'
+                style={{ paddingBottom }}>
                 <canvas ref={`page-${i + 1}`} />
               </div>
             ))}
