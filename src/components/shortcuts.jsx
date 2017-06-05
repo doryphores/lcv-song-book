@@ -5,7 +5,7 @@ import { TOGGLE_SHORTCUTS } from '../actions'
 import ToolbarPanel from './toolbar_panel'
 import Overlay from './overlay'
 
-let cmdOrCtrl = process.os === 'darwin' ? '⌘' : 'Ctrl'
+let cmdOrCtrl = process.platform === 'darwin' ? '⌘' : 'Ctrl'
 
 class Shortcuts extends React.Component {
   render () {
