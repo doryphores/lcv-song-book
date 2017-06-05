@@ -12,7 +12,6 @@ export default class Sheet extends React.Component {
     super()
     this.state = {
       numPages: 0,
-      pageWidth: 0,
       pdfURL: '',
       loading: false
     }
@@ -20,8 +19,7 @@ export default class Sheet extends React.Component {
 
   componentDidMount () {
     this.loadPDF(this.props.pdfURL)
-    this.onResize = debounce(this.updatePageWidth.bind(this))
-    this.updatePageWidth()
+    this.onResize = debounce(this.renderPDF.bind(this), 250)
     window.addEventListener('resize', this.onResize)
   }
 
@@ -40,16 +38,11 @@ export default class Sheet extends React.Component {
       this.state.pdfURL !== '' &&
       (
         prevState.pdfURL !== this.state.pdfURL ||
-        prevState.numPages !== this.state.numPages ||
-        prevState.pageWidth !== this.state.pageWidth
+        prevState.numPages !== this.state.numPages
       )
     ) {
       this.renderPDF()
     }
-  }
-
-  updatePageWidth () {
-    this.setState({ pageWidth: this.refs.container.clientWidth })
   }
 
   loadPDF (pdfURL) {
@@ -78,7 +71,7 @@ export default class Sheet extends React.Component {
       return this.pdfDocument.getPage(i + 1).then(pdfPage => {
         let viewport = pdfPage.getViewport(1.0)
         let canvas = this.refs[`page-${i + 1}`]
-        let scale = this.state.pageWidth / viewport.width
+        let scale = this.refs.container.clientWidth / viewport.width
         viewport = pdfPage.getViewport(scale)
         canvas.width = viewport.width
         canvas.height = viewport.height

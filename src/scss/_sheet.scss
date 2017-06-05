@@ -45,13 +45,20 @@
 }
 
 .sheet__page {
+  position: relative;
+  height: 0;
+  padding-bottom: percentage(1.414141);
   background-color: #fff;
   @include card-shadow(1);
   opacity: 1;
   transition: opacity .2s;
 
   canvas {
-    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   + .sheet__page {
