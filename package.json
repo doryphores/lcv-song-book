@@ -13,6 +13,7 @@
     "test": "standard 'src/**/*.{js,jsx}' | snazzy"
   },
   "dependencies": {
+    "@material/elevation": "^0.1.8",
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-react": "^6.24.1",

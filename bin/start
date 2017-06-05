@@ -4,7 +4,7 @@ PATH=$PATH:./node_modules/.bin
 
 # Build JS and CSS with source maps
 babel src --source-maps --out-dir app/js
-node-sass --source-map app/css src/scss --output app/css
+node-sass --include-path node_modules --source-map app/css src/scss --output app/css
 
 # Start app
 if [[ `uname -s` == 'Linux' ]]; then

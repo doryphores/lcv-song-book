@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@material/animation@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@material/animation/-/animation-0.2.3.tgz#25f24962cd649e76459a16ab234b7846a7a7f419"
+
+"@material/elevation@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@material/elevation/-/elevation-0.1.8.tgz#57a1f3541a330d035633db7f5db82c462d0ccad0"
+  dependencies:
+    "@material/animation" "^0.2.3"
+
 "@types/node@^7.0.18":
   version "7.0.22"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.22.tgz#4593f4d828bdd612929478ea40c67b4f403ca255"

@@ -15,7 +15,7 @@
   background-color: pink(400);
   color: #fff;
   fill: #fff;
-  @include card-shadow(2);
+  @include mdc-elevation(2);
   cursor: pointer;
 
   &:hover {
