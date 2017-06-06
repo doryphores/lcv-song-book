@@ -203,47 +203,50 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div className={this.classNames('sidebar u-flex u-flex--vertical')}
-        style={{ width: this.props.width }}>
-        <div className='sidebar__search u-flex__panel'>
-          <input ref='searchInput'
-            type='text'
-            placeholder='Search'
-            className='sidebar__search-field field__input'
-            value={this.state.search}
-            onFocus={this.startSearch.bind(this)}
-            onBlur={this.stopSearch.bind(this)}
-            onChange={this.handleSearch.bind(this)} />
-          <Icon icon='search' className='sidebar__icon sidebar__search-icon' />
-          <Icon icon='close'
-            className='sidebar__icon sidebar__close-icon'
-            style={{ display: this.state.search === '' ? 'none' : 'block' }}
-            onClick={() => this.setState({ search: '' })} />
-        </div>
-        <ul ref='songList'
-          className='sidebar__menu u-flex__panel u-flex__panel--grow'>
-          {this.filterSongs().map((s, i) => (
-            <li key={s.title}
-              ref={`item-${i}`}
-              className={this.itemClassNames(s.title, i)}
-              onClick={() => this.props.onSelect(s.title)}
-              onContextMenu={() => this.popupMenu(s.title)}>
-              {s.title}
-            </li>
-          ))}
-        </ul>
-        <div className='sidebar__playlist-selector theme--dark u-flex__panel'>
-          <label className='field field--dropdown'>
-            <select className='field__input field__input--select'
-              value={this.state.selectedPlaylist}
-              onChange={this.selectPlaylist.bind(this)}>
-              <option value='ALL'>All songs</option>
-              {Object.keys(this.props.playlists).map((p, i) => (
-                <option key={i}>{p}</option>
-              ))}
-            </select>
-            <Icon className='field__icon' icon='arrow_drop_down' />
-          </label>
+      <div className={this.classNames('sidebar')}
+        style={{ width: (this.props.visible && this.props.width) || 0 }}>
+        <div className='sidebar__inner u-flex u-flex--vertical'
+          style={{ width: this.props.width }}>
+          <div className='sidebar__search u-flex__panel'>
+            <input ref='searchInput'
+              type='text'
+              placeholder='Search'
+              className='sidebar__search-field field__input'
+              value={this.state.search}
+              onFocus={this.startSearch.bind(this)}
+              onBlur={this.stopSearch.bind(this)}
+              onChange={this.handleSearch.bind(this)} />
+            <Icon icon='search' className='sidebar__icon sidebar__search-icon' />
+            <Icon icon='close'
+              className='sidebar__icon sidebar__close-icon'
+              style={{ display: this.state.search === '' ? 'none' : 'block' }}
+              onClick={() => this.setState({ search: '' })} />
+          </div>
+          <ul ref='songList'
+            className='sidebar__menu u-flex__panel u-flex__panel--grow'>
+            {this.filterSongs().map((s, i) => (
+              <li key={s.title}
+                ref={`item-${i}`}
+                className={this.itemClassNames(s.title, i)}
+                onClick={() => this.props.onSelect(s.title)}
+                onContextMenu={() => this.popupMenu(s.title)}>
+                {s.title}
+              </li>
+            ))}
+          </ul>
+          <div className='sidebar__playlist-selector theme--dark u-flex__panel'>
+            <label className='field field--dropdown'>
+              <select className='field__input field__input--select'
+                value={this.state.selectedPlaylist}
+                onChange={this.selectPlaylist.bind(this)}>
+                <option value='ALL'>All songs</option>
+                {Object.keys(this.props.playlists).map((p, i) => (
+                  <option key={i}>{p}</option>
+                ))}
+              </select>
+              <Icon className='field__icon' icon='arrow_drop_down' />
+            </label>
+          </div>
         </div>
         {this.renderNewPlaylistPanel()}
         <Resizer className='sidebar__resizer'
