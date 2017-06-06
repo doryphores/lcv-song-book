@@ -19,7 +19,7 @@ export default class Sheet extends React.Component {
 
   componentDidMount () {
     this.loadPDF(this.props.pdfURL)
-    this.onResize = debounce(this.renderPDF.bind(this), 250)
+    this.onResize = debounce(this.renderPDF.bind(this), 100)
     window.addEventListener('resize', this.onResize)
   }
 
@@ -74,7 +74,7 @@ export default class Sheet extends React.Component {
     Promise.all(range(this.state.numPages).map(i => {
       return this.pdfDocument.getPage(i + 1).then(pdfPage => {
         let viewport = pdfPage.getViewport(1.0)
-        let canvas = this.refs[`page-${i + 1}`]
+        let canvas = document.createElement('canvas')
         let scale = this.refs.container.clientWidth / viewport.width
         viewport = pdfPage.getViewport(scale)
         canvas.width = viewport.width
@@ -82,6 +82,13 @@ export default class Sheet extends React.Component {
         return pdfPage.render({
           canvasContext: canvas.getContext('2d'),
           viewport: viewport
+        }).then(() => {
+          let page = this.refs[`page-${i + 1}`]
+          if (page.firstChild) {
+            page.firstChild.replaceWith(canvas)
+          } else {
+            page.appendChild(canvas)
+          }
         })
       })
     })).then(() => this.setState({ loading: false }))
@@ -102,11 +109,10 @@ export default class Sheet extends React.Component {
         <div className='sheet__scroller'>
           <div className='sheet__page-container' ref='container'>
             {range(this.state.numPages).map(i => (
-              <div key={`page-${i + 1}`}
+              <div key={i}
+                ref={`page-${i + 1}`}
                 className='sheet__page'
-                style={{ paddingBottom }}>
-                <canvas ref={`page-${i + 1}`} />
-              </div>
+                style={{ paddingBottom }} />
             ))}
           </div>
           <span className='sheet__loading-message'>
