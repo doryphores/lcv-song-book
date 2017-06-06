@@ -22,6 +22,10 @@ if (shouldQuit) {
   app.quit()
 }
 
+if (process.platform === 'linux') {
+  app.disableHardwareAcceleration()
+}
+
 app.on('ready', () => {
   let opts = {
     minWidth: 800,
