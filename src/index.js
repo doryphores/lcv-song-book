@@ -54,6 +54,7 @@ app.on('ready', () => {
         x,
         y
       })
+      app.quit()
     })
 
     appWindow.loadURL(`file://${path.join(app.getAppPath(), 'static', 'index.html')}`)
