@@ -49,6 +49,9 @@ class Sidebar extends React.Component {
       document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
     }
     this.toggleKeyCapture.activate()
+    this.refs.sidebar.addEventListener('transitionend', () => {
+      window.dispatchEvent(new window.Event('resize'))
+    })
   }
 
   componentWillUnmount () {
@@ -66,10 +69,6 @@ class Sidebar extends React.Component {
       } else if (itemRect.top < listRect.top) {
         highlightedElement.scrollIntoView(true)
       }
-    }
-
-    if (prevProps.visible !== this.props.visible) {
-      window.dispatchEvent(new window.Event('resize'))
     }
   }
 
@@ -203,7 +202,8 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div className={this.classNames('sidebar')}
+      <div ref='sidebar'
+        className={this.classNames('sidebar')}
         style={{ width: (this.props.visible && this.props.width) || 0 }}>
         <div className='sidebar__inner u-flex u-flex--vertical'
           style={{ width: this.props.width }}>
