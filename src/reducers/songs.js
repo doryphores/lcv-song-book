@@ -36,5 +36,6 @@ function sortSongs (songs) {
 const ALIASES = {
   'chirstmas in la': 'Christmas in LA',
   'if you don\'t know me': 'If you don\'t know me by now',
-  'waking in a winter wonderland': 'Walking In A Winter Wonderland'
+  'waking in a winter wonderland': 'Walking In A Winter Wonderland',
+  'if you leave me know': 'if you leave me now'
 }
