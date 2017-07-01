@@ -5,7 +5,9 @@ const SPECIAL_KEYS = {
   'left': 37,
   'up': 38,
   'right': 39,
-  'down': 40
+  'down': 40,
+  'pageup': 33,
+  'pagedown': 34
 }
 
 export default class KeyCapture {
@@ -15,10 +17,12 @@ export default class KeyCapture {
     this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
-  register (key, handler) {
-    this.listeners[this.keyCode(key)] = Object.assign({
-      ignoreInForms: this.isChar(key) || ['left', 'right', 'space'].includes(key)
-    }, { handler })
+  register (keys, handler) {
+    keys.split(' ').forEach(key => {
+      this.listeners[this.keyCode(key)] = Object.assign({
+        ignoreInForms: this.isChar(key) || ['left', 'right', 'space'].includes(key)
+      }, { handler })
+    })
   }
 
   registerMany (handlers) {

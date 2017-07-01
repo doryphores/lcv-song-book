@@ -2,6 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { PDFJS } from 'pdfjs-dist'
 
+import KeyCapture from '../key_capture'
 import { debounce, range } from '../utils'
 import Icon from './icon'
 
@@ -15,16 +16,25 @@ export default class Sheet extends React.Component {
       pdfURL: '',
       loading: false
     }
+
+    this.keyCapture = new KeyCapture({
+      'pageup pagedown': () => {
+        this.refs.scroller.focus()
+        return true
+      }
+    })
   }
 
   componentDidMount () {
     this.loadPDF(this.props.pdfURL)
     this.onResize = debounce(this.renderPDF.bind(this), 100)
     window.addEventListener('resize', this.onResize)
+    this.keyCapture.activate()
   }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.onResize)
+    this.keyCapture.deactivate()
   }
 
   componentWillReceiveProps (nextProps) {
@@ -106,7 +116,7 @@ export default class Sheet extends React.Component {
 
     return (
       <div className={this.classNames('sheet')}>
-        <div className='sheet__scroller'>
+        <div className='sheet__scroller' tabIndex='-1' ref='scroller'>
           <div className='sheet__page-container' ref='container'>
             {range(this.state.numPages).map(i => (
               <div key={i}
