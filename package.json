@@ -13,12 +13,12 @@
     "test": "standard 'src/**/*.{js,jsx}' | snazzy"
   },
   "dependencies": {
-    "@material/elevation": "^0.1.8",
+    "@material/elevation": "^0.1.9",
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "electron": "^1.6.11",
-    "electron-packager": "^8.7.1",
+    "electron-packager": "^8.7.2",
     "node-sass": "^4.5.3",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2"
