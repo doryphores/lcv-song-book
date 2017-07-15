@@ -7,11 +7,11 @@
   transition: transform .3s;
 }
 
-.slide-down-leave {
+.slide-down-exit {
   transform: translateY(0);
 }
 
-.slide-down-leave-active {
+.slide-down-exit-active {
   transform: translateY(-100%);
   transition: transform .3s;
 }
@@ -27,12 +27,12 @@
   transition: all .2s;
 }
 
-.grow-leave {
+.grow-exit {
   opacity: 1;
   transform: scale(1);
 }
 
-.grow-leave-active {
+.grow-exit-active {
   opacity: 0;
   transform: scale(.5);
   transition: all .2s;

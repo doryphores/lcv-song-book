@@ -1,18 +1,13 @@
 import React from 'react'
 import classnames from 'classnames'
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
-
-import FirstChild from './first_child'
+import { CSSTransition } from 'react-transition-group'
 
 const Overlay = ({ open, className, children }) => (
-  <CSSTransitionGroup component={FirstChild}
-    transitionName='slide-down'
-    transitionEnterTimeout={400}
-    transitionLeaveTimeout={400}>
-    {open && (<div className={classnames(className, 'modal u-flex u-flex--vertical u-flex--center')}>
+  <CSSTransition in={open} classNames='slide-down' timeout={400} unmountOnExit mountOnEnter>
+    <div className={classnames(className, 'modal u-flex u-flex--vertical u-flex--center')}>
       {children}
-    </div>)}
-  </CSSTransitionGroup>
+    </div>
+  </CSSTransition>
 )
 
 export default Overlay
