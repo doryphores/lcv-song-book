@@ -8,8 +8,13 @@ import { TOGGLE_PLAY } from '../actions'
 
 const SelectedSong = ({ className, sheetMusicURL, fullRecordingURL, voiceRecordingURL }) => (
   <div className={classnames(className, 'u-flex u-flex--vertical')}>
-    <Sheet className='u-flex__panel u-flex__panel--grow'
-      pdfURL={sheetMusicURL} />
+    {sheetMusicURL
+      ? <Sheet className='u-flex__panel u-flex__panel--grow'
+        pdfURL={sheetMusicURL} />
+      : <span className='sheet sheet--empty u-flex__panel--grow u-flex u-flex--center u-flex--vertical-center'>
+        Missing sheet music
+      </span>
+    }
     <Player className='u-flex__panel'
       fullRecordingURL={fullRecordingURL}
       voiceRecordingURL={voiceRecordingURL} />

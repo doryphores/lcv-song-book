@@ -3,6 +3,13 @@
   background-color: #f0f0f0;
 }
 
+.sheet--empty {
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ccc;
+}
+
 .sheet__scroller {
   overflow-x: hidden;
   overflow-y: scroll;
@@ -28,10 +35,6 @@
 
   span {
     vertical-align: middle;
-  }
-
-  .sheet--empty & {
-    display: none;
   }
 }
 
