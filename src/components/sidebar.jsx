@@ -46,7 +46,8 @@ class Sidebar extends React.Component {
 
   componentDidMount () {
     if (this.props.selectedSongTitle) {
-      document.querySelector('.sidebar__menu-item--selected').scrollIntoView()
+      let selectedItem = document.querySelector('.sidebar__menu-item--selected')
+      selectedItem && selectedItem.scrollIntoView()
     }
     this.toggleKeyCapture.activate()
     this.refs.sidebar.addEventListener('transitionend', () => {
