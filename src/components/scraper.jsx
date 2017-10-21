@@ -61,7 +61,7 @@ class Scraper extends React.Component {
       `Array.prototype.slice.call(
         document.querySelectorAll('#downloads a[href$=pdf], #downloads a[href$=mp3]'),
         0
-      ).map(el => {
+      ).filter(el => el.href.indexOf('/admin/') === -1).map(el => {
         return {
           title: el.closest('tr').querySelector('td:first-child').innerHTML.trim(),
           voice: el.innerHTML.trim(),
