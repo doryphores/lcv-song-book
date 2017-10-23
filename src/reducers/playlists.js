@@ -1,28 +1,51 @@
 import _ from 'lodash'
 
-import { ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST } from '../actions'
+import {
+  SELECT_PLAYLIST, ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST,
+  RESTORE
+} from '../actions'
 
-const initialState = {}
+const initialState = {
+  selectedPlaylist: 'ALL',
+  playlists: {}
+}
 
 export const playlists = (state = initialState, { type, payload }) => {
+  let playlists
+  let selectedPlaylist = state.selectedPlaylist
+
   switch (type) {
+    case SELECT_PLAYLIST:
+      return Object.assign({}, state, { selectedPlaylist: payload })
     case ADD_TO_PLAYLIST:
-      return Object.assign({}, state, {
+      playlists = Object.assign({}, state.playlists, {
         [payload.playlist]: _.union(state[payload.playlist], [payload.song])
       })
+      return Object.assign({}, state, { playlists })
     case REMOVE_FROM_PLAYLIST:
-      if (!state[payload.playlist]) return state
+      if (!state.playlists[payload.playlist]) return state
 
-      let newPlaylist = _.without(state[payload.playlist], payload.song)
+      let newPlaylist = _.without(state.playlists[payload.playlist], payload.song)
 
       if (_.isEmpty(newPlaylist)) {
         // Remove empty playlist
-        return _.omit(state, payload.playlist)
+        playlists = _.omit(state.playlists, payload.playlist)
+        if (selectedPlaylist === payload.playlist) {
+          selectedPlaylist = ''
+        }
+      } else {
+        playlists = Object.assign({}, playlists, {
+          [payload.playlist]: newPlaylist
+        })
       }
 
       return Object.assign({}, state, {
-        [payload.playlist]: newPlaylist
+        selectedPlaylist: selectedPlaylist,
+        playlists: playlists
       })
+    case RESTORE:
+      if (state.playlists) return state
+      return Object.assign({}, initialState, { playlists: state })
     default:
       return state
   }

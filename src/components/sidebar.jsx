@@ -5,7 +5,7 @@ import { remote } from 'electron'
 
 import {
   selectSong, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
-  ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST
+  SELECT_PLAYLIST, ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST
 } from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
@@ -19,7 +19,6 @@ class Sidebar extends React.Component {
       search: '',
       highlighted: -1,
       searching: false,
-      selectedPlaylist: 'ALL',
       newPlaylistLabel: '',
       songToAdd: ''
     }
@@ -85,8 +84,8 @@ class Sidebar extends React.Component {
 
   filterSongs () {
     let songs = this.props.songs
-    if (this.state.selectedPlaylist !== 'ALL') {
-      let playlist = this.props.playlists[this.state.selectedPlaylist]
+    if (this.props.selectedPlaylist !== '') {
+      let playlist = this.props.playlists[this.props.selectedPlaylist]
       songs = this.props.songs.filter(s => playlist.includes(s.title))
     }
     if (this.state.search === '') return songs
@@ -121,10 +120,8 @@ class Sidebar extends React.Component {
 
   selectPlaylist (e) {
     this.stopSearch()
-    this.setState({
-      search: '',
-      selectedPlaylist: e.target.value
-    })
+    this.props.selectPlaylist(e.target.value)
+    this.setState({ search: '' })
   }
 
   popupMenu (title) {
@@ -238,9 +235,9 @@ class Sidebar extends React.Component {
           <div className='sidebar__playlist-selector theme--dark u-flex__panel'>
             <label className='field field--dropdown'>
               <select className='field__input field__input--select'
-                value={this.state.selectedPlaylist}
+                value={this.props.selectedPlaylist}
                 onChange={this.selectPlaylist.bind(this)}>
-                <option value='ALL'>All songs</option>
+                <option value=''>All songs</option>
                 {Object.keys(this.props.playlists).map((p, i) => (
                   <option key={i}>{p}</option>
                 ))}
@@ -259,6 +256,10 @@ class Sidebar extends React.Component {
 
 function mapDispatchToProps (dispatch) {
   return {
+    selectPlaylist: (playlist) => dispatch({
+      type: SELECT_PLAYLIST,
+      payload: playlist
+    }),
     addToPlaylist: (playlist, song) => dispatch({
       type: ADD_TO_PLAYLIST,
       payload: { playlist, song }
@@ -280,7 +281,8 @@ function mapStateToProps (state) {
   return {
     selectedSongTitle: state.selectedSong.title,
     songs: state.songs,
-    playlists: state.playlists,
+    playlists: state.playlists.playlists,
+    selectedPlaylist: state.playlists.selectedPlaylist,
     visible: state.ui.sidebarVisible,
     width: state.ui.sidebarWidth
   }
