@@ -6,7 +6,7 @@ import {
 } from '../actions'
 
 const initialState = {
-  selectedPlaylist: 'ALL',
+  selectedPlaylist: '',
   playlists: {}
 }
 
@@ -19,7 +19,7 @@ export const playlists = (state = initialState, { type, payload }) => {
       return Object.assign({}, state, { selectedPlaylist: payload })
     case ADD_TO_PLAYLIST:
       playlists = Object.assign({}, state.playlists, {
-        [payload.playlist]: _.union(state[payload.playlist], [payload.song])
+        [payload.playlist]: _.union(state.playlists[payload.playlist], [payload.song])
       })
       return Object.assign({}, state, { playlists })
     case REMOVE_FROM_PLAYLIST:
@@ -34,7 +34,7 @@ export const playlists = (state = initialState, { type, payload }) => {
           selectedPlaylist = ''
         }
       } else {
-        playlists = Object.assign({}, playlists, {
+        playlists = Object.assign({}, state.playlists, {
           [payload.playlist]: newPlaylist
         })
       }
