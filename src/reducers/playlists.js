@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { patch, putInBy } from 'emerge'
 
 import {
   SELECT_PLAYLIST, ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST,
@@ -10,39 +11,25 @@ const initialState = {
   playlists: {}
 }
 
-export const playlists = (state = initialState, { type, payload }) => {
-  let playlists
-  let selectedPlaylist = state.selectedPlaylist
+function cleanup (state) {
+  return patch(state, {
+    selectedPlaylist: state.playlists[state.selectedPlaylist] ? state.selectedPlaylist : ''
+  })
+}
 
+export const playlists = (state = initialState, { type, payload }) => {
   switch (type) {
     case SELECT_PLAYLIST:
-      return Object.assign({}, state, { selectedPlaylist: payload })
+      return cleanup(patch(state, { selectedPlaylist: payload }))
     case ADD_TO_PLAYLIST:
-      playlists = Object.assign({}, state.playlists, {
-        [payload.playlist]: _.union(state.playlists[payload.playlist], [payload.song])
-      })
-      return Object.assign({}, state, { playlists })
+      return cleanup(putInBy(state, ['playlists', payload.playlist], list => {
+        return _.union(list, [payload.song])
+      }))
     case REMOVE_FROM_PLAYLIST:
-      if (!state.playlists[payload.playlist]) return state
-
-      let newPlaylist = _.without(state.playlists[payload.playlist], payload.song)
-
-      if (_.isEmpty(newPlaylist)) {
-        // Remove empty playlist
-        playlists = _.omit(state.playlists, payload.playlist)
-        if (selectedPlaylist === payload.playlist) {
-          selectedPlaylist = ''
-        }
-      } else {
-        playlists = Object.assign({}, state.playlists, {
-          [payload.playlist]: newPlaylist
-        })
-      }
-
-      return Object.assign({}, state, {
-        selectedPlaylist: selectedPlaylist,
-        playlists: playlists
-      })
+      return cleanup(putInBy(state, ['playlists', payload.playlist], list => {
+        list = _.without(list, payload.song)
+        return list.length ? list : null
+      }))
     case RESTORE:
       if (state.playlists) return state
       return Object.assign({}, initialState, { playlists: state })

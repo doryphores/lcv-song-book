@@ -1,9 +1,11 @@
+import { patch } from 'emerge'
+
 import {
   RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
   TOGGLE_SETTINGS, TOGGLE_SHORTCUTS, SAVE_SETTINGS
 } from '../actions'
 
-const initiaState = {
+const initialState = {
   sidebarVisible: true,
   sidebarWidth: 300,
   settingsVisible: false,
@@ -11,33 +13,33 @@ const initiaState = {
   hideScrollbars: false
 }
 
-export const ui = (state = initiaState, { type, payload }) => {
+export const ui = (state = initialState, { type, payload }) => {
   switch (type) {
     case TOGGLE_SIDEBAR:
-      return Object.assign({}, state, {
+      return patch(state, {
         sidebarVisible: !state.sidebarVisible
       })
     case RESIZE_SIDEBAR:
-      return Object.assign({}, state, {
+      return patch(state, {
         sidebarWidth: payload
       })
     case TOGGLE_SETTINGS:
-      return Object.assign({}, state, {
+      return patch(state, {
         settingsVisible: !state.settingsVisible,
         shortcutsVisible: false
       })
     case TOGGLE_SHORTCUTS:
-      return Object.assign({}, state, {
+      return patch(state, {
         shortcutsVisible: !state.shortcutsVisible,
         settingsVisible: false
       })
     case SAVE_SETTINGS:
-      return Object.assign({}, state, {
+      return patch(state, {
         settingsVisible: false,
         hideScrollbars: payload.hideScrollbars
       })
     case RESTORE:
-      return Object.assign({}, initiaState, state, {
+      return Object.assign({}, initialState, state, {
         settingsVisible: false,
         shortcutsVisible: false
       })

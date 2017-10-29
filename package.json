@@ -10,7 +10,7 @@
     "package": "bin/build && electron-packager app --out dist --overwrite --asar --icon ./app/static/icon.icns",
     "start": "foreman s",
     "build": "bin/build",
-    "test": "standard 'src/**/*.{js,jsx}' | snazzy"
+    "test": "standard --verbose 'src/**/*.{js,jsx}' | snazzy"
   },
   "dependencies": {
     "@material/elevation": "^0.1.11",

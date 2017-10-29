@@ -7,6 +7,7 @@
   "main": "js/index.js",
   "dependencies": {
     "classnames": "^2.2.5",
+    "emerge": "^0.1.0",
     "format-duration": "^1.0.0",
     "fs-extra": "^4.0.1",
     "howler": "^2.0.2",
