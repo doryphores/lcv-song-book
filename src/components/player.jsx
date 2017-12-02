@@ -73,9 +73,13 @@ export default class Player extends React.Component {
     this.unloadRecordings()
   }
 
-  componentDidUpdate (nextProps) {
-    if (this.props.voiceRecordingURL !== nextProps.voiceRecordingURL) {
+  componentDidUpdate (prevProps, prevState) {
+    if (this.props.voiceRecordingURL !== prevProps.voiceRecordingURL) {
       this.loadRecordings()
+    }
+
+    if (prevState.track !== this.state.track) {
+      this.configureTrack('full', 'voice')
     }
   }
 
@@ -177,7 +181,6 @@ export default class Player extends React.Component {
 
   selectTrack (track) {
     this.setState({ track: track })
-    this.configureTrack('full', 'voice')
   }
 
   isEmpty () {
