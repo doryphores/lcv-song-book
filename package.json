@@ -8,7 +8,7 @@
   "scripts": {
     "postinstall": "cd app && yarn install",
     "package": "bin/build && electron-packager app --out dist --overwrite --asar --icon ./app/static/icon.icns",
-    "start": "foreman s",
+    "start": "nf start",
     "build": "bin/build",
     "test": "standard --verbose 'src/**/*.{js,jsx}' | snazzy"
   },
@@ -19,6 +19,7 @@
     "babel-preset-react": "^6.24.1",
     "electron": "^1.7.9",
     "electron-packager": "^8.7.2",
+    "foreman": "^2.0.0",
     "node-sass": "^4.5.3",
     "snazzy": "^7.0.0",
     "standard": "^10.0.3"
