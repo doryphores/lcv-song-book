@@ -55,7 +55,7 @@
   height: 0;
   padding-bottom: percentage(1.41);
   background-color: #fff;
-  @include mdc-elevation(3);
+  @include elevation(3);
   opacity: 1;
   transition: opacity .2s;
 
