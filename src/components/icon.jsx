@@ -21,7 +21,7 @@ const ICONS = {
 
 const Icon = ({ className, icon, style = {}, onClick }) => (
   <svg className={classnames(className, 'icon')} style={style} onClick={onClick}>
-    <use xlinkHref={`./sprites/svg-sprite-${ICONS[icon]}.svg#ic_${icon}_24px`} />
+    <use xlinkHref={`../static/sprites/svg-sprite-${ICONS[icon]}.svg#ic_${icon}_24px`} />
   </svg>
 )
 

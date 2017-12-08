@@ -36,7 +36,7 @@ app.on('ready', () => {
     center: true,
     show: false,
     autoHideMenuBar: true,
-    icon: path.join(app.getAppPath(), 'static', 'icon.png')
+    icon: `${__dirname}/static/icon.png`
   }
 
   readJSON(CONFIG_PATH, (_, config) => {
@@ -60,7 +60,7 @@ app.on('ready', () => {
       app.quit()
     })
 
-    appWindow.loadURL(`file://${path.join(app.getAppPath(), 'static', 'index.html')}`)
+    appWindow.loadURL(`file://${__dirname}/static/index.html`)
 
     if (isDevMode) installExtension(REACT_DEVELOPER_TOOLS)
   })

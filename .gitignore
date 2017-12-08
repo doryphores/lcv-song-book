@@ -1,4 +1,2 @@
 node_modules
-app/css
-app/js
-dist
+out
