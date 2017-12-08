@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron'
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import { outputJSON, readJSON } from 'fs-extra'
 
@@ -10,6 +11,8 @@ const CONFIG_PATH = path.join(
   app.getPath('userData'),
   'window.json'
 )
+
+const isDevMode = process.execPath.match(/[\\/]electron/)
 
 const shouldQuit = app.makeSingleInstance(() => {
   if (appWindow) {
@@ -58,5 +61,7 @@ app.on('ready', () => {
     })
 
     appWindow.loadURL(`file://${path.join(app.getAppPath(), 'static', 'index.html')}`)
+
+    if (isDevMode) installExtension(REACT_DEVELOPER_TOOLS)
   })
 })
