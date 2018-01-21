@@ -3,11 +3,20 @@ import classnames from 'classnames'
 
 import Icon from './icon'
 
-const ToolbarPanel = ({ className, toggleIcon, spinToggle = false, onToggle, children }) => (
+const ToolbarPanel = ({
+  className,
+  toggleIcon,
+  disabled = false,
+  spinToggle = false,
+  onToggle,
+  children
+}) => (
   <div className={className}>
     {children}
 
-    <button className={buttonClassnames(spinToggle)} onClick={onToggle}>
+    <button className={buttonClassnames(spinToggle)}
+      onClick={onToggle}
+      disabled={disabled}>
       <Icon icon={toggleIcon} className='toolbar__button-icon' />
     </button>
   </div>
