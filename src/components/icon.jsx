@@ -6,6 +6,7 @@ const ICONS = {
   'audiotrack': 'image',
   'check': 'navigation',
   'close': 'navigation',
+  'cloud_download': 'file',
   'error': 'alert',
   'help': 'action',
   'help_outline': 'action',
