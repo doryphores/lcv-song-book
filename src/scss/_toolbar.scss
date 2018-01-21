@@ -50,6 +50,11 @@
   }
 }
 
+.toolbar__button[disabled] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .toolbar__button-icon {
   position: relative;
   transition: fill .2s;

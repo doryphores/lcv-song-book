@@ -4,6 +4,7 @@ import classnames from 'classnames'
 
 import { selectVoice } from '../actions'
 import Scraper from './scraper'
+import Downloader from './downloader'
 import Settings from './settings'
 import Shortcuts from './shortcuts'
 import Icon from './icon'
@@ -51,6 +52,8 @@ class Toolbar extends React.Component {
         </div>
 
         <Scraper className='u-flex__panel' />
+        <Downloader className='u-flex__panel'
+          pdfURL={this.props.sheetMusicURL} />
         <Settings className='u-flex__panel' />
         <Shortcuts className='u-flex__panel' />
       </div>
@@ -60,7 +63,8 @@ class Toolbar extends React.Component {
 
 function mapStateToProps (state) {
   return {
-    selectedVoice: state.selectedVoice
+    selectedVoice: state.selectedVoice,
+    sheetMusicURL: state.selectedSong.sheet
   }
 }
 
