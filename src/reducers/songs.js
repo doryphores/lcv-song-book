@@ -10,7 +10,7 @@ export const songs = (state = initialState, { type, payload }) => {
       return sortSongs(payload.resources.reduce((songs, r) => {
         let song = addSong(songs, r.title)
         let type = /pdf$/.test(r.url) ? 'sheets' : 'recordings'
-        song[type][r.voice.toLowerCase()] = r.url
+        song[type][r.voice.toLowerCase()] = r.url.replace('http://', 'https://')
         return songs
       }, []))
     default:
