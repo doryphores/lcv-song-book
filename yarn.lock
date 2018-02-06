@@ -4470,12 +4470,12 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
-pdfjs-dist@^1.8.618:
-  version "1.10.97"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-1.10.97.tgz#d3999586c94b75fe5e6e8161a57c449a13a030fb"
+pdfjs-dist@^2.0.332:
+  version "2.0.332"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.332.tgz#c62dddb1f880ad798c107539f035475267cdb2a1"
   dependencies:
     node-ensure "^0.0.0"
-    worker-loader "^1.0.0"
+    worker-loader "^1.1.0"
 
 pend@~1.2.0:
   version "1.2.0"
@@ -6237,7 +6237,7 @@ wordwrap@~0.0.2:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
 
-worker-loader@^1.0.0:
+worker-loader@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/worker-loader/-/worker-loader-1.1.0.tgz#8cf21869a07add84d66f821d948d23c1eb98e809"
   dependencies:

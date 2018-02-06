@@ -58,7 +58,7 @@
     "fs-extra": "^4.0.1",
     "howler": "^2.0.2",
     "lodash": "^4.17.4",
-    "pdfjs-dist": "^1.8.618",
+    "pdfjs-dist": "^2.0.332",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-electron-webview": "^2.0.2",
