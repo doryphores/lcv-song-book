@@ -30,7 +30,7 @@
         ]
       },
       "electronPackagerConfig": {
-        "packageManager": "npm",
+        "packageManager": "yarn",
         "icon": "src/static/icon.icns"
       },
       "electronWinstallerConfig": {
