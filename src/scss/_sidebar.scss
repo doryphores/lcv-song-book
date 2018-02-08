@@ -3,7 +3,7 @@
   position: relative;
   max-width: 50vw;
   background-color: #fff;
-  transition: width .2s;
+  transition: width .32s;
 
   .u-resizing & {
     transition: none;
@@ -31,7 +31,7 @@
   background-color: purple(500);
   color: rgba(#fff, .87);
   border-bottom: 1px solid purple(500);
-  transition: background-color .2s;
+  transition: background-color .32s;
 
   &:focus {
     background-color: #fff;

@@ -37,7 +37,7 @@
     border-radius: 50%;
     transform: scale(0);
     opacity: 0;
-    transition: all .2s;
+    transition: all .32s;
   }
 
   &:hover {
@@ -57,7 +57,7 @@
 
 .toolbar__button-icon {
   position: relative;
-  transition: fill .2s;
+  transition: fill .32s;
 }
 
 .toolbar__button--spinning {

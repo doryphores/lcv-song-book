@@ -41,7 +41,7 @@
     height: 2px;
     background-color: #7C4DFF;
     transform: scale(0);
-    transition: transform .2s;
+    transition: transform .32s;
 
     .field__input:focus + & {
       transform: scale(1);
@@ -63,7 +63,7 @@
   font-family: inherit;
   color: inherit;
   font-size: 16px;
-  transition: all .2s;
+  transition: all .32s;
 
   .theme--dark & {
     &:hover,
@@ -112,7 +112,7 @@ option {
   border-radius: 2px;
   background-color: #fff;
   box-shadow: 0 0 0 2px rgba(#000, .54) inset;
-  transition: all .2s;
+  transition: all .32s;
 
   :checked + & {
     background-color: purple(500);
@@ -127,7 +127,7 @@ option {
 .checkbox__check-icon {
   transform: scale(0);
   fill: #fff;
-  transition: transform .2s;
+  transition: transform .32s;
 }
 
 .checkbox__label {
