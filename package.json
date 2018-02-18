@@ -12,7 +12,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "standard --verbose | snazzy"
+    "test": "standard --verbose | snazzy"
   },
   "keywords": [],
   "config": {
