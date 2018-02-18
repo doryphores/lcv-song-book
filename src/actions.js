@@ -30,6 +30,9 @@ export const PLAYER_PLAYING = 'PLAYER_PLAYING'
 export const PLAYER_PAUSED = 'PLAYER_PAUSED'
 export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 
+export const ADD_MARKER = 'ADD_MARKER'
+export const REMOVE_MARKER = 'REMOVE_MARKER'
+
 export function notify (notification) {
   return {
     type: NOTIFY,
@@ -138,6 +141,30 @@ export function selectSong (title) {
           voice: selectVoiceRecording(song, voice),
           full: song.recordings['full song']
         }
+      }
+    })
+  }
+}
+
+export function addMarker (position) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: ADD_MARKER,
+      payload: {
+        song: getState().selectedSong.title,
+        position: position
+      }
+    })
+  }
+}
+
+export function removeMarker (position) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: REMOVE_MARKER,
+      payload: {
+        song: getState().selectedSong.title,
+        position: position
       }
     })
   }
