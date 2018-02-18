@@ -56,12 +56,13 @@ export default class Sheet extends React.Component {
   }
 
   loadPDF (pdfURL) {
-    if (pdfURL === '') {
-      this.setState({ numPages: 0 })
-      return
-    }
+    this.setState({
+      numPages: 0,
+      loading: true
+    })
 
-    this.setState({ loading: true })
+    this.pdfDocument = null
+
     this.refs.container.parentNode.scrollTop = 0
 
     PDFJS.getDocument(pdfURL)
