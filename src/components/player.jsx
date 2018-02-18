@@ -2,6 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import format from 'format-duration'
 import { Howl } from 'howler'
+import _ from 'lodash'
 
 import ProgressBar from './progress_bar'
 import Icon from './icon'
@@ -46,7 +47,6 @@ export default class Player extends React.Component {
       track: 'voice',
       duration: 0,
       progress: 0,
-      startMarker: 0,
       playing: false,
       loading: 0
     }
@@ -54,10 +54,13 @@ export default class Player extends React.Component {
     this.keyCapture = new KeyCapture({
       'space': () => this.togglePlay(),
       'left': () => {
-        this.forEachHowl(h => h.seek(this.state.startMarker))
-        this.setState({ progress: this.state.startMarker })
+        let pos = _.last(this.props.markers.filter(m => m < Math.floor(this.state.progress)))
+        this.jumpTo(pos || 0)
       },
-      'M': () => this.setState({ startMarker: this.state.progress }),
+      'right': () => {
+        let pos = this.props.markers.find(m => m > this.state.progress)
+        if (pos) this.jumpTo(pos)
+      },
       'F': () => this.selectTrack('full'),
       'V': () => this.selectTrack('voice'),
       'B': () => this.selectTrack('both')
@@ -103,8 +106,7 @@ export default class Player extends React.Component {
       loading: 2,
       playing: false,
       duration: 0,
-      progress: 0,
-      startMarker: 0
+      progress: 0
     })
 
     this.howls.voice = new Howl({
@@ -148,6 +150,13 @@ export default class Player extends React.Component {
     })
   }
 
+  configureTrack (...tracks) {
+    tracks.forEach(track => {
+      this.howls[track].stereo(TRACK_SETTINGS[track][this.state.track].stereo)
+      this.howls[track].volume(TRACK_SETTINGS[track][this.state.track].volume)
+    })
+  }
+
   step () {
     if (this.howls.voice.playing()) {
       this.setState({ progress: this.howls.voice.seek() || 0 })
@@ -163,19 +172,9 @@ export default class Player extends React.Component {
     }
   }
 
-  configureTrack (...tracks) {
-    tracks.forEach(track => {
-      this.howls[track].stereo(TRACK_SETTINGS[track][this.state.track].stereo)
-      this.howls[track].volume(TRACK_SETTINGS[track][this.state.track].volume)
-    })
-  }
-
-  onSeek (value) {
+  jumpTo (value) {
     if (value === this.state.duration) value = 0
-    this.setState({
-      startMarker: value,
-      progress: value
-    })
+    this.setState({ progress: value })
     this.forEachHowl(h => h.seek(value))
   }
 
@@ -227,8 +226,10 @@ export default class Player extends React.Component {
         <ProgressBar className='player__progress u-flex__panel u-flex__panel--grow'
           duration={this.state.duration}
           value={this.state.progress}
-          marker={this.state.startMarker}
-          onSeek={this.onSeek.bind(this)} />
+          markers={this.props.markers}
+          onSeek={this.jumpTo.bind(this)}
+          onAddMarker={this.props.onAddMarker}
+          onRemoveMarker={this.props.onRemoveMarker} />
         <span className='u-flex__panel player__duration'>
           {format(this.state.duration * 1000)}
         </span>

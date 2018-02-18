@@ -10,6 +10,8 @@ export default class ProgressBar extends React.Component {
     }
     this.updateSeek = this.updateSeek.bind(this)
     this.stopSeek = this.stopSeek.bind(this)
+    this.startSeek = this.startSeek.bind(this)
+    this.setMarker = this.setMarker.bind(this)
   }
 
   componentWillUnmount () {
@@ -24,6 +26,7 @@ export default class ProgressBar extends React.Component {
   }
 
   startSeek (e) {
+    if (e.button !== 0) return // left click only
     window.addEventListener('mousemove', this.updateSeek)
     window.addEventListener('mouseup', this.stopSeek)
     this.updateSeek(e)
@@ -43,22 +46,31 @@ export default class ProgressBar extends React.Component {
     this.props.onSeek(this.state.seek)
   }
 
-  renderMarker () {
-    return this.props.marker && this.props.marker !== this.props.duration ? (
-      <span className='progress__marker'
-        style={{ left: `${this.props.marker / this.props.duration * 100}%` }} />
-    ) : null
+  setMarker (e) {
+    if (e.button !== 2) return // right click only
+    this.props.onAddMarker(this.seekFromMouseEvent(e))
+  }
+
+  removeMarker (position, e) {
+    if (e.button !== 2) return // right click only
+    e.stopPropagation()
+    this.props.onRemoveMarker(position)
   }
 
   render () {
     return (
       <div ref='progressBar'
         className={classnames('progress', this.props.className)}
-        onMouseDown={(e) => this.startSeek(e)}>
+        onMouseDown={this.startSeek}
+        onMouseUp={this.setMarker}>
         <progress className=' progress__bar'
           value={this.state.seeking ? this.state.seek : this.props.value}
           max={this.props.duration} />
-        {this.renderMarker()}
+        {this.props.markers.map((m, i) => (
+          <span key={i} className='progress__marker'
+            onMouseUp={this.removeMarker.bind(this, m)}
+            style={{ left: `${m / this.props.duration * 100}%` }}>{i + 1}</span>
+        ))}
       </div>
     )
   }
