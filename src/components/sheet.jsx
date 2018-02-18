@@ -6,7 +6,7 @@ import KeyCapture from '../key_capture'
 import { debounce, range } from '../utils'
 import Icon from './icon'
 
-PDFJS.workerSrc = '../../node_modules/pdfjs-dist/build/pdf.worker.js'
+PDFJS.GlobalWorkerOptions.workerSrc = '../../node_modules/pdfjs-dist/build/pdf.worker.js'
 
 export default class Sheet extends React.Component {
   constructor () {
