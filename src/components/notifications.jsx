@@ -8,7 +8,7 @@ import { dismiss, selectSong } from '../actions'
 const Notifications = ({ notifications, onDismiss, onView }) => (
   <TransitionGroup className='notification-container' component='div'>
     {notifications.map(({ id, message, icon, song }) => (
-      <CSSTransition key={id} timeout={200} classNames='grow' unmountOnExit mountOnEnter>
+      <CSSTransition key={id} timeout={320} classNames='grow' unmountOnExit mountOnEnter>
         <div className='notification u-flex u-flex--horizontal'
           onClick={() => onDismiss(id)}>
           <Icon icon={icon} className='notification__icon u-flex__panel' />

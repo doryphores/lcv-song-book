@@ -17,10 +17,10 @@ class Settings extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.open && !this.props.open) {
-      this.state = {
+      this.setState({
         password: nextProps.password,
         hideScrollbars: nextProps.hideScrollbars
-      }
+      })
     }
   }
 
