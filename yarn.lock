@@ -1098,7 +1098,7 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
-camelcase@^4.0.0, camelcase@^4.1.0:
+camelcase@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
@@ -4947,12 +4947,6 @@ react-dom@^15.4.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
-
-react-electron-webview@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-electron-webview/-/react-electron-webview-2.0.2.tgz#ec6619e3935e06aa7c8c89db9fb0ce7290c94c28"
-  dependencies:
-    camelcase "^4.0.0"
 
 react-redux@^5.0.6:
   version "5.0.7"

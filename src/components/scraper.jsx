@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import WebView from 'react-electron-webview'
+import WebView from './web_view'
 
 import { loadResources, alert, DISMISS_ALL } from '../actions'
 import ToolbarPanel from './toolbar_panel'
@@ -80,8 +80,7 @@ class Scraper extends React.Component {
     if (!this.state.started) return null
 
     return (
-      <WebView style={{ width: 0, height: 0 }}
-        onDidFinishLoad={this.handleFinishLoad.bind(this)}
+      <WebView onDidFinishLoad={this.handleFinishLoad.bind(this)}
         src='https://www.londoncityvoices.co.uk/choir-resources/' />
     )
   }
