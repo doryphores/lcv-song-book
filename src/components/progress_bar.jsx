@@ -66,7 +66,7 @@ export default class ProgressBar extends React.Component {
         <progress className=' progress__bar'
           value={this.state.seeking ? this.state.seek : this.props.value}
           max={this.props.duration} />
-        {this.props.markers.map((m, i) => (
+        {this.props.duration > 0 && this.props.markers.map((m, i) => (
           <span key={i} className='progress__marker'
             onMouseUp={this.removeMarker.bind(this, m)}
             style={{ left: `${m / this.props.duration * 100}%` }}>{i + 1}</span>
