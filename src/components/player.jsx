@@ -61,6 +61,7 @@ export default class Player extends React.Component {
         let pos = this.props.markers.find(m => m > this.state.progress)
         if (pos) this.jumpTo(pos)
       },
+      'M': () => this.props.onAddMarker(this.state.progress),
       'F': () => this.selectTrack('full'),
       'V': () => this.selectTrack('voice'),
       'B': () => this.selectTrack('both')
