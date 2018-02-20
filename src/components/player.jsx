@@ -54,7 +54,7 @@ export default class Player extends React.Component {
     this.keyCapture = new KeyCapture({
       'space': () => this.togglePlay(),
       'left': () => {
-        let pos = _.last(this.props.markers.filter(m => m < Math.floor(this.state.progress)))
+        let pos = _.last(this.props.markers.filter(m => m < this.state.progress - 0.5))
         this.jumpTo(pos || 0)
       },
       'right': () => {
