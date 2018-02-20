@@ -21,7 +21,7 @@ export default class KeyCapture {
     keys.split(' ').forEach(key => {
       this.listeners[this.keyCode(key)] = Object.assign({
         ignoreInForms: this.isChar(key) || ['left', 'right', 'space'].includes(key)
-      }, { handler })
+      }, { handler: handler.bind(null, key) })
     })
   }
 
