@@ -6,21 +6,21 @@
   right: 0;
   bottom: 0;
   justify-content: center;
-  background-color: rgba(#000, .7);
+  background-color: rgba(#000, .5);
 }
 
 .modal__panel {
   min-width: 400px;
-  padding: 40px;
+  padding: 24px;
   background-color: #fff;
   border-radius: 2px;
-  @include elevation(12);
+  @include elevation(24);
   color: rgba(#000, .87);
   fill: rgba(#000, .87);
 }
 
 .modal__heading {
-  font-weight: normal;
+  font-weight: bold;
   font-size: 20px;
-  margin: 0 0 40px;
+  margin: 0 0 20px;
 }
