@@ -38,6 +38,12 @@ class Shortcuts extends React.Component {
                   </td>
                 </tr>
                 <tr>
+                  <th>Fast forward (forward to the next marker)</th>
+                  <td>
+                    <span className='shortcuts__keystroke'>➡</span>
+                  </td>
+                </tr>
+                <tr>
                   <th>Select single voice recording</th>
                   <td>
                     <span className='shortcuts__keystroke'>V</span>
