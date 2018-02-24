@@ -8,12 +8,12 @@ const Modal = ({ open, className, title, buttonLabel, onSubmit, onCancel, childr
       <h2 className='modal__heading'>{title}</h2>
       {children}
       <div className='form-actions'>
-        <button className='button'>{buttonLabel}</button>
         {onCancel && (
           <button className='button' type='button' onClick={onCancel}>
             Cancel
           </button>
         )}
+        <button className='button'>{buttonLabel}</button>
       </div>
     </form>
   </Overlay>

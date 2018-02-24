@@ -139,32 +139,34 @@ option {
 // Form actions
 
 .form-actions {
-  margin-top: 40px;
+  margin: 24px -16px -16px;
+  text-align: right;
 }
 
 .button {
-  padding: 7px 10px 6px;
+  padding: 0 8px;
   border: none;
   outline: none;
-  border-radius: 3px;
-  font-family: inherit;
-  font-size: 16px;
+  border-radius: 2px;
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 36px;
+  font-weight: 500;
   text-transform: uppercase;
-  font-weight: normal;
-  background-color: #7C4DFF;
-  color: #fff;
+  background: transparent;
+  color: #7C4DFF;
   cursor: pointer;
 
   + .button {
-    margin-left: 10px;
+    margin-left: 6px;
   }
 
   &:hover,
   &:focus {
-    background-color: #651FFF;
+    background-color: rgba(#7C4DFF, .12);
   }
 
   &:active {
-    background-color: #6200EA;
+    background-color: rgba(#7C4DFF, .4);
   }
 }
