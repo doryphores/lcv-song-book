@@ -4,10 +4,31 @@ import { connect } from 'react-redux'
 import { TOGGLE_SHORTCUTS } from '../actions'
 import ToolbarPanel from './toolbar_panel'
 import Overlay from './overlay'
+import KeyCapture from '../key_capture'
 
 let cmdOrCtrl = process.platform === 'darwin' ? '⌘' : 'Ctrl'
 
 class Shortcuts extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.keyCapture = new KeyCapture({
+      'escape': props.onToggle
+    })
+  }
+
+  componentWillUnmount () {
+    this.keyCapture.deactivate()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.open && !this.props.open) {
+      this.keyCapture.activate()
+    } else if (!nextProps.open && this.props.open) {
+      this.keyCapture.deactivate()
+    }
+  }
+
   render () {
     return (
       <ToolbarPanel className={this.props.className}

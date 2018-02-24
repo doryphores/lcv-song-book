@@ -41,7 +41,8 @@ class Settings extends React.Component {
           className='toolbar__panel'
           title='Preferences'
           buttonLabel='Apply'
-          onSubmit={this.handleSubmit.bind(this)}>
+          onSubmit={this.handleSubmit.bind(this)}
+          onCancel={this.props.onToggle}>
           <label className='field'>
             <input type='password'
               className='field__input'
