@@ -157,6 +157,7 @@ option {
   background: transparent;
   color: #7C4DFF;
   cursor: pointer;
+  transition: background-color .32s;
 
   + .button {
     margin-left: 6px;
