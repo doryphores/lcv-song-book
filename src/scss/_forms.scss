@@ -125,6 +125,7 @@ option {
 }
 
 .checkbox__check-icon {
+  display: block;
   transform: scale(0);
   fill: #fff;
   transition: transform .32s;
