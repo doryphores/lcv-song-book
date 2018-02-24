@@ -101,11 +101,13 @@
   z-index: 1;
   top: 0;
   margin-left: -1px;
-  padding: 1px 4px;
+  padding: 2px 5px 1px;
   background-color: pink(300);
   border-radius: 0 2px 2px 0;
   color: #fff;
+  font-family: Roboto;
   font-size: 12px;
+  font-weight: 500;
   line-height: normal;
   font-weight: bold;
 
@@ -122,6 +124,26 @@
     width: 1px;
     background-color: inherit;
   }
+}
+
+.progress__marker--enter {
+  transform: scale(0);
+  transform-origin: bottom left;
+}
+
+.progress__marker--enter-active {
+  transform: scale(1);
+  transition: transform .32s;
+}
+
+.progress__marker--exit {
+  transform: scale(1);
+  transform-origin: bottom left;
+}
+
+.progress__marker--exit-active {
+  transform: scale(0);
+  transition: transform .32s;
 }
 
 .player__track-switcher {

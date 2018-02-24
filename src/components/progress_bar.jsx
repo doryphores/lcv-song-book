@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 export default class ProgressBar extends React.Component {
   constructor (props) {
@@ -66,11 +67,15 @@ export default class ProgressBar extends React.Component {
         <progress className=' progress__bar'
           value={this.state.seeking ? this.state.seek : this.props.value}
           max={this.props.duration} />
-        {this.props.duration > 0 && this.props.markers.map((m, i) => (
-          <span key={i} className='progress__marker'
-            onMouseUp={this.removeMarker.bind(this, m)}
-            style={{ left: `${m / this.props.duration * 100}%` }}>{i + 1}</span>
-        ))}
+        <TransitionGroup>
+          {this.props.duration > 0 && this.props.markers.map((m, i) => (
+            <CSSTransition key={m} timeout={320} classNames='progress__marker-'>
+              <span className='progress__marker'
+                onMouseUp={this.removeMarker.bind(this, m)}
+                style={{ left: `${m / this.props.duration * 100}%` }}>{i + 1}</span>
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
       </div>
     )
   }
