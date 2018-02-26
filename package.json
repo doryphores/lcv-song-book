@@ -75,6 +75,6 @@
     "electron-packager": "^11.0.1",
     "electron-prebuilt-compile": "1.8.2",
     "snazzy": "^7.0.0",
-    "standard": "^10.0.3"
+    "standard": "^11.0"
   }
 }
