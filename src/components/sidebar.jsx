@@ -149,7 +149,7 @@ class Sidebar extends React.Component {
       })
     }
 
-    remote.Menu.buildFromTemplate(template).popup()
+    remote.Menu.buildFromTemplate(template).popup({})
   }
 
   createPlaylist (e) {
