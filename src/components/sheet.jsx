@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { PDFJS } from 'pdfjs-dist'
+import PDFJS from 'pdfjs-dist'
 
 import KeyCapture from '../key_capture'
 import { debounce, range } from '../utils'
