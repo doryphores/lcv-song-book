@@ -21,17 +21,6 @@ const VOICES = [
 ]
 
 class Toolbar extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      open: false
-    }
-  }
-
-  toggleSettings () {
-    this.setState({ open: !this.state.open })
-  }
-
   selectVoice (e) {
     this.props.onSelect(e.target.value)
     e.target.blur()
