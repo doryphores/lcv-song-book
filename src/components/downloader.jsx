@@ -11,7 +11,7 @@ function download (pdfURL) {
   let downloadPath = path.join(remote.app.getPath('downloads'), filename)
   let stream = fs.createWriteStream(downloadPath)
   request(pdfURL).pipe(stream).on('finish', () => {
-    shell.openExternal('file://' + downloadPath)
+    shell.openItem(downloadPath)
   })
 }
 
