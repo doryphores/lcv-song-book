@@ -7,7 +7,7 @@ import path from 'path'
 import ToolbarPanel from './toolbar_panel'
 
 function download (pdfURL) {
-  let filename = pdfURL.split('/').pop()
+  let filename = decodeURIComponent(pdfURL.split('/').pop())
   let downloadPath = path.join(remote.app.getPath('downloads'), filename)
   let stream = fs.createWriteStream(downloadPath)
   request(pdfURL).pipe(stream).on('finish', () => {
