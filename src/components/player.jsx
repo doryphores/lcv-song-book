@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import format from 'format-duration'
 import { Howl } from 'howler'
 import _ from 'lodash'
+import { detectBeats } from '../beat_detector'
 
 import ProgressBar from './progress_bar'
 import Icon from './icon'
@@ -114,6 +115,10 @@ export default class Player extends React.Component {
       progress: 0
     })
 
+    detectBeats(this.props.fullRecordingURL).then((beats) => {
+      this.setState({ beats })
+    })
+
     this.howls.voice = new Howl({
       src: [this.props.voiceRecordingURL],
       onload: () => {
@@ -183,6 +188,11 @@ export default class Player extends React.Component {
     this.forEachHowl(h => h.seek(value))
   }
 
+  addMarker (position) {
+    position = position - position % (60 / this.beats.bpm) + this.beats.offset
+    this.props.addMarker(position)
+  }
+
   selectTrack (track) {
     this.setState({ track: track })
   }
@@ -231,6 +241,7 @@ export default class Player extends React.Component {
         <ProgressBar className='player__progress u-flex__panel u-flex__panel--grow'
           duration={this.state.duration}
           value={this.state.progress}
+          beats={this.state.beats}
           markers={this.props.markers}
           onSeek={this.jumpTo.bind(this)}
           onAddMarker={this.props.onAddMarker}

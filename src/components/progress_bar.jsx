@@ -58,10 +58,18 @@ export default class ProgressBar extends React.Component {
     this.props.onRemoveMarker(position)
   }
 
+  beatGridStyles () {
+    return this.props.beats && {
+      backgroundPosition: (this.props.beats.offset / this.props.duration * 100).toString() + '%',
+      backgroundSize: (60 / this.props.beats.bpm / this.props.duration * 400).toString() + '%'
+    }
+  }
+
   render () {
     return (
       <div ref='progressBar'
         className={classnames('progress', this.props.className)}
+        style={this.beatGridStyles()}
         onMouseDown={this.startSeek}
         onMouseUp={this.setMarker}>
         <progress className=' progress__bar'
