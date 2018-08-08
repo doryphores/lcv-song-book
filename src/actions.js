@@ -189,3 +189,21 @@ function selectVoiceRecording (song, voice) {
 function gatherRecordings (songs) {
   return _.compact(songs.map(s => !_.isEmpty(s.recordings) && s.title))
 }
+
+export function addToCurrentPlaylist (song) {
+  return function (dispatch, getState) {
+    let selectedPlaylist = getState().playlists.selectedPlaylist
+
+    if (selectedPlaylist) {
+      dispatch({
+        type: ADD_TO_PLAYLIST,
+        payload: {
+          playlist: selectedPlaylist,
+          song: song
+        }
+      })
+    }
+
+    dispatch(selectSong(song))
+  }
+}

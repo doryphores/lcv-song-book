@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { ReactFragment } from 'react'
 import { connect } from 'react-redux'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 import Icon from './icon'
-import { dismiss, selectSong } from '../actions'
+import { dismiss, addToCurrentPlaylist } from '../actions'
 
 const Notifications = ({ notifications, onDismiss, onView }) => (
   <TransitionGroup className='notification-container' component='div'>
@@ -15,9 +15,12 @@ const Notifications = ({ notifications, onDismiss, onView }) => (
           <span className='u-flex__panel u-flex__panel--grow'>
             {message + ' '}
             {song && (
-              <span className='notification__song' onClick={() => onView(song)}>
-                {song}
-              </span>
+              <ReactFragment>
+                {song + ' '}
+                <span className='notification__song' onClick={() => onView(song)}>
+                  Add to current playlist
+                </span>
+              </ReactFragment>
             )}
           </span>
         </div>
@@ -33,7 +36,7 @@ function mapStateToProps ({ notifications }) {
 function mapDispatchToProps (dispatch) {
   return {
     onDismiss: (message) => dispatch(dismiss(message)),
-    onView: (song) => dispatch(selectSong(song))
+    onView: (song) => dispatch(addToCurrentPlaylist(song))
   }
 }
 
