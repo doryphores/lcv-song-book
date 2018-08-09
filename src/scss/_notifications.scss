@@ -7,24 +7,16 @@
 
 .notification {
   align-items: center;
-  width: 350px;
+  width: 450px;
   padding: 16px;
   margin-bottom: 10px;
   line-height: 22px;
   border-radius: 2px;
-  background-color: pink(400);
+  background-color: grey(800);
   color: #fff;
   fill: #fff;
   @include elevation(2);
-  cursor: pointer;
-
-  &:hover {
-    background-color: pink(500);
-  }
-
-  &:active {
-    background-color: pink(600);
-  }
+  cursor: default;
 }
 
 .notification__icon {
@@ -39,5 +31,18 @@
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.notification__action {
+  color: pink(200);
+
+  &:hover,
+  &:focus {
+    background-color: rgba(pink(200), 0.2);
+  }
+
+  &:active {
+    background-color: rgba(pink(200), 0.3);
   }
 }

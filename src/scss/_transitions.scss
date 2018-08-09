@@ -16,6 +16,24 @@
   transition: transform .32s;
 }
 
+.slide-left-enter {
+  transform: translateX(150%);
+}
+
+.slide-left-enter-active {
+  transform: translateX(0);
+  transition: transform .32s;
+}
+
+.slide-left-exit {
+  transform: translateX(0);
+}
+
+.slide-left-exit-active {
+  transform: translateX(150%);
+  transition: transform .32s;
+}
+
 .grow-enter {
   opacity: 0;
   transform: scale(.5);

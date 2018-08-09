@@ -99,16 +99,15 @@ export function loadResources (resources) {
     dispatch(notify(_.concat(
       newSongs.map(s => {
         return {
-          message: 'New song:',
+          message: `New song: ${s}`,
           icon: 'audiotrack',
           song: s
         }
       }),
       newRecordings.map(s => {
         return {
-          message: 'New recording for',
-          icon: 'voicemail',
-          song: s
+          message: `New recording for ${s}`,
+          icon: 'voicemail'
         }
       })
     )))
