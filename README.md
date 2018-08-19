@@ -4,7 +4,7 @@
 
 ## Install and run for development
 
-You need [node](https://nodejs.org) and [yarn](https://yarnpkg.com/) installed first.
+You need [node](https://nodejs.org) installed first.
 
 Install dependencies:
 
