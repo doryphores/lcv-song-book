@@ -17,7 +17,7 @@ export const DISMISS_AND_NOTIFY = 'DISMISS_AND_NOTIFY'
 export const DISMISS_ALL = 'DISMISS_ALL'
 
 export const SELECT_VOICE = 'SELECT_VOICE'
-export const SONG_SELECTED = 'SONG_SELECTED'
+export const SELECT_SONG = 'SELECT_SONG'
 
 export const SELECT_PLAYLIST = 'SELECT_PLAYLIST'
 export const ADD_TO_PLAYLIST = 'ADD_TO_PLAYLIST'
@@ -80,9 +80,6 @@ export function loadResources (resources) {
       }
     })
 
-    let selectedSongTitle = getState().selectedSong.title
-    if (selectedSongTitle) dispatch(selectSong(selectedSongTitle))
-
     let newSongs = _.difference(getState().songs.map(s => s.title), songsBefore)
     let newRecordings = _.difference(gatherRecordings(getState().songs), recordingsBefore)
 
@@ -116,33 +113,16 @@ export function loadResources (resources) {
 }
 
 export function selectVoice (voice) {
-  return function (dispatch, getState) {
-    dispatch({
-      type: SELECT_VOICE,
-      payload: voice
-    })
-    let songTitle = getState().selectedSong.title
-    if (songTitle) dispatch(selectSong(songTitle))
+  return {
+    type: SELECT_VOICE,
+    payload: voice
   }
 }
 
 export function selectSong (title) {
-  return function (dispatch, getState) {
-    let song = getState().songs.find(s => s.title === title)
-    if (!song) throw new Error(`Song ${title} is unknown`)
-    let voice = getState().selectedVoice
-
-    dispatch({
-      type: SONG_SELECTED,
-      payload: {
-        title: title,
-        sheet: selectSheet(song, voice),
-        recordings: {
-          voice: selectVoiceRecording(song, voice),
-          full: song.recordings['full song']
-        }
-      }
-    })
+  return {
+    type: SELECT_SONG,
+    payload: title
   }
 }
 
@@ -151,7 +131,7 @@ export function addMarker (position) {
     dispatch({
       type: ADD_MARKER,
       payload: {
-        song: getState().selectedSong.title,
+        song: getState().selectedSong,
         position: position
       }
     })
@@ -163,27 +143,11 @@ export function removeMarker (position) {
     dispatch({
       type: REMOVE_MARKER,
       payload: {
-        song: getState().selectedSong.title,
+        song: getState().selectedSong,
         position: position
       }
     })
   }
-}
-
-function selectSheet (song, voice) {
-  voice = voice.toLowerCase()
-  return song.sheets[voice] ||
-    song.sheets[voice.replace(/ [12]/, '')] ||
-    song.sheets[voice.replace(/ 1/, ' 2')] ||
-    song.sheets[voice.replace(/ 2/, ' 1')] ||
-    song.sheets['all parts']
-}
-
-function selectVoiceRecording (song, voice) {
-  voice = voice.toLowerCase()
-  return song.recordings[voice] ||
-    song.recordings[voice.replace(/ [12]/, '')] ||
-    song.recordings[voice.replace(/ [12]/, '') + ' 1 + 2']
 }
 
 function gatherRecordings (songs) {

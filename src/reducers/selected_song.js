@@ -1,24 +1,13 @@
-import { RESTORE, SONG_SELECTED } from '../actions'
+import { RESTORE, SELECT_SONG } from '../actions'
 
-const initialState = {
-  title: '',
-  sheet: '',
-  recordings: {
-    voice: '',
-    full: ''
-  }
-}
+const initialState = ''
 
 export const selectedSong = (state = initialState, { type, payload }) => {
   switch (type) {
-    case SONG_SELECTED:
+    case SELECT_SONG:
       return payload
     case RESTORE:
-      try {
-        return Object.assign({}, initialState, state)
-      } catch (e) {
-        return Object.assign({}, initialState)
-      }
+      return (typeof state === 'string') ? state : initialState
     default:
       return state
   }
