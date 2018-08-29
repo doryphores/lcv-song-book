@@ -279,7 +279,7 @@ function mapDispatchToProps (dispatch) {
 
 function mapStateToProps (state) {
   return {
-    selectedSongTitle: state.selectedSong.title,
+    selectedSongTitle: state.selectedSong,
     songs: state.songs,
     playlists: state.playlists.playlists,
     selectedPlaylist: state.playlists.selectedPlaylist,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 
 import { selectVoice } from '../actions'
+import { sheetMusicURL } from '../selectors'
 import Scraper from './scraper'
 import Downloader from './downloader'
 import Settings from './settings'
@@ -53,7 +54,7 @@ class Toolbar extends React.Component {
 function mapStateToProps (state) {
   return {
     selectedVoice: state.selectedVoice,
-    sheetMusicURL: state.selectedSong.sheet
+    sheetMusicURL: sheetMusicURL(state)
   }
 }
 

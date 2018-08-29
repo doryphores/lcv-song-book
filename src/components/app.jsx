@@ -2,17 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
+import { songIsSelected } from '../selectors'
 import Sidebar from './sidebar'
 import Toolbar from './toolbar'
 import SelectedSong from './selected_song'
 import Notifications from './notifications'
 
-const App = ({ hideScrollbars }) => (
+const App = ({ showSong, hideScrollbars }) => (
   <div className={classnames('u-flex u-flex--full u-flex--horizontal', { 'u-hide-scrollbars': hideScrollbars })}>
     <Sidebar className='u-flex__panel' />
     <div className='u-flex__panel u-flex__panel--grow u-flex u-flex--vertical'>
       <Toolbar className='u-flex__panel' />
-      <SelectedSong className='u-flex__panel u-flex__panel--grow' />
+      {showSong && <SelectedSong className='u-flex__panel u-flex__panel--grow' />}
     </div>
     <Notifications />
   </div>
@@ -20,6 +21,7 @@ const App = ({ hideScrollbars }) => (
 
 function mapStateToProps (state) {
   return {
+    showSong: songIsSelected(state),
     hideScrollbars: state.ui.hideScrollbars
   }
 }

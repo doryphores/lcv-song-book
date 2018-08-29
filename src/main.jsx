@@ -32,6 +32,6 @@ export function start (container) {
 function setTitle ({ selectedSong, selectedVoice }) {
   let title = remote.app.getName()
   if (selectedVoice) title = `${selectedVoice} — ${title}`
-  if (selectedSong) title = `${selectedSong.title} — ${title}`
+  if (selectedSong) title = `${selectedSong} — ${title}`
   document.title = title
 }

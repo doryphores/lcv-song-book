@@ -4,6 +4,7 @@ import classnames from 'classnames'
 
 import Sheet from './sheet'
 import Player from './player'
+import { sheetMusicURL, voiceRecordingURL, fullRecordingURL } from '../selectors'
 import { TOGGLE_PLAY, addMarker, removeMarker } from '../actions'
 
 const SelectedSong = ({ className, sheetMusicURL, fullRecordingURL, voiceRecordingURL, songMarkers, addMarker, removeMarker }) => (
@@ -26,10 +27,10 @@ const SelectedSong = ({ className, sheetMusicURL, fullRecordingURL, voiceRecordi
 
 function mapStateToProps (state) {
   return {
-    sheetMusicURL: state.selectedSong.sheet,
-    fullRecordingURL: state.selectedSong.recordings.full,
-    voiceRecordingURL: state.selectedSong.recordings.voice,
-    songMarkers: state.markers[state.selectedSong.title] || []
+    sheetMusicURL: sheetMusicURL(state),
+    fullRecordingURL: fullRecordingURL(state),
+    voiceRecordingURL: voiceRecordingURL(state),
+    songMarkers: state.markers[state.selectedSong] || []
   }
 }
 
