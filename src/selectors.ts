@@ -4,6 +4,7 @@ interface IState {
   readonly songs: ISong[]
   readonly selectedSong: string
   readonly selectedVoice: string
+  readonly markers: { [key: string]: number[] }
 }
 
 interface ISong {
@@ -62,5 +63,14 @@ export const voiceRecordingURL = createSelector(
     return song.recordings[voiceKey] ||
       song.recordings[voiceKey.replace(/ [12]/, '')] ||
       song.recordings[voiceKey.replace(/ [12]/, '') + ' 1 + 2']
+  }
+)
+
+export const songMarkers = createSelector(
+  currentSong,
+  (state: IState) => state.markers,
+  (song, markers) => {
+    if (song === undefined) return []
+    return markers[song.title] || []
   }
 )
