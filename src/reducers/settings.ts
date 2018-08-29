@@ -1,5 +1,3 @@
-import { patch } from 'emerge'
-
 import { RESTORE, SAVE_SETTINGS, LOAD_RESOURCES } from '../actions'
 
 const initialState = {
@@ -10,11 +8,20 @@ const initialState = {
 export const settings = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOAD_RESOURCES:
-      return patch(state, { lastResourceUpdate: payload.timestamp })
+      return {
+        ...state,
+        lastResourceUpdate: payload.timestamp
+      }
     case SAVE_SETTINGS:
-      return patch(state, payload)
+      return {
+        ...state,
+        payload
+      }
     case RESTORE:
-      return Object.assign({}, initialState, state)
+      return {
+        ...initialState,
+        ...state
+      }
     default:
       return state
   }
