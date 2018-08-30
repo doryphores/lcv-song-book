@@ -1,6 +1,6 @@
 import { castArray, concat, isString, reject } from 'lodash'
 
-import { RESTORE, NOTIFY, DISMISS, DISMISS_AND_NOTIFY, DISMISS_ALL } from '../actions'
+import { RESTORE, NOTIFY, DISMISS, DISMISS_AND_NOTIFY, DISMISS_ALL } from '../../actions'
 
 let nextID = 0
 

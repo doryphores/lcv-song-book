@@ -1,4 +1,4 @@
-import { RESTORE, SELECT_SONG } from '../actions'
+import { RESTORE, SELECT_SONG } from '../../actions'
 
 const initialState = ''
 

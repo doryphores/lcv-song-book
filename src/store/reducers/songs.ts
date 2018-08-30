@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { LOAD_RESOURCES } from '../actions'
+import { LOAD_RESOURCES } from '../../actions'
 
 const initialState = []
 

@@ -1,7 +1,7 @@
 import {
   RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
   TOGGLE_SETTINGS, TOGGLE_SHORTCUTS, SAVE_SETTINGS
-} from '../actions'
+} from '../../actions'
 
 const initialState = {
   sidebarVisible: true,

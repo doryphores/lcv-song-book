@@ -1,6 +1,6 @@
 import { findIndex, sortedIndex, without } from 'lodash'
 
-import { ADD_MARKER, REMOVE_MARKER } from '../actions'
+import { ADD_MARKER, REMOVE_MARKER } from '../../actions'
 
 const TOLERANCE = 4
 

@@ -1,4 +1,4 @@
-import { RESTORE, SAVE_SETTINGS, LOAD_RESOURCES } from '../actions'
+import { RESTORE, SAVE_SETTINGS, LOAD_RESOURCES } from '../../actions'
 
 const initialState = {
   password: '',
@@ -15,7 +15,7 @@ export const settings = (state = initialState, { type, payload }) => {
     case SAVE_SETTINGS:
       return {
         ...state,
-        payload
+        ...payload
       }
     case RESTORE:
       return {
