@@ -3,7 +3,6 @@
     "target": "ES6",
     "module": "commonjs",
     "jsx": "react",
-    "allowJs": true,
     "esModuleInterop": true
   },
   "exclude": [
