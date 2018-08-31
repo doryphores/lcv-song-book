@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { last } from 'lodash'
 
 import { LOAD_RESOURCES } from '../../actions'
 
@@ -26,7 +26,7 @@ function addSong (songs, title) {
     title: title,
     recordings: {},
     sheets: {}
-  }) && _.last(songs)
+  }) && last(songs)
 }
 
 function sortSongs (songs) {

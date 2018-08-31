@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { compact, concat, difference, isEmpty } from 'lodash'
 
 export const RESTORE = 'RESTORE'
 
@@ -80,20 +80,20 @@ export function loadResources (resources) {
       }
     })
 
-    let newSongs = _.difference(getState().songs.map(s => s.title), songsBefore)
-    let newRecordings = _.difference(gatherRecordings(getState().songs), recordingsBefore)
+    let newSongs = difference(getState().songs.map(s => s.title), songsBefore)
+    let newRecordings = difference(gatherRecordings(getState().songs), recordingsBefore)
 
-    if (_.isEmpty(newSongs) && _.isEmpty(newRecordings)) {
+    if (isEmpty(newSongs) && isEmpty(newRecordings)) {
       dispatch(notify('No new songs or recordings'))
       return
     }
 
-    if (_.isEmpty(songsBefore)) {
+    if (isEmpty(songsBefore)) {
       dispatch(success(`Found ${newSongs.length} songs and ${newRecordings.length} recordings`))
       return
     }
 
-    dispatch(notify(_.concat(
+    dispatch(notify(concat(
       newSongs.map(s => {
         return {
           message: 'New song:',
@@ -151,5 +151,5 @@ export function removeMarker (position) {
 }
 
 function gatherRecordings (songs) {
-  return _.compact(songs.map(s => !_.isEmpty(s.recordings) && s.title))
+  return compact(songs.map(s => !isEmpty(s.recordings) && s.title))
 }
