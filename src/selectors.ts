@@ -8,7 +8,7 @@ const currentSong = createSelector(
   }
 )
 
-export const songIsSelected = createSelector(
+export const isSongSelected = createSelector(
   currentSong,
   (song) => song !== undefined
 )

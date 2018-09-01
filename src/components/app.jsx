@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { songIsSelected } from '../selectors'
+import { isSongSelected } from '../selectors'
 import Sidebar from './sidebar'
 import Toolbar from './toolbar'
 import SelectedSong from './selected_song'
@@ -21,7 +21,7 @@ const App = ({ showSong, hideScrollbars }) => (
 
 function mapStateToProps (state) {
   return {
-    showSong: songIsSelected(state),
+    showSong: isSongSelected(state),
     hideScrollbars: state.ui.hideScrollbars
   }
 }
