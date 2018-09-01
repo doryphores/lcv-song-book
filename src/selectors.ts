@@ -1,23 +1,10 @@
 import { createSelector } from 'reselect'
 
-interface IState {
-  readonly songs: ISong[]
-  readonly selectedSong: string
-  readonly selectedVoice: string
-  readonly markers: { [key: string]: number[] }
-}
-
-interface ISong {
-  readonly title: string
-  readonly sheets: { [key: string]: string }
-  readonly recordings: { [key: string]: string }
-}
-
 const currentSong = createSelector(
-  (state: IState) => state.songs,
-  (state: IState) => state.selectedSong,
+  (state: ApplicationState) => state.songs,
+  (state: ApplicationState) => state.selectedSong,
   (songs, title) => {
-    return songs.find((s: ISong) => s.title === title)
+    return songs.find((s) => s.title === title)
   }
 )
 
@@ -33,7 +20,7 @@ export const songTitle = createSelector(
 
 export const sheetMusicURL = createSelector(
   currentSong,
-  (state: IState) => state.selectedVoice,
+  (state: ApplicationState) => state.selectedVoice,
   (song, voice) => {
     if (song === undefined) return undefined
 
@@ -54,7 +41,7 @@ export const fullRecordingURL = createSelector(
 
 export const voiceRecordingURL = createSelector(
   currentSong,
-  (state: IState) => state.selectedVoice,
+  (state: ApplicationState) => state.selectedVoice,
   (song, voice) => {
     if (song === undefined) return undefined
 
@@ -68,7 +55,7 @@ export const voiceRecordingURL = createSelector(
 
 export const songMarkers = createSelector(
   currentSong,
-  (state: IState) => state.markers,
+  (state: ApplicationState) => state.markers,
   (song, markers) => {
     if (song === undefined) return []
     return markers[song.title] || []

@@ -12,14 +12,14 @@ const CACHE_PATH = path.join(
   'store.json'
 )
 
-export function configureStore (): Promise<Store> {
+export function configureStore (): Promise<Store<ApplicationState>> {
   return new Promise((resolve, reject) => {
     readJSON(CACHE_PATH, (_, data) => {
       try {
-        let reducer = combineReducers(reducers)
-        let store = createStore(
-          reducer,
-          reducer(data, { type: RESTORE }),
+        const rootReducer = combineReducers<ApplicationState>(reducers)
+        const store = createStore(
+          rootReducer,
+          rootReducer(data, { type: RESTORE }),
           applyMiddleware(thunk)
         )
 

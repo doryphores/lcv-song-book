@@ -1,17 +1,10 @@
-import { castArray, concat, isString, reject } from 'lodash'
+import { castArray, concat, reject } from 'lodash'
 
 import { RESTORE, NOTIFY, DISMISS, DISMISS_AND_NOTIFY, DISMISS_ALL } from '../../actions'
 
 let nextID = 0
 
-interface INotification {
-  readonly id: number
-  readonly icon: string
-  readonly message: string
-  readonly song?: string
-}
-
-const initiaState: INotification[] = []
+const initiaState: Notification[] = []
 
 export const notifications = (state = initiaState, { type, payload }) => {
   switch (type) {
@@ -30,11 +23,10 @@ export const notifications = (state = initiaState, { type, payload }) => {
   }
 }
 
-function format (notification): INotification[] {
+function format (notification: any): Notification[] {
   return castArray(notification).map(n => {
-    if (isString(n)) n = { message: n }
     return {
-      ...n,
+      ...(typeof n === 'string') ? { message: n } : n,
       id: nextID++,
       icon: 'info'
     }

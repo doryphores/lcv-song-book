@@ -5,15 +5,12 @@ import {
   RESTORE
 } from '../../actions'
 
-const initialState: {
-  selectedPlaylist: string,
-  playlists: { [key: string]: string }
-} = {
+const initialState: PlaylistState = {
   selectedPlaylist: '',
   playlists: {}
 }
 
-function cleanup (state) {
+function cleanup (state: PlaylistState) {
   const playlists = omitBy(state.playlists, l => isEmpty(l))
   let selectedPlaylist = state.selectedPlaylist
 

@@ -4,7 +4,7 @@ import { ADD_MARKER, REMOVE_MARKER } from '../../actions'
 
 const TOLERANCE = 4
 
-const initiaState: { [key: string]: number[] } = {}
+const initiaState: MarkerCollection = {}
 
 export const markers = (state = initiaState, { type, payload }) => {
   switch (type) {
@@ -24,7 +24,7 @@ export const markers = (state = initiaState, { type, payload }) => {
   }
 }
 
-function addMarker (markers: number[], position: number) {
+function addMarker (markers: SongMarkers, position: number) {
   if (!markers || markers.length === 0) return [position]
 
   let result = markers.concat()
