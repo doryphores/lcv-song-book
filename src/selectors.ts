@@ -74,3 +74,8 @@ export const songMarkers = createSelector(
     return markers[song.title] || []
   }
 )
+
+export const notifications = createSelector(
+  (state: ApplicationState) => state.notifications,
+  (notifications) => notifications
+)

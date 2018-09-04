@@ -1,11 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { Dispatch } from 'redux'
 
+import { notifications } from '../selectors'
 import Icon from './icon'
 import { dismiss, selectSong } from '../actions'
 
-const Notifications = ({ notifications, onDismiss, onView }) => (
+interface NotificationsProps {
+  readonly notifications: Notification[]
+  readonly onDismiss: (id: number) => void
+  readonly onView: (song: string) => void
+}
+
+const Notifications: React.SFC<NotificationsProps> = ({ notifications, onDismiss, onView }) => (
   <TransitionGroup className='notification-container' component='div'>
     {notifications.map(({ id, message, icon, song }) => (
       <CSSTransition key={id} timeout={320} classNames='grow' unmountOnExit mountOnEnter>
@@ -26,14 +34,16 @@ const Notifications = ({ notifications, onDismiss, onView }) => (
   </TransitionGroup>
 )
 
-function mapStateToProps ({ notifications }) {
-  return { notifications }
+function mapStateToProps (state: ApplicationState) {
+  return {
+    notifications: notifications(state)
+  }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    onDismiss: (message) => dispatch(dismiss(message)),
-    onView: (song) => dispatch(selectSong(song))
+    onDismiss: (id: number) => dispatch(dismiss(id)),
+    onView: (song: string) => dispatch(selectSong(song))
   }
 }
 
