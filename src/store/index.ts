@@ -1,7 +1,7 @@
 import { remote } from 'electron'
 import { outputJsonSync, readJSON } from 'fs-extra'
 import * as path from 'path'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, combineReducers, applyMiddleware, Store } from 'redux'
 import thunk from 'redux-thunk'
 
 import * as reducers from './reducers'
@@ -12,7 +12,7 @@ const CACHE_PATH = path.join(
   'store.json'
 )
 
-export function configureStore () {
+export function configureStore (): Promise<Store> {
   return new Promise((resolve, reject) => {
     readJSON(CACHE_PATH, (_, data) => {
       try {
