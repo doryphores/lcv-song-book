@@ -1,9 +1,14 @@
 import React from 'react'
 import classnames from 'classnames'
 
-export default class Resizer extends React.Component {
-  constructor () {
-    super()
+interface ResizerProps {
+  readonly className: string
+  readonly onResize: (x: number) => void
+}
+
+export default class Resizer extends React.Component<ResizerProps> {
+  constructor (props) {
+    super(props)
     this.stopResize = this.stopResize.bind(this)
     this.handleResize = this.handleResize.bind(this)
   }
@@ -22,7 +27,7 @@ export default class Resizer extends React.Component {
 
   handleResize (e) {
     this.props.onResize(e.clientX)
-    window.dispatchEvent(new window.Event('resize'))
+    window.dispatchEvent(new UIEvent('resize'))
   }
 
   render () {
