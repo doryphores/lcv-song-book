@@ -10,14 +10,21 @@ const SPECIAL_KEYS = {
   'pagedown': 34
 }
 
+interface Listener {
+  readonly handler: Function
+  readonly ignoreInForms: boolean
+}
+
 export default class KeyCapture {
+  listeners: { [key: number]: Listener } = {}
+
   constructor (handlers) {
     this.listeners = {}
     if (handlers) this.registerMany(handlers)
     this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
-  register (keys, handler) {
+  register (keys: string, handler: Function) {
     keys.split(' ').forEach(key => {
       this.listeners[this.keyCode(key)] = Object.assign({
         ignoreInForms: this.isChar(key) || ['left', 'right', 'space'].includes(key)
@@ -25,7 +32,7 @@ export default class KeyCapture {
     })
   }
 
-  registerMany (handlers) {
+  registerMany (handlers: { [key: string]: Function }) {
     Object.keys(handlers).forEach(k => this.register(k, handlers[k]))
   }
 
@@ -37,25 +44,27 @@ export default class KeyCapture {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  handleKeyDown (e) {
-    let listener = this.listeners[e.which]
+  handleKeyDown (e: KeyboardEvent) {
+    let listener = this.listeners[e.keyCode]
     if (this.shouldIgnore(listener, e)) return
-    if (!this.listeners[e.which].handler()) e.preventDefault()
+    if (!this.listeners[e.keyCode].handler()) e.preventDefault()
   }
 
-  shouldIgnore (listener, e) {
+  shouldIgnore (listener: Listener, e: KeyboardEvent) {
+    const target = e.target as HTMLElement
+
     return (
       typeof listener === 'undefined' ||
       (
         listener.ignoreInForms &&
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
+        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
       )
     )
   }
 
-  keyCode (key) {
+  keyCode (key: number | string) {
     if (typeof key === 'number') return key
-    if (this.isChar(key)) return key.toUpperCase().charCodeAt()
+    if (this.isChar(key)) return key.toUpperCase().charCodeAt(0)
     if (SPECIAL_KEYS[key]) return SPECIAL_KEYS[key]
     throw new Error(`Unknown key: "${key}"`)
   }
