@@ -5,14 +5,14 @@ import { outputJSON, readJSON } from 'fs-extra'
 
 import { setApplicationMenu } from './application_menu'
 
-let appWindow
+let appWindow: BrowserWindow
 
 const CONFIG_PATH = path.join(
   app.getPath('userData'),
   'window.json'
 )
 
-const isDevMode = process.execPath.match(/[\\/]electron/)
+const isDevMode = /[\\/]electron/.test(process.execPath)
 
 const shouldQuit = app.makeSingleInstance(() => {
   if (appWindow) {
@@ -30,7 +30,7 @@ if (process.platform === 'linux') {
 }
 
 app.on('ready', () => {
-  let opts = {
+  const defaultWindowOpts = {
     minWidth: 800,
     minHeight: 600,
     center: true,
@@ -39,10 +39,11 @@ app.on('ready', () => {
     icon: `${__dirname}/static/icon.png`
   }
 
-  readJSON(CONFIG_PATH, (_, config) => {
-    if (config) Object.assign(opts, config)
-
-    appWindow = new BrowserWindow(opts)
+  readJSON(CONFIG_PATH, (_, savedWindowOpts: {} | undefined) => {
+    appWindow = new BrowserWindow({
+      ...defaultWindowOpts,
+      ...savedWindowOpts
+    })
 
     setApplicationMenu(appWindow)
 

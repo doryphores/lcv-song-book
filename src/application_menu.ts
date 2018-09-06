@@ -1,10 +1,10 @@
-import { app, Menu, shell } from 'electron'
+import { app, Menu, shell, BrowserWindow } from 'electron'
 
 import { TOGGLE_SIDEBAR, TOGGLE_SETTINGS, TOGGLE_SHORTCUTS } from './actions'
 
-let win
+let win: BrowserWindow
 
-const template = [
+const template: Electron.MenuItemConstructorOptions[] = [
   {
     label: 'Edit',
     submenu: [
@@ -120,7 +120,7 @@ if (process.platform === 'darwin') {
   })
 }
 
-export function setApplicationMenu (activeWindow) {
+export function setApplicationMenu (activeWindow: BrowserWindow) {
   win = activeWindow
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 }
