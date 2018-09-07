@@ -20,7 +20,14 @@ const ICONS = {
   'voicemail': 'communication'
 }
 
-const Icon = ({ className, icon, style = {}, onClick }) => (
+interface IconProps {
+  readonly className: string
+  readonly icon: string
+  readonly style: {}
+  readonly onClick: () => void
+}
+
+const Icon: React.SFC<IconProps> = ({ className, icon, style, onClick }) => (
   <svg className={classnames(className, 'icon')} style={style} onClick={onClick}>
     <use xlinkHref={`../static/sprites/svg-sprite-${ICONS[icon]}.svg#ic_${icon}_24px`} />
   </svg>
