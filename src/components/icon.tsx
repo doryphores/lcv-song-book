@@ -23,8 +23,8 @@ const ICONS = {
 interface IconProps {
   readonly className: string
   readonly icon: string
-  readonly style: {}
-  readonly onClick: () => void
+  readonly style?: {}
+  readonly onClick?: () => void
 }
 
 const Icon: React.SFC<IconProps> = ({ className, icon, style, onClick }) => (

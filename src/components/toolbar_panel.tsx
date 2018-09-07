@@ -3,7 +3,16 @@ import classnames from 'classnames'
 
 import Icon from './icon'
 
-const ToolbarPanel = ({
+interface ToolbarPanelProps {
+  readonly className: string
+  readonly toggleIcon: string
+  readonly disabled: boolean
+  readonly spinToggle: boolean
+  readonly onToggle: () => void
+  readonly children: React.ReactChild | React.ReactChild[]
+}
+
+const ToolbarPanel: React.SFC<ToolbarPanelProps> = ({
   className,
   toggleIcon,
   disabled = false,
@@ -22,7 +31,7 @@ const ToolbarPanel = ({
   </div>
 )
 
-function buttonClassnames (spin) {
+function buttonClassnames (spin: boolean) {
   return classnames('toolbar__button', {
     'toolbar__button--spinning': spin
   })

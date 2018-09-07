@@ -25,7 +25,7 @@ export default class Resizer extends React.Component<ResizerProps> {
     window.removeEventListener('mousemove', this.handleResize)
   }
 
-  handleResize (e) {
+  handleResize (e: MouseEvent) {
     this.props.onResize(e.clientX)
     window.dispatchEvent(new UIEvent('resize'))
   }
