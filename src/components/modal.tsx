@@ -3,7 +3,19 @@ import React from 'react'
 import KeyCapture from '../key_capture'
 import Overlay from './overlay'
 
-export default class Modal extends React.Component {
+interface ModalProps {
+  readonly open: boolean
+  readonly className: string
+  readonly buttonLabel: string
+  readonly title: string
+  readonly onSubmit: () => void
+  readonly onCancel: () => void
+  readonly children: React.ReactNode
+}
+
+export default class Modal extends React.Component<ModalProps> {
+  private keyCapture: KeyCapture
+
   constructor (props) {
     super(props)
 
