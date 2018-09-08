@@ -112,14 +112,14 @@ export function loadResources (resources) {
   }
 }
 
-export function selectVoice (voice) {
+export function selectVoice (voice: string) {
   return {
     type: SELECT_VOICE,
     payload: voice
   }
 }
 
-export function selectSong (title) {
+export function selectSong (title: string) {
   return {
     type: SELECT_SONG,
     payload: title

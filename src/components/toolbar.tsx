@@ -1,6 +1,7 @@
-import React from 'react'
-import { connect } from 'react-redux'
 import classnames from 'classnames'
+import React, { ChangeEvent } from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 
 import { selectVoice } from '../actions'
 import { sheetMusicURL } from '../selectors'
@@ -9,6 +10,13 @@ import Downloader from './downloader'
 import Settings from './settings'
 import Shortcuts from './shortcuts'
 import Icon from './icon'
+
+interface ToolbarProps {
+  readonly className: string
+  readonly selectedVoice: string
+  readonly sheetMusicURL: string
+  readonly onSelectVoice: (voice: string) => void
+}
 
 const VOICES = [
   'Soprano 1',
@@ -21,9 +29,9 @@ const VOICES = [
   'Bass 2'
 ]
 
-class Toolbar extends React.Component {
-  selectVoice (e) {
-    this.props.onSelect(e.target.value)
+class Toolbar extends React.Component<ToolbarProps> {
+  selectVoice (e: ChangeEvent<HTMLSelectElement>) {
+    this.props.onSelectVoice(e.target.value)
     e.target.blur()
   }
 
@@ -51,16 +59,16 @@ class Toolbar extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps (state: ApplicationState) {
   return {
     selectedVoice: state.selectedVoice,
-    sheetMusicURL: sheetMusicURL(state)
+    sheetMusicURL: sheetMusicURL(state)!
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    onSelect: (voice) => dispatch(selectVoice(voice))
+    onSelectVoice: (voice: string) => dispatch(selectVoice(voice))
   }
 }
 
