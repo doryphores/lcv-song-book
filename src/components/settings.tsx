@@ -1,21 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 
 import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
 import ToolbarPanel from './toolbar_panel'
 import Icon from './icon'
 import Modal from './modal'
 
-class Settings extends React.Component {
-  constructor (props) {
-    super()
+interface SettingsState {
+  readonly password: string
+  readonly hideScrollbars: boolean
+}
+
+interface SettingsProps extends SettingsState {
+  readonly className: string
+  readonly open: boolean
+  readonly onSubmit: (settings: SettingsState) => void
+  readonly onToggle: () => void
+}
+
+class Settings extends React.Component<SettingsProps, SettingsState> {
+  constructor (props: SettingsProps) {
+    super(props)
     this.state = {
       password: props.password,
       hideScrollbars: props.hideScrollbars
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps: SettingsProps) {
     if (nextProps.open && !this.props.open) {
       this.setState({
         password: nextProps.password,
@@ -24,8 +37,7 @@ class Settings extends React.Component {
     }
   }
 
-  handleSubmit (e) {
-    e.preventDefault()
+  handleSubmit () {
     this.props.onSubmit({
       password: this.state.password,
       hideScrollbars: this.state.hideScrollbars
@@ -73,7 +85,7 @@ class Settings extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps (state: ApplicationState) {
   return {
     open: state.ui.settingsVisible,
     password: state.settings.password,
@@ -81,13 +93,15 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    onToggle: settings => dispatch({ type: TOGGLE_SETTINGS }),
-    onSubmit: settings => dispatch({
-      type: SAVE_SETTINGS,
-      payload: settings
-    })
+    onToggle: () => dispatch({ type: TOGGLE_SETTINGS }),
+    onSubmit: (settings: SettingsState) => {
+      dispatch({
+        type: SAVE_SETTINGS,
+        payload: settings
+      })
+    }
   }
 }
 

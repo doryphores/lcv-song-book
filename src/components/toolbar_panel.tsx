@@ -6,7 +6,7 @@ import Icon from './icon'
 interface ToolbarPanelProps {
   readonly className: string
   readonly toggleIcon: string
-  readonly disabled: boolean
+  readonly disabled?: boolean
   readonly spinToggle?: boolean
   readonly onToggle: () => void
   readonly children?: React.ReactChild | React.ReactChild[]
