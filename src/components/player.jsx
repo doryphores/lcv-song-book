@@ -52,12 +52,12 @@ export default class Player extends React.Component {
     }
 
     this.keyCapture = new KeyCapture({
-      'space': () => this.togglePlay(),
-      'left': () => {
+      'Space': () => { this.togglePlay(); return false },
+      'ArrowLeft': () => {
         let pos = last(this.props.markers.filter(m => m < this.state.progress - 0.5))
         this.jumpTo(pos || 0)
       },
-      'right': () => {
+      'ArrowRight': () => {
         let pos = this.props.markers.find(m => m > this.state.progress)
         if (pos) this.jumpTo(pos)
       },
@@ -65,10 +65,10 @@ export default class Player extends React.Component {
         let pos = this.props.markers[parseInt(key, 10) - 1]
         if (pos) this.jumpTo(pos)
       },
-      'M': () => this.props.onAddMarker(this.state.progress),
-      'F': () => this.selectTrack('full'),
-      'V': () => this.selectTrack('voice'),
-      'B': () => this.selectTrack('both')
+      'm': () => this.props.onAddMarker(this.state.progress),
+      'f': () => this.selectTrack('full'),
+      'v': () => this.selectTrack('voice'),
+      'b': () => this.selectTrack('both')
     })
   }
 

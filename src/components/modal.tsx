@@ -20,7 +20,7 @@ export default class Modal extends React.Component<ModalProps> {
     super(props)
 
     this.keyCapture = new KeyCapture({
-      'escape': props.onCancel
+      'Escape': props.onCancel
     })
   }
 

@@ -13,7 +13,7 @@ class Shortcuts extends React.Component {
     super(props)
 
     this.keyCapture = new KeyCapture({
-      'escape': props.onToggle
+      'Escape': props.onToggle
     })
   }
 

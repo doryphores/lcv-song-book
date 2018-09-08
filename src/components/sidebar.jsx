@@ -24,22 +24,22 @@ class Sidebar extends React.Component {
     }
 
     this.toggleKeyCapture = new KeyCapture({
-      'S': () => {
+      's': () => {
         if (!this.props.visible) this.props.toggleSidebar()
         this.refs.searchInput.select()
       }
     })
 
     this.searchingKeyCapture = new KeyCapture({
-      'enter': () => {
+      'Enter': () => {
         if (this.state.highlighted > -1) {
           this.props.onSelect(this.filterSongs()[this.state.highlighted].title)
           this.refs.searchInput.blur()
         }
       },
-      'escape': () => this.refs.searchInput.blur(),
-      'up': () => this.updateHighlighted(this.state.highlighted - 1),
-      'down': () => this.updateHighlighted(this.state.highlighted + 1)
+      'Escape': () => this.refs.searchInput.blur(),
+      'ArrowUp': () => this.updateHighlighted(this.state.highlighted - 1),
+      'ArrowDown': () => this.updateHighlighted(this.state.highlighted + 1)
     })
   }
 

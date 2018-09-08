@@ -18,7 +18,7 @@ export default class Sheet extends React.Component {
     }
 
     this.keyCapture = new KeyCapture({
-      'pageup pagedown': () => {
+      'PageUp PageDown': () => {
         this.refs.scroller.focus()
         return true
       }
