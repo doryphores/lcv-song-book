@@ -7,9 +7,9 @@ interface ToolbarPanelProps {
   readonly className: string
   readonly toggleIcon: string
   readonly disabled: boolean
-  readonly spinToggle: boolean
+  readonly spinToggle?: boolean
   readonly onToggle: () => void
-  readonly children: React.ReactChild | React.ReactChild[]
+  readonly children?: React.ReactChild | React.ReactChild[]
 }
 
 const ToolbarPanel: React.SFC<ToolbarPanelProps> = ({
