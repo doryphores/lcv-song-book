@@ -57,7 +57,7 @@ app.on('ready', () => {
         height,
         x,
         y
-      })
+      }).catch(err => console.error(err))
       app.quit()
     })
 

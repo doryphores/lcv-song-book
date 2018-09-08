@@ -26,7 +26,7 @@ export function start (container) {
     ipcRenderer.on('dispatch-action', (e, actionType) => {
       store.dispatch({ type: actionType })
     })
-  })
+  }).catch(err => console.error(err))
 }
 
 function setTitle ({ selectedSong, selectedVoice }) {
