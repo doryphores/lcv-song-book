@@ -39,10 +39,38 @@ const TRACK_SETTINGS = {
   }
 }
 
-export default class Player extends React.Component {
-  constructor (props) {
-    super()
-    this.howls = {}
+type Track = 'voice' | 'full' | 'both'
+
+interface PlayerProps {
+  readonly className: string
+  readonly markers: SongMarkers
+  readonly voiceRecordingURL: string
+  readonly fullRecordingURL: string
+  readonly onAddMarker: (position: number) => void
+  readonly onRemoveMarker: (position: number) => void
+}
+
+interface PlayerState {
+  readonly track: Track
+  readonly duration: number
+  readonly progress: number
+  readonly playing: boolean
+  readonly loading: number
+}
+
+interface PlayHeads {
+  voice: Howl
+  full: Howl
+}
+
+export default class Player extends React.Component<PlayerProps, PlayerState> {
+  private playHeads?: PlayHeads
+  private keyCapture: KeyCapture
+  private animationFrame?: number
+
+  constructor (props: PlayerProps) {
+    super(props)
+
     this.state = {
       track: 'voice',
       duration: 0,
@@ -61,7 +89,7 @@ export default class Player extends React.Component {
         let pos = this.props.markers.find(m => m > this.state.progress)
         if (pos) this.jumpTo(pos)
       },
-      '1 2 3 4 5 6 7 8 9': (key) => {
+      '1 2 3 4 5 6 7 8 9': (key: string) => {
         let pos = this.props.markers[parseInt(key, 10) - 1]
         if (pos) this.jumpTo(pos)
       },
@@ -81,7 +109,7 @@ export default class Player extends React.Component {
     this.unloadRecordings()
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevProps: PlayerProps, prevState: PlayerState) {
     if (this.props.voiceRecordingURL !== prevProps.voiceRecordingURL) {
       this.loadRecordings()
     }
@@ -91,8 +119,10 @@ export default class Player extends React.Component {
     }
   }
 
-  forEachHowl (func) {
-    Object.keys(this.howls).forEach(k => func(this.howls[k]))
+  forEachHowl (func: (h: Howl) => void) {
+    if (this.playHeads === undefined) return
+    func(this.playHeads.voice)
+    func(this.playHeads.full)
   }
 
   unloadRecordings () {
@@ -114,62 +144,66 @@ export default class Player extends React.Component {
       progress: 0
     })
 
-    this.howls.voice = new Howl({
-      src: [this.props.voiceRecordingURL],
-      onload: () => {
-        this.configureTrack('voice')
-        this.howls.voice.seek(this.state.progress)
-        this.setState({
-          loading: this.state.loading - 1,
-          duration: this.howls.voice.duration()
-        })
-      },
-      onplay: () => {
-        this.setState({
-          playing: true
-        })
-        this.step()
-      },
-      onpause: () => {
-        this.setState({
-          playing: false
-        })
-      },
-      onend: () => {
-        this.setState({
-          progress: 0,
-          playing: false
-        })
-      }
-    })
-
-    this.howls.full = new Howl({
-      src: [this.props.fullRecordingURL],
-      onload: () => {
-        this.configureTrack('full')
-        this.howls.full.seek(this.state.progress)
-        this.setState({
-          loading: this.state.loading - 1
-        })
-      }
-    })
+    this.playHeads = {
+      voice: new Howl({
+        src: [this.props.voiceRecordingURL],
+        onload: () => {
+          this.configureTrack('voice')
+          if (this.playHeads === undefined) return
+          this.playHeads.voice.seek(this.state.progress)
+          this.setState({
+            loading: this.state.loading - 1,
+            duration: this.playHeads.voice.duration()
+          })
+        },
+        onplay: () => {
+          this.setState({
+            playing: true
+          })
+          this.step()
+        },
+        onpause: () => {
+          this.setState({
+            playing: false
+          })
+        },
+        onend: () => {
+          this.setState({
+            progress: 0,
+            playing: false
+          })
+        }
+      }),
+      full: new Howl({
+        src: [this.props.fullRecordingURL],
+        onload: () => {
+          this.configureTrack('full')
+          if (this.playHeads === undefined) return
+          this.playHeads.full.seek(this.state.progress)
+          this.setState({
+            loading: this.state.loading - 1
+          })
+        }
+      })
+    }
   }
 
-  configureTrack (...tracks) {
+  configureTrack (...tracks: (keyof PlayHeads)[]) {
     tracks.forEach(track => {
-      this.howls[track].stereo(TRACK_SETTINGS[track][this.state.track].stereo)
-      this.howls[track].volume(TRACK_SETTINGS[track][this.state.track].volume)
+      if (this.playHeads === undefined) return
+      this.playHeads[track].stereo(TRACK_SETTINGS[track][this.state.track].stereo)
+      this.playHeads[track].volume(TRACK_SETTINGS[track][this.state.track].volume)
     })
   }
 
   step () {
-    if (this.howls.voice.playing()) {
-      this.setState({ progress: this.howls.voice.seek() || 0 })
+    if (this.playHeads !== undefined && this.playHeads.voice.playing()) {
+      this.setState({ progress: this.playHeads['voice'].seek() as number || 0 })
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
     }
   }
 
-  togglePlay (e) {
+  togglePlay () {
     if (this.state.playing) {
       this.forEachHowl(h => h.pause())
     } else {
@@ -177,13 +211,13 @@ export default class Player extends React.Component {
     }
   }
 
-  jumpTo (value) {
+  jumpTo (value: number) {
     if (value === this.state.duration) value = 0
     this.setState({ progress: value })
     this.forEachHowl(h => h.seek(value))
   }
 
-  selectTrack (track) {
+  selectTrack (track: Track) {
     this.setState({ track: track })
   }
 
@@ -191,16 +225,16 @@ export default class Player extends React.Component {
     return !this.props.voiceRecordingURL
   }
 
-  classNames (classNames) {
+  classNames (classNames: string) {
     return classnames(this.props.className, classNames, {
       'player--loading': this.state.loading > 0,
       'player--empty': this.isEmpty()
     })
   }
 
-  toggleClassNames (t) {
+  toggleClassNames (track: string) {
     return classnames('toggle', {
-      'toggle--selected': t === this.state.track
+      'toggle--selected': track === this.state.track
     })
   }
 
@@ -216,7 +250,7 @@ export default class Player extends React.Component {
           <Icon className='player__button-icon' icon={this.state.playing ? 'pause_circle_filled' : 'play_circle_filled'} />
         </button>
         <div className='player__track-switcher'>
-          {['voice', 'full', 'both'].map(t => (
+          {['voice', 'full', 'both'].map((t) => (
             <button key={t}
               className={this.toggleClassNames(t)}
               title={t}
