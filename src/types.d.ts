@@ -1,3 +1,5 @@
+type ScrapedResource = Readonly<Record<'title' | 'voice' | 'url', string>>
+
 interface Resource {
   readonly title: string
   readonly sheets: {

@@ -1,4 +1,5 @@
 import { compact, concat, difference, isEmpty } from 'lodash'
+import { Dispatch, Action, ActionCreator } from 'redux'
 
 export const RESTORE = 'RESTORE'
 
@@ -76,8 +77,8 @@ export function dismiss (notificationId: number) {
   }
 }
 
-export function loadResources (resources) {
-  return function (dispatch, getState) {
+export function loadResources (resources: ScrapedResource[]) {
+  return function (dispatch: Dispatch, getState: () => ApplicationState): void {
     let songsBefore = getState().songs.map(s => s.title)
     let recordingsBefore = gatherRecordings(getState().songs)
 
@@ -104,14 +105,14 @@ export function loadResources (resources) {
 
     const notifications: INotification[] = concat(
       newSongs.map(s => ({
-          message: 'New song:',
-          icon: 'audiotrack',
-          song: s
+        message: 'New song:',
+        icon: 'audiotrack',
+        song: s
       })),
       newRecordings.map(s => ({
-          message: 'New recording for',
-          icon: 'voicemail',
-          song: s
+        message: 'New recording for',
+        icon: 'voicemail',
+        song: s
       }))
     )
 
@@ -133,8 +134,8 @@ export function selectSong (title: string) {
   }
 }
 
-export function addMarker (position) {
-  return function (dispatch, getState) {
+export function addMarker (position: number) {
+  return function (dispatch: Dispatch, getState: () => ApplicationState) {
     dispatch({
       type: ADD_MARKER,
       payload: {
@@ -145,8 +146,8 @@ export function addMarker (position) {
   }
 }
 
-export function removeMarker (position) {
-  return function (dispatch, getState) {
+export function removeMarker (position: number) {
+  return function (dispatch: Dispatch, getState: () => ApplicationState) {
     dispatch({
       type: REMOVE_MARKER,
       payload: {
@@ -157,6 +158,6 @@ export function removeMarker (position) {
   }
 }
 
-function gatherRecordings (songs) {
+function gatherRecordings (songs: Resource[]) {
   return compact(songs.map(s => !isEmpty(s.recordings) && s.title))
 }

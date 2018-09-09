@@ -1,39 +1,54 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import WebView from './web_view'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { loadResources, alert, DISMISS_ALL } from '../actions'
 import ToolbarPanel from './toolbar_panel'
+import WebView from './web_view'
 
-class Scraper extends React.Component {
-  constructor () {
-    super()
+interface ScraperProps {
+  readonly className: string
+  readonly password: string
+  readonly lastUpdate: number
+  readonly onAlert: (message: string) => void
+  readonly onDismissAllNotifications: () => void
+  readonly onLoadResources: (resources: ScrapedResource[]) => void
+}
+
+interface ScraperState {
+  readonly started: boolean
+}
+
+class Scraper extends React.Component<ScraperProps, ScraperState> {
+  constructor (props: ScraperProps) {
+    super(props)
     this.state = { started: false }
   }
 
   componentDidMount () {
     if (this.props.password) {
-      let oneDay = 1000 * 60 * 60 * 24 // in milliseconds
+      const oneDay = 1000 * 60 * 60 * 24 // in milliseconds
       if (this.props.lastUpdate < (Date.now() - oneDay)) this.start()
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (this.props.password === '' && nextProps.password !== '') {
-      this.start()
-    }
+  componentWillReceiveProps (nextProps: ScraperProps) {
+    if (this.props.password === '' && nextProps.password !== '') this.start()
   }
 
   start () {
     if (this.state.started) return
-    this.props.dismissAllNotifications()
+    this.props.onDismissAllNotifications()
     this.setState({ started: true })
   }
 
-  handleFinishLoad (e) {
-    switch (e.target.getURL()) {
+  handleFinishLoad (e: GlobalEvent) {
+    let webview = e.target as Electron.WebviewTag
+
+    switch (webview.getURL()) {
       case 'https://www.londoncityvoices.co.uk/choir-resources/':
-        e.target.executeJavaScript(
+        webview.executeJavaScript(
           `(function () {
             if (document.body.textContent.includes("You've entered an invalid password")) {
               return true
@@ -42,22 +57,22 @@ class Scraper extends React.Component {
             document.querySelector('#smartPWLogin').submit()
             return false
           })()`,
-          true, (invalidPassword) => {
+          true, (invalidPassword: boolean) => {
             if (invalidPassword) {
-              this.props.alert('Invalid LCV website password. Check your password and try again.')
+              this.props.onAlert('Invalid LCV website password. Check your password and try again.')
               this.setState({ started: false })
             }
           }
         )
         break
       case 'https://www.londoncityvoices.co.uk/choir-resources/choir-resources-2/':
-        this.harvestData(e.target)
+        this.harvestData(webview)
         break
     }
   }
 
-  harvestData (webView) {
-    webView.executeJavaScript(
+  harvestData (webview: Electron.WebviewTag) {
+    webview.executeJavaScript(
       `Array.prototype.slice.call(
         document.querySelectorAll('#downloads a[href$=pdf], #downloads a[href$=mp3]'),
         0
@@ -69,15 +84,15 @@ class Scraper extends React.Component {
         }
       })`,
       true,
-      resources => {
-        this.props.loadResources(resources)
+      (resources: ScrapedResource[]) => {
+        this.props.onLoadResources(resources)
         this.setState({ started: false })
       }
     )
   }
 
   renderBrowser () {
-    if (!this.state.started) return null
+    if (!this.state.started) return undefined
 
     return (
       <WebView onDidFinishLoad={this.handleFinishLoad.bind(this)}
@@ -97,18 +112,18 @@ class Scraper extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps (state: ApplicationState) {
   return {
     password: state.settings.password,
     lastUpdate: state.settings.lastResourceUpdate
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, Action>) {
   return {
-    dismissAllNotifications: () => dispatch({ type: DISMISS_ALL }),
-    alert: notification => dispatch(alert(notification)),
-    loadResources: resources => dispatch(loadResources(resources))
+    onDismissAllNotifications: () => dispatch({ type: DISMISS_ALL }),
+    onAlert: (message: string) => dispatch(alert(message)),
+    onLoadResources: (resources: ScrapedResource[]) => dispatch(loadResources(resources))
   }
 }
 
