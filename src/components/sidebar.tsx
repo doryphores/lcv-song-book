@@ -1,4 +1,5 @@
 import React from 'react'
+import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { remote } from 'electron'
@@ -12,9 +13,41 @@ import Resizer from './resizer'
 import Modal from './modal'
 import KeyCapture from '../key_capture'
 
-class Sidebar extends React.Component {
-  constructor () {
-    super()
+interface SidebarProps {
+  readonly className: string
+  readonly visible: boolean
+  readonly width: number
+  readonly songs: Resource[]
+  readonly selectedSongTitle: string
+  readonly selectedPlaylist: string
+  readonly playlists: PlaylistCollection
+  readonly onToggle: () => void
+  readonly onSelect: (song: string) => void
+  readonly onResize: (width: number) => void
+  readonly onPlaylistSelect: (song: string) => void
+  readonly onPlaylistAdd: (playlist: string, song: string) => void
+  readonly onPlaylistRemove: (playlist: string, song: string) => void
+}
+
+interface SidebarState {
+  readonly search: string
+  readonly highlighted: number
+  readonly searching: boolean
+  readonly newPlaylistLabel: string
+  readonly songToAdd: string
+}
+
+class Sidebar extends React.Component<SidebarProps, SidebarState> {
+  private toggleKeyCapture: KeyCapture
+  private searchingKeyCapture: KeyCapture
+  private sidebar = React.createRef<HTMLDivElement>()
+  private searchInput = React.createRef<HTMLInputElement>()
+  private songList = React.createRef<HTMLUListElement>()
+  private songRefs: HTMLLIElement[] = []
+
+  constructor (props: SidebarProps) {
+    super(props)
+
     this.state = {
       search: '',
       highlighted: -1,
@@ -25,8 +58,8 @@ class Sidebar extends React.Component {
 
     this.toggleKeyCapture = new KeyCapture({
       's': () => {
-        if (!this.props.visible) this.props.toggleSidebar()
-        this.refs.searchInput.select()
+        if (!this.props.visible) this.props.onToggle()
+        this.searchInput.current!.select()
       }
     })
 
@@ -34,10 +67,10 @@ class Sidebar extends React.Component {
       'Enter': () => {
         if (this.state.highlighted > -1) {
           this.props.onSelect(this.filterSongs()[this.state.highlighted].title)
-          this.refs.searchInput.blur()
+          this.searchInput.current!.blur()
         }
       },
-      'Escape': () => this.refs.searchInput.blur(),
+      'Escape': () => this.searchInput.current!.blur(),
       'ArrowUp': () => this.updateHighlighted(this.state.highlighted - 1),
       'ArrowDown': () => this.updateHighlighted(this.state.highlighted + 1)
     })
@@ -49,8 +82,8 @@ class Sidebar extends React.Component {
       selectedItem && selectedItem.scrollIntoView()
     }
     this.toggleKeyCapture.activate()
-    this.refs.sidebar.addEventListener('transitionend', () => {
-      window.dispatchEvent(new window.Event('resize'))
+    this.sidebar.current!.addEventListener('transitionend', () => {
+      window.dispatchEvent(new UIEvent('resize'))
     })
   }
 
@@ -59,10 +92,10 @@ class Sidebar extends React.Component {
     this.searchingKeyCapture.deactivate()
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevProps: SidebarProps, prevState: SidebarState) {
     if (this.state.highlighted > -1 && prevState.highlighted !== this.state.highlighted) {
-      let highlightedElement = this.refs[`item-${this.state.highlighted}`]
-      let listRect = this.refs.songList.getBoundingClientRect()
+      let highlightedElement = this.songRefs[this.state.highlighted]
+      let listRect = this.songList.current!.getBoundingClientRect()
       let itemRect = highlightedElement.getBoundingClientRect()
       if (itemRect.bottom > listRect.bottom) {
         highlightedElement.scrollIntoView(false)
@@ -72,7 +105,7 @@ class Sidebar extends React.Component {
     }
   }
 
-  updateHighlighted (value) {
+  updateHighlighted (value: number) {
     let listLength = this.filterSongs().length
     if (value < 0) {
       value = listLength - 1
@@ -111,21 +144,21 @@ class Sidebar extends React.Component {
     this.searchingKeyCapture.deactivate()
   }
 
-  handleSearch (e) {
+  handleSearch (e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
       search: e.target.value,
       highlighted: -1
     })
   }
 
-  selectPlaylist (e) {
+  handlePlaylistSelect (e: React.ChangeEvent<HTMLSelectElement>) {
     this.stopSearch()
-    this.props.selectPlaylist(e.target.value)
+    this.props.onPlaylistSelect(e.target.value)
     this.setState({ search: '' })
   }
 
-  popupMenu (title) {
-    let template = [{
+  popupMenu (title: string) {
+    let template: Electron.MenuItemConstructorOptions[] = [{
       label: 'Add to new playlist',
       click: () => {
         this.setState({ songToAdd: title })
@@ -143,7 +176,11 @@ class Sidebar extends React.Component {
           type: 'checkbox',
           checked: inPlaylist,
           click: () => {
-            this.props[inPlaylist ? 'removeFromPlaylist' : 'addToPlaylist'](playlist, title)
+            if (inPlaylist) {
+              this.props.onPlaylistRemove(playlist, title)
+            } else {
+              this.props.onPlaylistAdd(playlist, title)
+            }
           }
         })
       })
@@ -152,9 +189,8 @@ class Sidebar extends React.Component {
     remote.Menu.buildFromTemplate(template).popup({})
   }
 
-  createPlaylist (e) {
-    e.preventDefault()
-    this.props.addToPlaylist(this.state.newPlaylistLabel, this.state.songToAdd)
+  createPlaylist () {
+    this.props.onPlaylistAdd(this.state.newPlaylistLabel, this.state.songToAdd)
     this.resetNewplaylist()
   }
 
@@ -185,13 +221,13 @@ class Sidebar extends React.Component {
     )
   }
 
-  classNames (classNames) {
+  classNames (classNames: string) {
     return classnames(classNames, this.props.className, {
       'sidebar--collapsed': !this.props.visible
     })
   }
 
-  itemClassNames (title, index) {
+  itemClassNames (title: string, index: number) {
     return classnames('sidebar__menu-item', {
       'sidebar__menu-item--selected': title === this.props.selectedSongTitle,
       'sidebar__menu-item--highlighted': index === this.state.highlighted
@@ -200,13 +236,13 @@ class Sidebar extends React.Component {
 
   render () {
     return (
-      <div ref='sidebar'
+      <div ref={this.sidebar}
         className={this.classNames('sidebar')}
         style={{ width: (this.props.visible && this.props.width) || 0 }}>
         <div className='sidebar__inner u-flex u-flex--vertical'
           style={{ width: this.props.width }}>
           <div className='sidebar__search u-flex__panel'>
-            <input ref='searchInput'
+            <input ref={this.searchInput}
               type='text'
               placeholder='Search'
               className='sidebar__search-field field__input'
@@ -220,11 +256,11 @@ class Sidebar extends React.Component {
               style={{ display: this.state.search === '' ? 'none' : 'block' }}
               onClick={() => this.setState({ search: '' })} />
           </div>
-          <ul ref='songList'
+          <ul ref={this.songList}
             className='sidebar__menu u-flex__panel u-flex__panel--grow'>
             {this.filterSongs().map((s, i) => (
               <li key={s.title}
-                ref={`item-${i}`}
+                ref={(el) => this.songRefs[i] = el!}
                 className={this.itemClassNames(s.title, i)}
                 onClick={() => this.props.onSelect(s.title)}
                 onContextMenu={() => this.popupMenu(s.title)}>
@@ -236,7 +272,7 @@ class Sidebar extends React.Component {
             <label className='field field--dropdown'>
               <select className='field__input field__input--select'
                 value={this.props.selectedPlaylist}
-                onChange={this.selectPlaylist.bind(this)}>
+                onChange={this.handlePlaylistSelect.bind(this)}>
                 <option value=''>All songs</option>
                 {Object.keys(this.props.playlists).map((p, i) => (
                   <option key={i}>{p}</option>
@@ -254,30 +290,30 @@ class Sidebar extends React.Component {
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    selectPlaylist: (playlist) => dispatch({
+    onToggle: () => dispatch({ type: TOGGLE_SIDEBAR }),
+    onSelect: (title: string) => dispatch(selectSong(title)),
+    onResize: (width: number) => dispatch({
+      type: RESIZE_SIDEBAR,
+      payload: width
+    }),
+    onPlaylistSelect: (playlist: string) => dispatch({
       type: SELECT_PLAYLIST,
       payload: playlist
     }),
-    addToPlaylist: (playlist, song) => dispatch({
+    onPlaylistAdd: (playlist: string, song: string) => dispatch({
       type: ADD_TO_PLAYLIST,
       payload: { playlist, song }
     }),
-    removeFromPlaylist: (playlist, song) => dispatch({
+    onPlaylistRemove: (playlist: string, song: string) => dispatch({
       type: REMOVE_FROM_PLAYLIST,
       payload: { playlist, song }
-    }),
-    toggleSidebar: () => dispatch({ type: TOGGLE_SIDEBAR }),
-    onSelect: (title) => dispatch(selectSong(title)),
-    onResize: (width) => dispatch({
-      type: RESIZE_SIDEBAR,
-      payload: width
     })
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps (state: ApplicationState) {
   return {
     selectedSongTitle: state.selectedSong,
     songs: state.songs,

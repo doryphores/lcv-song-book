@@ -14,7 +14,7 @@ interface PlaylistCollection {
 
 // Temporary: selectedPlaylist should move to Selection
 interface PlaylistState {
-  readonly selectedPlaylist: keyof PlaylistCollection
+  readonly selectedPlaylist: string
   readonly playlists: PlaylistCollection
 }
 
