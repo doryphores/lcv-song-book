@@ -24,11 +24,14 @@ interface MarkerCollection {
   readonly [key: string]: SongMarkers
 }
 
-interface Notification {
-  readonly id: number
+interface INotification {
   readonly icon: string
   readonly message: string
   readonly song?: string
+}
+
+interface SavedNotification extends INotification {
+  readonly id: number
 }
 
 interface Selection {
@@ -43,7 +46,7 @@ interface ApplicationState {
   readonly songs: Resource[]
   readonly playlists: PlaylistState
   readonly markers: MarkerCollection
-  readonly notifications: Notification[]
+  readonly notifications: SavedNotification[]
   readonly settings: {
     readonly password: string
     readonly lastResourceUpdate: number

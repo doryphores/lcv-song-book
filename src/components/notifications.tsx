@@ -8,7 +8,7 @@ import Icon from './icon'
 import { dismiss, selectSong } from '../actions'
 
 interface NotificationsProps {
-  readonly notifications: Notification[]
+  readonly notifications: SavedNotification[]
   readonly onDismiss: (id: number) => void
   readonly onView: (song: string) => void
 }

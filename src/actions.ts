@@ -13,7 +13,6 @@ export const LOAD_RESOURCES = 'LOAD_RESOURCES'
 
 export const NOTIFY = 'NOTIFY'
 export const DISMISS = 'DISMISS'
-export const DISMISS_AND_NOTIFY = 'DISMISS_AND_NOTIFY'
 export const DISMISS_ALL = 'DISMISS_ALL'
 
 export const SELECT_VOICE = 'SELECT_VOICE'
@@ -33,14 +32,24 @@ export const PLAYER_PROGRESS = 'PLAYER_PROGRESS'
 export const ADD_MARKER = 'ADD_MARKER'
 export const REMOVE_MARKER = 'REMOVE_MARKER'
 
-export function notify (notification) {
+export function notify (notifications: INotification[]) {
   return {
     type: NOTIFY,
-    payload: notification
+    payload: notifications
   }
 }
 
-export function alert (message) {
+export function info (message: string) {
+  return {
+    type: NOTIFY,
+    payload: {
+      message,
+      icon: 'info'
+    }
+  }
+}
+
+export function alert (message: string) {
   return {
     type: NOTIFY,
     payload: {
@@ -50,7 +59,7 @@ export function alert (message) {
   }
 }
 
-export function success (message) {
+export function success (message: string) {
   return {
     type: NOTIFY,
     payload: {
@@ -60,10 +69,10 @@ export function success (message) {
   }
 }
 
-export function dismiss (notification) {
+export function dismiss (notificationId: number) {
   return {
     type: DISMISS,
-    payload: notification
+    payload: notificationId
   }
 }
 
@@ -84,7 +93,7 @@ export function loadResources (resources) {
     let newRecordings = difference(gatherRecordings(getState().songs), recordingsBefore)
 
     if (isEmpty(newSongs) && isEmpty(newRecordings)) {
-      dispatch(notify('No new songs or recordings'))
+      dispatch(info('No new songs or recordings'))
       return
     }
 
@@ -93,22 +102,20 @@ export function loadResources (resources) {
       return
     }
 
-    dispatch(notify(concat(
-      newSongs.map(s => {
-        return {
+    const notifications: INotification[] = concat(
+      newSongs.map(s => ({
           message: 'New song:',
           icon: 'audiotrack',
           song: s
-        }
-      }),
-      newRecordings.map(s => {
-        return {
+      })),
+      newRecordings.map(s => ({
           message: 'New recording for',
           icon: 'voicemail',
           song: s
-        }
-      })
-    )))
+      }))
+    )
+
+    dispatch(notify(notifications))
   }
 }
 
