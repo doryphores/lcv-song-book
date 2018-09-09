@@ -1,15 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 
 import { TOGGLE_SHORTCUTS } from '../actions'
 import ToolbarPanel from './toolbar_panel'
 import Overlay from './overlay'
 import KeyCapture from '../key_capture'
 
-let cmdOrCtrl = process.platform === 'darwin' ? '⌘' : 'Ctrl'
+const CMD_OR_CONTROL = process.platform === 'darwin' ? '⌘' : 'Ctrl'
 
-class Shortcuts extends React.Component {
-  constructor (props) {
+interface ShortcutsProps {
+  readonly className: string
+  readonly open: boolean
+  readonly onToggle: () => void
+}
+
+class Shortcuts extends React.Component<ShortcutsProps> {
+  private keyCapture: KeyCapture
+
+  constructor (props: ShortcutsProps) {
     super(props)
 
     this.keyCapture = new KeyCapture({
@@ -21,7 +30,7 @@ class Shortcuts extends React.Component {
     this.keyCapture.deactivate()
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps: ShortcutsProps) {
     if (nextProps.open && !this.props.open) {
       this.keyCapture.activate()
     } else if (!nextProps.open && this.props.open) {
@@ -94,7 +103,7 @@ class Shortcuts extends React.Component {
                   <th>Toggle sidebar</th>
                   <td>
                     <span className='shortcuts__keystroke'>
-                      {cmdOrCtrl} + \
+                      {CMD_OR_CONTROL} + \
                     </span>
                   </td>
                 </tr>
@@ -102,7 +111,7 @@ class Shortcuts extends React.Component {
                   <th>Settings</th>
                   <td>
                     <span className='shortcuts__keystroke'>
-                      {cmdOrCtrl} + ,
+                      {CMD_OR_CONTROL} + ,
                     </span>
                   </td>
                 </tr>
@@ -123,11 +132,11 @@ class Shortcuts extends React.Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps (state: ApplicationState) {
   return { open: state.ui.shortcutsVisible }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (dispatch: Dispatch) {
   return {
     onToggle: () => dispatch({ type: TOGGLE_SHORTCUTS })
   }
