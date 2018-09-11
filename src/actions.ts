@@ -1,5 +1,5 @@
 import { compact, concat, difference, isEmpty } from 'lodash'
-import { Dispatch, Action, ActionCreator } from 'redux'
+import { Dispatch } from 'redux'
 
 export const RESTORE = 'RESTORE'
 
