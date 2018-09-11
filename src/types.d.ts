@@ -1,3 +1,34 @@
+declare module 'pdfjs-dist' {
+  interface PDFViewport {
+    height: number
+    width: number
+  }
+
+  interface PDFRenderPageOptions {
+    canvasContext: CanvasRenderingContext2D
+    viewport: PDFViewport
+  }
+
+  export interface PDFPage {
+    getViewport(ratio: number): PDFViewport
+    render(opts: PDFRenderPageOptions): Promise<void>
+  }
+
+  export interface PDFDocument {
+    numPages: number
+    getPage(num: number): Promise<PDFPage>
+  }
+
+  interface PDFJSStatic {
+    GlobalWorkerOptions: { workerSrc: string }
+    getDocument(url: string): Promise<PDFDocument>
+  }
+
+  const PDFJS: PDFJSStatic
+
+  export default PDFJS
+}
+
 type ScrapedResource = Readonly<Record<'title' | 'voice' | 'url', string>>
 
 interface Resource {
