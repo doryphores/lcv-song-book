@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { loadResources, alert, DISMISS_ALL } from '../actions'
+import { loadResources, alert, dismissAll } from '../actions'
 import ToolbarPanel from './toolbar_panel'
 import WebView from './web_view'
 
@@ -121,7 +121,7 @@ function mapStateToProps (state: ApplicationState) {
 
 function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, Action>) {
   return {
-    onDismissAllNotifications: () => dispatch({ type: DISMISS_ALL }),
+    onDismissAllNotifications: () => dispatch(dismissAll()),
     onAlert: (message: string) => dispatch(alert(message)),
     onLoadResources: (resources: ScrapedResource[]) => dispatch(loadResources(resources))
   }

@@ -1,7 +1,16 @@
 import {
   RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
-  TOGGLE_SETTINGS, TOGGLE_SHORTCUTS, SAVE_SETTINGS
+  TOGGLE_SETTINGS, TOGGLE_SHORTCUTS, SAVE_SETTINGS,
+  RestoreAction, ResizeSidebarAction, ToggleSidebarAction,
+  ToggleSettingsAction, ToggleShortcutsAction, SaveSettingsAction
 } from '../../actions'
+
+type Actions = RestoreAction
+  | ResizeSidebarAction
+  | ToggleSidebarAction
+  | ToggleSettingsAction
+  | ToggleShortcutsAction
+  | SaveSettingsAction
 
 const initialState = {
   sidebarVisible: true,
@@ -11,8 +20,8 @@ const initialState = {
   hideScrollbars: false
 }
 
-export const ui = (state = initialState, { type, payload }) => {
-  switch (type) {
+export const ui = (state = initialState, action: Actions) => {
+  switch (action.type) {
     case TOGGLE_SIDEBAR:
       return {
         ...state,
@@ -21,7 +30,7 @@ export const ui = (state = initialState, { type, payload }) => {
     case RESIZE_SIDEBAR:
       return {
         ...state,
-        sidebarWidth: payload
+        sidebarWidth: action.payload
       }
     case TOGGLE_SETTINGS:
       return {
@@ -39,7 +48,7 @@ export const ui = (state = initialState, { type, payload }) => {
       return {
         ...state,
         settingsVisible: false,
-        hideScrollbars: payload.hideScrollbars
+        hideScrollbars: action.payload.hideScrollbars
       }
     case RESTORE:
       return {

@@ -1,13 +1,9 @@
-import { RESTORE, SELECT_SONG } from '../../actions'
+import { SelectSongAction, SELECT_SONG } from '../../actions'
 
-const initialState = ''
-
-export const selectedSong = (state = initialState, { type, payload }) => {
-  switch (type) {
+export const selectedSong = (state = '', action: SelectSongAction) => {
+  switch (action.type) {
     case SELECT_SONG:
-      return payload
-    case RESTORE:
-      return (typeof state === 'string') ? state : initialState
+      return action.payload
     default:
       return state
   }

@@ -1,23 +1,28 @@
 import { findIndex, sortedIndex, without } from 'lodash'
 
-import { ADD_MARKER, REMOVE_MARKER } from '../../actions'
+import {
+  ADD_MARKER, REMOVE_MARKER,
+  AddMarkerAction, RemoveMarkerAction
+} from '../../actions'
+
+type Actions = AddMarkerAction | RemoveMarkerAction
 
 const TOLERANCE = 4
 
 const initiaState: MarkerCollection = {}
 
-export const markers = (state = initiaState, { type, payload }) => {
-  switch (type) {
+export const markers = (state = initiaState, action: Actions) => {
+  switch (action.type) {
     case ADD_MARKER:
       const markers = {
         ...state,
-        [payload.song]: addMarker(state[payload.song], payload.position)
+        [action.payload.song]: addMarker(state[action.payload.song], action.payload.position)
       }
       return markers
     case REMOVE_MARKER:
       return {
         ...state,
-        [payload.song]: without(state[payload.song], payload.position)
+        [action.payload.song]: without(state[action.payload.song], action.payload.position)
       }
     default:
       return state

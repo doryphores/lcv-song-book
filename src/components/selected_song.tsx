@@ -1,10 +1,9 @@
 import classnames from 'classnames'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { addMarker, removeMarker, TOGGLE_PLAY } from '../actions'
+import { addMarker, removeMarker, AddMarkerAction, RemoveMarkerAction } from '../actions'
 import { fullRecordingURL, sheetMusicURL, songMarkers, voiceRecordingURL } from '../selectors'
 import Player from './player'
 import Sheet from './sheet'
@@ -54,9 +53,8 @@ function mapStateToProps (state: ApplicationState) {
   }
 }
 
-function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, Action>) {
+function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, AddMarkerAction | RemoveMarkerAction>) {
   return {
-    onTogglePlay: () => dispatch({ type: TOGGLE_PLAY }),
     onAddMarker: (position: number) => dispatch(addMarker(position)),
     onRemoveMarker: (position: number) => dispatch(removeMarker(position))
   }

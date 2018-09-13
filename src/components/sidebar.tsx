@@ -5,8 +5,8 @@ import classnames from 'classnames'
 import { remote } from 'electron'
 
 import {
-  selectSong, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
-  SELECT_PLAYLIST, ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST
+  selectSong, resizeSidebar, toggleSidebar,
+  selectPlaylist, addToPlaylist, removeFromPlaylist
 } from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
@@ -292,24 +292,12 @@ class Sidebar extends React.Component<SidebarProps, SidebarState> {
 
 function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    onToggle: () => dispatch({ type: TOGGLE_SIDEBAR }),
+    onToggle: () => dispatch(toggleSidebar()),
     onSelect: (title: string) => dispatch(selectSong(title)),
-    onResize: (width: number) => dispatch({
-      type: RESIZE_SIDEBAR,
-      payload: width
-    }),
-    onPlaylistSelect: (playlist: string) => dispatch({
-      type: SELECT_PLAYLIST,
-      payload: playlist
-    }),
-    onPlaylistAdd: (playlist: string, song: string) => dispatch({
-      type: ADD_TO_PLAYLIST,
-      payload: { playlist, song }
-    }),
-    onPlaylistRemove: (playlist: string, song: string) => dispatch({
-      type: REMOVE_FROM_PLAYLIST,
-      payload: { playlist, song }
-    })
+    onResize: (width: number) => dispatch(resizeSidebar(width)),
+    onPlaylistSelect: (playlist: string) => dispatch(selectPlaylist(playlist)),
+    onPlaylistAdd: (playlist: string, song: string) => dispatch(addToPlaylist(playlist, song)),
+    onPlaylistRemove: (playlist: string, song: string) => dispatch(removeFromPlaylist(playlist, song))
   }
 }
 

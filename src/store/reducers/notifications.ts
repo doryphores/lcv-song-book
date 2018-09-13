@@ -1,24 +1,26 @@
 import { castArray, concat, reject } from 'lodash'
 
-import { RESTORE, NOTIFY, DISMISS, DISMISS_ALL } from '../../actions'
+import {
+  RESTORE, NOTIFY, DISMISS, DISMISS_ALL,
+  RestoreAction, NotifyAction, DismissAction, DismissAllAction
+} from '../../actions'
+
+type Actions = RestoreAction | NotifyAction | DismissAction | DismissAllAction
 
 let nextID = 0
 
-const initiaState: SavedNotification[] = []
-
-export const notifications = (state = initiaState, { type, payload }) => {
-  switch (type) {
+export const notifications = (state: SavedNotification[] = [], action: Actions) => {
+  switch (action.type) {
     case NOTIFY:
-      return concat(state, castArray(payload).map((notification) => ({
+      return concat(state, castArray(action.payload).map((notification) => ({
         id: nextID++,
         ...notification
       })))
     case DISMISS:
-      return reject(state, n => n.id === payload)
+      return reject(state, n => n.id === action.payload)
     case DISMISS_ALL:
-      return initiaState
     case RESTORE:
-      return initiaState
+      return []
     default:
       return state
   }

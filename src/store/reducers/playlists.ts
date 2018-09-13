@@ -1,9 +1,14 @@
 import { isEmpty, omitBy, union, without } from 'lodash'
 
 import {
-  SELECT_PLAYLIST, ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST,
-  RESTORE
+  RESTORE, SELECT_PLAYLIST, ADD_TO_PLAYLIST, REMOVE_FROM_PLAYLIST,
+  RestoreAction, SelectPlaylistAction, AddToPlaylistAction, RemoveFromPlaylistAction
 } from '../../actions'
+
+type Actions = RestoreAction
+  | SelectPlaylistAction
+  | AddToPlaylistAction
+  | RemoveFromPlaylistAction
 
 const initialState: PlaylistState = {
   selectedPlaylist: '',
@@ -23,19 +28,22 @@ function cleanup (state: PlaylistState) {
   }
 }
 
-export const playlists = (state = initialState, { type, payload }) => {
-  switch (type) {
+export const playlists = (state = initialState, action: Actions) => {
+  switch (action.type) {
     case SELECT_PLAYLIST:
       return cleanup({
         ...state,
-        selectedPlaylist: payload
+        selectedPlaylist: action.payload
       })
     case ADD_TO_PLAYLIST:
       return cleanup({
         ...state,
         playlists: {
           ...state.playlists,
-          [payload.playlist]: union(state.playlists[payload.playlist], [payload.song])
+          [action.payload.list]: union(
+            state.playlists[action.payload.list],
+            [action.payload.song]
+          )
         }
       })
     case REMOVE_FROM_PLAYLIST:
@@ -43,7 +51,10 @@ export const playlists = (state = initialState, { type, payload }) => {
         ...state,
         playlists: {
           ...state.playlists,
-          [payload.playlist]: without(state.playlists[payload.playlist], payload.song)
+          [action.payload.list]: without(
+            state.playlists[action.payload.list],
+            action.payload.song
+          )
         }
       })
     case RESTORE:

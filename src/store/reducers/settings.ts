@@ -1,21 +1,26 @@
-import { RESTORE, SAVE_SETTINGS, LOAD_RESOURCES } from '../../actions'
+import {
+  RESTORE, SAVE_SETTINGS, LOAD_RESOURCES,
+  RestoreAction, SaveSettingsAction, LoadResourcesAction
+} from '../../actions'
+
+type Actions = RestoreAction | SaveSettingsAction | LoadResourcesAction
 
 const initialState = {
   password: '',
   lastResourceUpdate: 0
 }
 
-export const settings = (state = initialState, { type, payload }) => {
-  switch (type) {
+export const settings = (state = initialState, action: Actions) => {
+  switch (action.type) {
     case LOAD_RESOURCES:
       return {
         ...state,
-        lastResourceUpdate: payload.timestamp
+        lastResourceUpdate: action.payload.timestamp
       }
     case SAVE_SETTINGS:
       return {
         ...state,
-        ...payload
+        ...action.payload
       }
     case RESTORE:
       return {

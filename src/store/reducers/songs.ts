@@ -1,8 +1,6 @@
-import { last } from 'lodash'
+import { LOAD_RESOURCES, LoadResourcesAction } from '../../actions'
 
-import { LOAD_RESOURCES } from '../../actions'
-
-const ALIASES = {
+const ALIASES: { [key: string]: string } = {
   'chirstmas in la': 'Christmas in LA',
   'if you don\'t know me': 'If you don\'t know me by now',
   'waking in a winter wonderland': 'Walking In A Winter Wonderland',
@@ -11,22 +9,29 @@ const ALIASES = {
 
 const initialState: Resource[] = []
 
+function formatTitle (title: string) {
+  return ALIASES[title.toLowerCase()] || title
+}
+
 function addSong (songs: Resource[], title: string) {
-  title = ALIASES[title.toLowerCase()] || title
-  let song = songs.find(s => s.title.toLowerCase() === title.toLowerCase())
+  const formattedTitle = formatTitle(title)
+  const keyTitle = formattedTitle.toLowerCase()
+  let song = songs.find(s => s.title.toLowerCase() === keyTitle)
   if (song) return song
-  return songs.push({
-    title: title,
+  song = {
+    title: formattedTitle,
     recordings: {},
     sheets: {}
-  }) && last(songs)
+  }
+  songs.push(song)
+  return song
 }
 
 function sortSongs (songs: Resource[]) {
   return songs.sort((a, b) => a.title.localeCompare(b.title))
 }
 
-export const songs = (state = initialState, { type, payload }) => {
+export const songs = (state = initialState, { type, payload }: LoadResourcesAction) => {
   switch (type) {
     case LOAD_RESOURCES:
       return sortSongs(payload.resources.reduce((songs, r) => {
