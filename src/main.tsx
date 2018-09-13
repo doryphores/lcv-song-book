@@ -7,7 +7,7 @@ import { configureStore } from './store'
 import { TOGGLE_SETTINGS } from './actions'
 import App from './components/app'
 
-export function start (container) {
+export function start (container: Element) {
   configureStore().then(store => {
     ReactDOM.render(
       <Provider store={store}>
@@ -23,13 +23,13 @@ export function start (container) {
       store.dispatch({ type: TOGGLE_SETTINGS })
     }
 
-    ipcRenderer.on('dispatch-action', (e, actionType) => {
+    ipcRenderer.on('dispatch-action', (_e: Electron.IpcMessageEvent, actionType: string) => {
       store.dispatch({ type: actionType })
     })
   }).catch(err => console.error(err))
 }
 
-function setTitle ({ selectedSong, selectedVoice }) {
+function setTitle ({ selectedSong, selectedVoice }: ApplicationState) {
   let title = remote.app.getName()
   if (selectedVoice) title = `${selectedVoice} — ${title}`
   if (selectedSong) title = `${selectedSong} — ${title}`
