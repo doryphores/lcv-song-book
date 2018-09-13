@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 
-const ICONS = {
+const ICON_GROUPS: { [key: string]: string } = {
   'arrow_drop_down': 'navigation',
   'audiotrack': 'image',
   'check': 'navigation',
@@ -29,7 +29,7 @@ interface IconProps {
 
 const Icon: React.SFC<IconProps> = ({ className, icon, style, onClick }) => (
   <svg className={classnames(className, 'icon')} style={style} onClick={onClick}>
-    <use xlinkHref={`../static/sprites/svg-sprite-${ICONS[icon]}.svg#ic_${icon}_24px`} />
+    <use xlinkHref={`../static/sprites/svg-sprite-${ICON_GROUPS[icon]}.svg#ic_${icon}_24px`} />
   </svg>
 )
 

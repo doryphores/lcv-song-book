@@ -1,8 +1,9 @@
-import React from 'react'
-import request from 'request'
 import { remote, shell } from 'electron'
 import fs from 'fs'
+import { last } from 'lodash'
 import path from 'path'
+import React from 'react'
+import request from 'request'
 
 import ToolbarPanel from './toolbar_panel'
 
@@ -12,7 +13,7 @@ interface DownloaderProps {
 }
 
 function download (pdfURL: string) {
-  const filename = decodeURIComponent(pdfURL.split('/').pop())
+  const filename = decodeURIComponent(last(pdfURL.split('/'))!)
   const downloadPath = path.join(remote.app.getPath('downloads'), filename)
   const stream = fs.createWriteStream(downloadPath)
   request(pdfURL).pipe(stream).on('finish', () => {

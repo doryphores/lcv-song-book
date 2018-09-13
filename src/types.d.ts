@@ -1,3 +1,5 @@
+declare module 'electron-devtools-installer'
+
 declare module 'pdfjs-dist' {
   interface PDFViewport {
     height: number

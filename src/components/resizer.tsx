@@ -7,27 +7,25 @@ interface ResizerProps {
 }
 
 export default class Resizer extends React.Component<ResizerProps> {
-  constructor (props) {
+  constructor (props: ResizerProps) {
     super(props)
-    this.stopResize = this.stopResize.bind(this)
-    this.handleResize = this.handleResize.bind(this)
+  }
+
+  stopResize = () => {
+    document.body.classList.remove('u-resizing')
+    window.removeEventListener('mouseup', this.stopResize)
+    window.removeEventListener('mousemove', this.handleResize)
+  }
+
+  handleResize = (e: MouseEvent) => {
+    this.props.onResize(e.clientX)
+    window.dispatchEvent(new UIEvent('resize'))
   }
 
   startResize () {
     document.body.classList.add('u-resizing')
     window.addEventListener('mouseup', this.stopResize)
     window.addEventListener('mousemove', this.handleResize)
-  }
-
-  stopResize () {
-    document.body.classList.remove('u-resizing')
-    window.removeEventListener('mouseup', this.stopResize)
-    window.removeEventListener('mousemove', this.handleResize)
-  }
-
-  handleResize (e: MouseEvent) {
-    this.props.onResize(e.clientX)
-    window.dispatchEvent(new UIEvent('resize'))
   }
 
   render () {
