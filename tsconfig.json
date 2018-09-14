@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "lib": ["dom", "dom.iterable", "es2015", "es2016"],
+    "jsx": "react",
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "exclude": [
+    "node_modules",
+    "out"
+  ]
+}

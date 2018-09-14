@@ -134,7 +134,7 @@
 
 .progress__marker--enter-active {
   transform: scale(1);
-  transition: transform .32s;
+  transition: transform .2s;
 }
 
 .progress__marker--exit {
@@ -144,7 +144,7 @@
 
 .progress__marker--exit-active {
   transform: scale(0);
-  transition: transform .32s;
+  transition: transform .2s;
 }
 
 .player__track-switcher {
