@@ -44,7 +44,7 @@ export default class Sheet extends React.Component<SheetProps, SheetState> {
     })
   }
 
-  onResize = debounce(() => this.renderPDF(), 100)
+  onResize = debounce(() => this.renderPDF(), 250)
 
   componentDidMount () {
     this.loadPDF(this.props.pdfURL)
