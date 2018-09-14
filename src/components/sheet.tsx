@@ -1,9 +1,9 @@
 import React from 'react'
 import classnames from 'classnames'
 import PDFJS, { PDFDocument } from 'pdfjs-dist'
+import { debounce, range } from 'lodash'
 
 import KeyCapture from '../key_capture'
-import { debounce, range } from '../utils'
 import Icon from './icon'
 
 PDFJS.GlobalWorkerOptions.workerSrc = '../../node_modules/pdfjs-dist/build/pdf.worker.js'
