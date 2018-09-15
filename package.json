@@ -2,49 +2,22 @@
   "name": "lcv-song-book",
   "productName": "LCV Song Book",
   "description": "London City Voices Choir Song Book",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "author": "Martin Laine <martin.laine@gmail.com>",
-  "repository": "https://github.com/doryphores/lcv-choir-resources",
+  "repository": "https://github.com/doryphores/lcv-song-book",
   "license": "MIT",
   "main": "src/index.ts",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint:ts": "tslint -p .",
     "test": "npm run lint:ts"
   },
   "config": {
     "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
       "electronPackagerConfig": {
-        "packageManager": "npm",
         "icon": "src/static/icon.icns"
-      },
-      "electronWinstallerConfig": {
-        "name": "lcv-song-book"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "",
-        "name": ""
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "lcv2"
       }
     }
   },
