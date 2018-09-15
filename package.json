@@ -56,7 +56,7 @@
     "format-duration": "^1.0.0",
     "fs-extra": "^7.0",
     "howler": "^2.0.15",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "pdfjs-dist": "^2.0.332",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
