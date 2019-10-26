@@ -1,6 +1,8 @@
 import { LOAD_RESOURCES, LoadResourcesAction } from '../../actions'
 
 const ALIASES: { [key: string]: string } = {
+  '80s dance medley': "80's Dance Medley",
+  '80s pop medley': "80's Pop Medley",
   'chirstmas in la': 'Christmas in LA',
   'if you don\'t know me': 'If you don\'t know me by now',
   'waking in a winter wonderland': 'Walking In A Winter Wonderland',
@@ -13,7 +15,7 @@ function formatTitle (title: string) {
   return ALIASES[title.toLowerCase()] || title
 }
 
-function addSong (songs: Resource[], title: string) {
+function addSong (songs: Resource[], title: string): Resource {
   const formattedTitle = formatTitle(title)
   const keyTitle = formattedTitle.toLowerCase()
   let song = songs.find(s => s.title.toLowerCase() === keyTitle)
