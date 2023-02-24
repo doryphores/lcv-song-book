@@ -9,14 +9,14 @@ export default class WebView extends React.Component<WebViewProps> {
   private webviewElement?: Electron.WebviewTag
 
   componentDidMount () {
-    this.webviewElement!.addEventListener(
+    this.webviewElement.addEventListener(
       'did-finish-load',
       this.props.onDidFinishLoad
     )
   }
 
   componentWillUnmount () {
-    this.webviewElement!.removeEventListener(
+    this.webviewElement.removeEventListener(
       'did-finish-load',
       this.props.onDidFinishLoad
     )

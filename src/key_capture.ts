@@ -1,18 +1,18 @@
-interface Listener {
-  readonly handler: Function
-  readonly ignoreInForms: boolean
+type Listener = {
+  handler: () => boolean
+  ignoreInForms: boolean
 }
 
 export default class KeyCapture {
   listeners: { [key: string]: Listener } = {}
 
-  constructor (handlers?: { [key: string]: Function }) {
+  constructor (handlers?: { [key: string]: () => void }) {
     this.listeners = {}
     if (handlers) this.registerMany(handlers)
     this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
-  register (keys: string, handler: Function) {
+  register (keys: string, handler: () => void) {
     keys.split(' ').forEach(key => {
       this.listeners[key] = Object.assign({
         ignoreInForms: this.isChar(key) || ['ArrowLeft', 'ArrowRight', 'Space'].includes(key)
@@ -20,7 +20,7 @@ export default class KeyCapture {
     })
   }
 
-  registerMany (handlers: { [key: string]: Function }) {
+  registerMany (handlers: { [key: string]: () => void }) {
     Object.keys(handlers).forEach(k => this.register(k, handlers[k]))
   }
 
@@ -47,7 +47,7 @@ export default class KeyCapture {
     )
   }
 
-  isChar (s: any) {
+  isChar (s: unknown) {
     return (typeof s === 'string' && s.length === 1)
   }
 }

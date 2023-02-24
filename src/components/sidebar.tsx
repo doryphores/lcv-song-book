@@ -41,8 +41,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSelect,
   onResize,
   onPlaylistSelect,
-  onPlaylistAdd,
-  onPlaylistRemove
+  onPlaylistAdd
+  // onPlaylistRemove
 }) => {
   const toggleKeyCapture = useRef<KeyCapture>(null)
   const searchingKeyCapture = useRef<KeyCapture>(null)
@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [search, setSearch] = useState('')
   const [highlighted, setHighlighted] = useState(-1)
   // FIXME: where is searching used?
-  const [searching, setSearching] = useState(false)
+  // const [searching, setSearching] = useState(false)
   const [newPlaylistLabel, setNewPlaylistLabel] = useState('')
   const [songToAdd, setSongToAdd] = useState('')
 
@@ -138,13 +138,13 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [filterSongs])
 
   const startSearch = useCallback(() => {
-    setSearching(true)
+    // setSearching(true)
     setHighlighted(filterSongs().findIndex(s => s.title === selectedSongTitle))
     searchingKeyCapture.current.activate()
   }, [selectedSongTitle])
 
   const stopSearch = useCallback(() => {
-    setSearching(false)
+    // setSearching(false)
     setHighlighted(-1)
     searchingKeyCapture.current.deactivate()
   }, [])

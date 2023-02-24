@@ -44,7 +44,7 @@ class Scraper extends React.Component<ScraperProps, ScraperState> {
   }
 
   handleFinishLoad (e: GlobalEvent) {
-    let webview = e.target as Electron.WebviewTag
+    const webview = e.target as Electron.WebviewTag
 
     switch (webview.getURL()) {
       case 'https://www.londoncityvoices.co.uk/choir-resources/':

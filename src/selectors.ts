@@ -36,7 +36,7 @@ export const sheetMusicURL = createSelector(
 
 export const fullRecordingURL = createSelector(
   currentSong,
-  (song) => song!.recordings['full song']
+  (song) => song.recordings['full song']
 )
 
 export const voiceRecordingURL = createSelector(
@@ -45,9 +45,9 @@ export const voiceRecordingURL = createSelector(
   (song, voice) => {
     const voiceKey = voice.toLowerCase()
 
-    return song!.recordings[voiceKey] ||
-      song!.recordings[voiceKey.replace(/ [12]/, '')] ||
-      song!.recordings[voiceKey.replace(/ [12]/, '') + ' 1 + 2']
+    return song.recordings[voiceKey] ||
+      song.recordings[voiceKey.replace(/ [12]/, '')] ||
+      song.recordings[voiceKey.replace(/ [12]/, '') + ' 1 + 2']
   }
 )
 

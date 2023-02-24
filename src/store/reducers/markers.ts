@@ -14,11 +14,10 @@ const initiaState: MarkerCollection = {}
 export const markers = (state = initiaState, action: Actions) => {
   switch (action.type) {
     case ADD_MARKER:
-      const markers = {
+      return {
         ...state,
         [action.payload.song]: addMarker(state[action.payload.song], action.payload.position)
       }
-      return markers
     case REMOVE_MARKER:
       return {
         ...state,
