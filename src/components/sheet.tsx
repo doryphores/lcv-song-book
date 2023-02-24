@@ -1,124 +1,104 @@
-import React from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import classnames from 'classnames'
-import PDFJS, { PDFDocument } from 'pdfjs-dist'
+import * as PDFJS from 'pdfjs-dist'
 import { debounce, range } from 'lodash'
 
 import KeyCapture from '../key_capture'
 import Icon from './icon'
+import PDFWorker from '../static/pdf.worker.min.worker'
 
-PDFJS.GlobalWorkerOptions.workerSrc = '../../node_modules/pdfjs-dist/build/pdf.worker.js'
-
-interface SheetProps {
-  readonly className: string
-  readonly pdfURL: string
+type SheetProps = {
+  className: string
+  pdfURL: string
 }
 
-interface SheetState {
-  readonly numPages: number
-  readonly pdfURL: string
-  readonly loading: boolean
-  readonly pageRatio: number
-}
+PDFJS.GlobalWorkerOptions.workerSrc = PDFWorker;
 
-export default class Sheet extends React.Component<SheetProps, SheetState> {
-  private keyCapture: KeyCapture
-  private scrollerElement: HTMLDivElement | null = null
-  private containerElement: HTMLDivElement | null = null
-  private pdfDocument: PDFDocument | null = null
-  private pages: HTMLDivElement[] = []
+const Sheet: React.FC<SheetProps> = ({
+  className,
+  pdfURL
+}) => {
+  const [numPages, setNumPages] = useState(0)
+  const [pageRatio, setPageRatio] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [loadedPDF, setLoadedPDF] = useState('')
 
-  constructor (props: SheetProps) {
-    super(props)
-    this.state = {
-      numPages: 0,
-      pdfURL: '',
-      pageRatio: 0,
-      loading: false
-    }
+  const containerElement = useRef<HTMLDivElement>(null)
+  const pdfDocument = useRef<PDFJS.PDFDocumentProxy>(null)
+  const pages = useRef<HTMLDivElement[]>([])
 
-    this.keyCapture = new KeyCapture({
+  if (pages.current.length !== numPages) {
+    pages.current = Array(numPages).fill(null).map((_, i) => pages.current[i]);
+  }
+
+  const scrollerElement = useRef<HTMLDivElement>()
+  const keyCapture = useRef<KeyCapture>()
+
+  useEffect(() => {
+    keyCapture.current = new KeyCapture({
       'PageUp PageDown': () => {
-        this.scrollerElement!.focus()
+        scrollerElement.current.focus()
         return true
       }
     })
-  }
+    keyCapture.current.activate()
 
-  onResize = debounce(() => this.renderPDF(), 250)
+    return () => keyCapture.current.deactivate()
+  }, [])
 
-  componentDidMount () {
-    this.loadPDF(this.props.pdfURL)
-    window.addEventListener('resize', () => this.onResize())
-    this.keyCapture.activate()
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('resize', () => this.onResize())
-    this.keyCapture.deactivate()
-  }
-
-  componentWillReceiveProps (nextProps: SheetProps) {
-    if (this.props.pdfURL !== nextProps.pdfURL) {
-      this.loadPDF(nextProps.pdfURL)
+  useEffect(() => {
+    const onResize = debounce(() => renderPDF(), 250)
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
     }
+  }, [])
+
+  useEffect(() => {
+    loadPDF(pdfURL)
+  }, [pdfURL])
+
+  useEffect(() => {
+    renderPDF()
+  }, [loadedPDF, numPages])
+
+  const loadPDF = async (pdfURL: string) => {
+    setNumPages(0)
+    setLoading(true)
+
+    pdfDocument.current = null
+
+    scrollerElement.current.scrollTop = 0
+
+    pdfDocument.current = await PDFJS.getDocument(pdfURL).promise
+
+    const pdfPage = await pdfDocument.current.getPage(1)
+    const viewport = pdfPage.getViewport({ scale: 1.0 })
+
+    setLoadedPDF(pdfURL)
+    setPageRatio(viewport.height / viewport.width)
+    setNumPages(pdfDocument.current.numPages)
   }
 
-  componentDidUpdate (prevProps: SheetProps, prevState: SheetState) {
-    if (
-      this.state.pdfURL !== '' &&
-      (
-        prevState.pdfURL !== this.state.pdfURL ||
-        prevState.numPages !== this.state.numPages
-      )
-    ) {
-      this.renderPDF()
-    }
-  }
+  const renderPDF = () => {
+    if (numPages === 0) return
 
-  loadPDF (pdfURL: string) {
-    this.setState({
-      numPages: 0,
-      loading: true
-    })
+    const promises = range(numPages).map(i => {
+      return pdfDocument.current.getPage(i + 1).then(pdfPage => {
+        let viewport = pdfPage.getViewport({ scale: 1.0 })
+        const canvas = document.createElement('canvas')
+        const scale = containerElement.current.clientWidth / viewport.width
 
-    this.pdfDocument = null
-
-    this.scrollerElement!.scrollTop = 0
-
-    PDFJS.getDocument(pdfURL).then(pdfDocument => {
-      this.pdfDocument = pdfDocument
-
-      return pdfDocument.getPage(1).then(pdfPage => {
-        const viewport = pdfPage.getViewport(1.0)
-
-        this.setState({
-          pdfURL: pdfURL,
-          pageRatio: viewport.height / viewport.width,
-          numPages: pdfDocument.numPages
-        })
-      })
-    }).catch(err => console.error(err))
-  }
-
-  renderPDF () {
-    if (this.state.numPages === 0) return
-
-    const promises = range(this.state.numPages).map(i => {
-      return this.pdfDocument!.getPage(i + 1).then(pdfPage => {
-        let viewport = pdfPage.getViewport(1.0)
-        let canvas = document.createElement('canvas')
-        let scale = this.containerElement!.clientWidth / viewport.width
-
-        viewport = pdfPage.getViewport(scale)
+        viewport = pdfPage.getViewport({ scale })
 
         canvas.width = viewport.width
         canvas.height = viewport.height
 
         return pdfPage.render({
-          canvasContext: canvas.getContext('2d')!,
+          canvasContext: canvas.getContext('2d'),
           viewport: viewport
-        }).then(() => {
-          let page = this.pages[i]
+        }).promise.then(() => {
+          const page = pages.current[i]
 
           if (page.firstChild) {
             page.replaceChild(canvas, page.firstChild)
@@ -130,39 +110,36 @@ export default class Sheet extends React.Component<SheetProps, SheetState> {
     })
 
     Promise.all(promises)
-           .then(() => this.setState({ loading: false }))
+           .then(() => setLoading(false))
            .catch(err => console.log(err))
   }
 
-  classNames (classNames: string) {
-    return classnames(this.props.className, classNames, {
-      'sheet--loading': this.state.loading
+  const classNames = useCallback((classNames: string) => {
+    return classnames(className, classNames, {
+      'sheet--loading': loading
     })
-  }
+  }, [className, loading])
 
-  render () {
-    let paddingBottom = (this.state.pageRatio * 100) + '%'
+  const paddingBottom = (pageRatio * 100) + '%'
 
-    return (
-      <div className={this.classNames('sheet')}>
-        <div className='sheet__scroller'
-          tabIndex={-1}
-          ref={(el) => this.scrollerElement = el}>
-          <div className='sheet__page-container'
-            ref={(el) => this.containerElement = el}>
-            {range(this.state.numPages).map(i => (
-              <div key={this.state.pdfURL + i}
-                ref={(el) => this.pages[i] = el!}
-                className='sheet__page'
-                style={{ paddingBottom }} />
-            ))}
-          </div>
-          <span className='sheet__loading-message'>
-            <Icon icon='refresh' className='sheet__loading-icon' />
-            <span>LOADING…</span>
-          </span>
+  return (
+    <div className={classNames('sheet')}>
+      <div className='sheet__scroller' tabIndex={-1} ref={scrollerElement}>
+        <div className='sheet__page-container' ref={containerElement}>
+          {range(numPages).map(i => (
+            <div key={loadedPDF + i}
+              ref={(el) => pages.current[i] = el}
+              className='sheet__page'
+              style={{ paddingBottom }} />
+          ))}
         </div>
+        <span className='sheet__loading-message'>
+          <Icon icon='refresh' className='sheet__loading-icon' />
+          <span>LOADING…</span>
+        </span>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+export default Sheet
