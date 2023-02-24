@@ -4,15 +4,17 @@
 
 ## Install and run for development
 
-You need [node](https://nodejs.org) installed first.
+You need [node](https://nodejs.org) and [yarn](https://yarnpkg.com/) installed first.
+
+Check [.node-version](./.node-version) for which version is required.
 
 Install dependencies:
 
-    > npm install
+    > yarn install
 
 And start the app:
 
-    > npm start
+    > yarn start
 
 This will start the app and compile JS and CSS on the fly. You can open dev tools by hitting `Ctrl+Shift+I` or `Cmd+Opt+I` on a mac. Use `Ctrl+R` (`Cmd+R` on a mac) to reload the app.
 
@@ -20,6 +22,6 @@ This will start the app and compile JS and CSS on the fly. You can open dev tool
 
 Simply run:
 
-    > npm run package
+    > yarn package
 
 This will build the app into the `out` folder.
