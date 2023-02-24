@@ -13,7 +13,7 @@ interface NotificationsProps {
   readonly onView: (song: string) => void
 }
 
-const Notifications: React.SFC<NotificationsProps> = ({ notifications, onDismiss, onView }) => (
+const Notifications: React.FC<NotificationsProps> = ({ notifications, onDismiss, onView }) => (
   <TransitionGroup className='notification-container' component='div'>
     {notifications.map(({ id, message, icon, song }) => (
       <CSSTransition key={id} timeout={320} classNames='grow' unmountOnExit mountOnEnter>

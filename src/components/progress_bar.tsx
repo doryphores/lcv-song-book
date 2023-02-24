@@ -62,8 +62,8 @@ export default class ProgressBar extends React.Component<ProgressBarProps, Progr
 
   seekFromMouseEvent (e: MouseEvent) {
     if (this.progressBar.current === null) return 0
-    let rect = this.progressBar.current.getBoundingClientRect()
-    let seek = (e.clientX - rect.left) / rect.width * this.props.duration
+    const rect = this.progressBar.current.getBoundingClientRect()
+    const seek = (e.clientX - rect.left) / rect.width * this.props.duration
     return Math.min(Math.max(0, seek), this.props.duration)
   }
 

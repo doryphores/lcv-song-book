@@ -18,7 +18,7 @@ interface SelectedSongProps {
   readonly onRemoveMarker: (position: number) => void
 }
 
-const SelectedSong: React.SFC<SelectedSongProps> = ({
+const SelectedSong: React.FC<SelectedSongProps> = ({
   className,
   sheetMusicURL,
   fullRecordingURL,

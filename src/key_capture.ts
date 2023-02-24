@@ -33,7 +33,7 @@ export default class KeyCapture {
   }
 
   handleKeyDown (e: KeyboardEvent) {
-    let listener = this.listeners[e.key] || this.listeners[e.code]
+    const listener = this.listeners[e.key] || this.listeners[e.code]
     if (!listener || this.shouldIgnore(listener, e)) return
     if (!listener.handler()) e.preventDefault()
   }

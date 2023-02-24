@@ -82,15 +82,15 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
     this.keyCapture = new KeyCapture({
       'Space': () => { this.togglePlay(); return false },
       'ArrowLeft': () => {
-        let pos = last(this.props.markers.filter(m => m < this.state.progress - 0.5))
+        const pos = last(this.props.markers.filter(m => m < this.state.progress - 0.5))
         this.jumpTo(pos || 0)
       },
       'ArrowRight': () => {
-        let pos = this.props.markers.find(m => m > this.state.progress)
+        const pos = this.props.markers.find(m => m > this.state.progress)
         if (pos) this.jumpTo(pos)
       },
       '1 2 3 4 5 6 7 8 9': (key: string) => {
-        let pos = this.props.markers[parseInt(key, 10) - 1]
+        const pos = this.props.markers[parseInt(key, 10) - 1]
         if (pos) this.jumpTo(pos)
       },
       'm': () => this.props.onAddMarker(this.state.progress),

@@ -32,9 +32,9 @@ export const markers = (state = initiaState, action: Actions) => {
 function addMarker (markers: SongMarkers, position: number) {
   if (!markers || markers.length === 0) return [position]
 
-  let result = markers.concat()
+  const result = markers.concat()
 
-  let index = findIndex(markers, m => Math.abs(m - position) < TOLERANCE)
+  const index = findIndex(markers, m => Math.abs(m - position) < TOLERANCE)
 
   if (index > -1) {
     result.splice(index, 1, position)

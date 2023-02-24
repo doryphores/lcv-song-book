@@ -13,7 +13,7 @@ interface AppProps {
   readonly hideScrollbars: boolean
 }
 
-const App: React.SFC<AppProps> = ({ showSong, hideScrollbars }) => (
+const App: React.FC<AppProps> = ({ showSong, hideScrollbars }) => (
   <div className={classnames('u-flex u-flex--full u-flex--horizontal', { 'u-hide-scrollbars': hideScrollbars })}>
     <Sidebar className='u-flex__panel' />
     <div className='u-flex__panel u-flex__panel--grow u-flex u-flex--vertical'>

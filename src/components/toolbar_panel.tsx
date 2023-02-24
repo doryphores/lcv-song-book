@@ -12,7 +12,7 @@ interface ToolbarPanelProps {
   readonly children?: React.ReactChild | React.ReactChild[]
 }
 
-const ToolbarPanel: React.SFC<ToolbarPanelProps> = ({
+const ToolbarPanel: React.FC<ToolbarPanelProps> = ({
   className,
   toggleIcon,
   disabled = false,
