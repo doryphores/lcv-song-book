@@ -1,14 +1,20 @@
 {
   "compilerOptions": {
     "target": "ES6",
+    "allowJs": true,
     "module": "commonjs",
-    "lib": ["dom", "dom.iterable", "es2015", "es2016"],
-    "jsx": "react",
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "strict": true
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "out"
-  ]
+  "include": ["src/**/*"]
 }
