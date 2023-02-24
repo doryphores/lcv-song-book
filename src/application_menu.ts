@@ -9,6 +9,39 @@ const template: Electron.MenuItemConstructorOptions[] = [
     label: 'Edit',
     submenu: [
       {
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        role: 'undo'
+      },
+      {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        role: 'redo'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        role: 'cut'
+      },
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        role: 'copy'
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste'
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectAll'
+      },
+      {
         label: 'Preferences',
         click: () => win.webContents.send('dispatch-action', TOGGLE_SETTINGS),
         accelerator: 'CmdOrCtrl+,'
@@ -30,13 +63,13 @@ const template: Electron.MenuItemConstructorOptions[] = [
         type: 'separator'
       },
       {
-        role: 'resetzoom'
+        role: 'resetZoom'
       },
       {
-        role: 'zoomin'
+        role: 'zoomIn'
       },
       {
-        role: 'zoomout'
+        role: 'zoomOut'
       },
       {
         type: 'separator'
@@ -48,7 +81,7 @@ const template: Electron.MenuItemConstructorOptions[] = [
             role: 'reload'
           },
           {
-            role: 'toggledevtools'
+            role: 'toggleDevTools'
           }
         ]
       }
@@ -96,7 +129,7 @@ if (process.platform === 'darwin') {
         role: 'hide'
       },
       {
-        role: 'hideothers'
+        role: 'hideOthers'
       },
       {
         role: 'unhide'
