@@ -37,8 +37,8 @@ export const songs = (state = initialState, { type, payload }: LoadResourcesActi
   switch (type) {
     case LOAD_RESOURCES:
       return sortSongs(payload.resources.reduce((songs, r) => {
-        let song = addSong(songs, r.title)
-        let type: keyof Resource = /pdf$/.test(r.url) ? 'sheets' : 'recordings'
+        const song = addSong(songs, r.title)
+        const type: keyof Resource = /pdf$/.test(r.url) ? 'sheets' : 'recordings'
         song[type][r.voice.toLowerCase()] = r.url.replace('http://', 'https://')
         return songs
       }, []))
