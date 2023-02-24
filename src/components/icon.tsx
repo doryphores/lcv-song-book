@@ -1,35 +1,42 @@
 import React from 'react'
 import classnames from 'classnames'
 
+import ActionSprite from '../static/sprites/svg-sprite-action.svg'
+import NavigationSprite from '../static/sprites/svg-sprite-navigation.svg'
+import ImageSprite from '../static/sprites/svg-sprite-image.svg'
+import FileSprite from '../static/sprites/svg-sprite-file.svg'
+import AVSprite from '../static/sprites/svg-sprite-av.svg'
+import CommunicationSprite from '../static/sprites/svg-sprite-communication.svg'
+
 const ICON_GROUPS: { [key: string]: string } = {
-  'arrow_drop_down': 'navigation',
-  'audiotrack': 'image',
-  'check': 'navigation',
-  'close': 'navigation',
-  'cloud_download': 'file',
+  'arrow_drop_down': NavigationSprite,
+  'audiotrack': ImageSprite,
+  'check': NavigationSprite,
+  'close': NavigationSprite,
+  'cloud_download': FileSprite,
   'error': 'alert',
-  'help': 'action',
-  'help_outline': 'action',
-  'info': 'action',
-  'info_outline': 'action',
-  'pause_circle_filled': 'av',
-  'play_circle_filled': 'av',
-  'refresh': 'navigation',
-  'search': 'action',
-  'settings': 'action',
-  'voicemail': 'communication'
+  'help': ActionSprite,
+  'help_outline': ActionSprite,
+  'info': ActionSprite,
+  'info_outline': ActionSprite,
+  'pause_circle_filled': AVSprite,
+  'play_circle_filled': AVSprite,
+  'refresh': NavigationSprite,
+  'search': ActionSprite,
+  'settings': ActionSprite,
+  'voicemail': CommunicationSprite
 }
 
 interface IconProps {
   readonly className: string
   readonly icon: string
-  readonly style?: {}
+  readonly style?: React.CSSProperties
   readonly onClick?: () => void
 }
 
-const Icon: React.SFC<IconProps> = ({ className, icon, style, onClick }) => (
+const Icon: React.FC<IconProps> = ({ className, icon, style, onClick }) => (
   <svg className={classnames(className, 'icon')} style={style} onClick={onClick}>
-    <use xlinkHref={`../static/sprites/svg-sprite-${ICON_GROUPS[icon]}.svg#ic_${icon}_24px`} />
+    <use xlinkHref={`${ICON_GROUPS[icon]}#ic_${icon}_24px`} />
   </svg>
 )
 
