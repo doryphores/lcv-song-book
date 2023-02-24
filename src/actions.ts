@@ -59,10 +59,10 @@ export function toggleShortcuts (): ToggleShortcutsAction {
 // =============================================================================
 
 export const SAVE_SETTINGS = 'SAVE_SETTINGS'
-export type SaveSettingsAction = Action<typeof SAVE_SETTINGS, { password: string, hideScrollbars: boolean }>
+export type SaveSettingsAction = Action<typeof SAVE_SETTINGS, { username: string, password: string, hideScrollbars: boolean }>
 
-export function saveSettings (password: string, hideScrollbars: boolean): SaveSettingsAction {
-  return createAction(SAVE_SETTINGS, { password, hideScrollbars })
+export function saveSettings (username: string, password: string, hideScrollbars: boolean): SaveSettingsAction {
+  return createAction(SAVE_SETTINGS, { username, password, hideScrollbars })
 }
 
 // =============================================================================
@@ -72,16 +72,16 @@ export type LoadResourcesAction = Action<typeof LOAD_RESOURCES, { resources: Scr
 
 export function loadResources (resources: ScrapedResource[]) {
   return function (dispatch: Dispatch, getState: () => ApplicationState): void {
-    let songsBefore = getState().songs.map(s => s.title)
-    let recordingsBefore = gatherRecordings(getState().songs)
+    const songsBefore = getState().songs.map(s => s.title)
+    const recordingsBefore = gatherRecordings(getState().songs)
 
     dispatch(createAction(LOAD_RESOURCES, {
       timestamp: Date.now(),
       resources
     }))
 
-    let newSongs = difference(getState().songs.map(s => s.title), songsBefore)
-    let newRecordings = difference(gatherRecordings(getState().songs), recordingsBefore)
+    const newSongs = difference(getState().songs.map(s => s.title), songsBefore)
+    const newRecordings = difference(gatherRecordings(getState().songs), recordingsBefore)
 
     if (isEmpty(newSongs) && isEmpty(newRecordings)) {
       dispatch(info('No new songs or recordings'))

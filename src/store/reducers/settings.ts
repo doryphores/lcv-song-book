@@ -6,6 +6,7 @@ import {
 type Actions = RestoreAction | SaveSettingsAction | LoadResourcesAction
 
 const initialState = {
+  username: '',
   password: '',
   lastResourceUpdate: 0
 }
