@@ -2,6 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 
 import ActionSprite from '../static/sprites/svg-sprite-action.svg'
+import AlertSprite from '../static/sprites/svg-sprite-alert.svg'
 import NavigationSprite from '../static/sprites/svg-sprite-navigation.svg'
 import ImageSprite from '../static/sprites/svg-sprite-image.svg'
 import FileSprite from '../static/sprites/svg-sprite-file.svg'
@@ -14,7 +15,7 @@ const ICON_GROUPS: { [key: string]: string } = {
   'check': NavigationSprite,
   'close': NavigationSprite,
   'cloud_download': FileSprite,
-  'error': 'alert',
+  'error': AlertSprite,
   'help': ActionSprite,
   'help_outline': ActionSprite,
   'info': ActionSprite,
