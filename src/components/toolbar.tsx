@@ -18,16 +18,16 @@ type ToolbarProps = {
   onSelectVoice: (voice: string) => void
 }
 
-const VOICES = [
-  'Soprano 1',
-  'Soprano 2',
-  'Alto 1',
-  'Alto 2',
-  'Tenor 1',
-  'Tenor 2',
-  'Bass 1',
-  'Bass 2'
-]
+const VOICES: Record<string, string> = {
+  'Soprano 1': 'Sop 1',
+  'Soprano 2': 'Sop 2',
+  'Alto 1': 'Alto 1',
+  'Alto 2': 'Alto 2',
+  'Tenor 1': 'Tenor 1',
+  'Tenor 2': 'Tenor 2',
+  'Bass 1': 'Bass 1',
+  'Bass 2': 'Bass 2'
+}
 
 const Toolbar: React.FC<ToolbarProps> = ({
   className,
@@ -47,7 +47,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <select className='field__input field__input--select'
             value={selectedVoice}
             onChange={selectVoice}>
-            {VOICES.map(v => <option key={v}>{v}</option>)}
+            {Object.keys(VOICES).map(v => <option key={v} value={VOICES[v]}>{v}</option>)}
           </select>
           <Icon className='field__icon' icon='arrow_drop_down' />
         </label>
