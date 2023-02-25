@@ -33,16 +33,10 @@ const Updater: React.FC<UpdaterProps> = ({
   )
 }
 
-function mapStateToProps (state: ApplicationState) {
-  return {
-    lastUpdate: state.settings.lastResourceUpdate
-  }
-}
-
 function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, Action>) {
   return {
     onLoadSongs: async () => await dispatch(loadSongs())
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Updater)
+export default connect(null, mapDispatchToProps)(Updater)

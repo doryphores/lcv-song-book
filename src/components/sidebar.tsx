@@ -3,7 +3,7 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { selectSong, resizeSidebar, toggleSidebar } from '../actions'
+import { selectSong, resizeSidebar, toggleSidebar, selectList } from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
 import KeyCapture from '../key_capture'
@@ -14,8 +14,10 @@ type SidebarProps = {
   width: number
   songs: Song[]
   selectedSongTitle: string
+  selectedList: ApplicationState['selectedList']
   onToggle: () => void
   onSelect: (song: string) => void
+  onSelectList: (list: List) => void
   onResize: (width: number) => void
 }
 
@@ -25,8 +27,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   width,
   songs,
   selectedSongTitle,
+  selectedList,
   onToggle,
   onSelect,
+  onSelectList,
   onResize
 }) => {
   const toggleKeyCapture = useRef<KeyCapture>(null)
@@ -39,7 +43,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [search, setSearch] = useState('')
   const [highlighted, setHighlighted] = useState(-1)
   const [searching, setSearching] = useState(false)
-  const [list, setList] = useState('all')
 
   useEffect(() => {
     toggleKeyCapture.current = new KeyCapture({
@@ -104,11 +107,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   const filterSongs = useCallback(() => {
     const searchString = search.toLowerCase()
     return songs.filter(s => {
-      if (list === 'term' && !s.thisTerm) return false
+      if (selectedList === 'term' && !s.thisTerm) return false
       if (search === '') return true
       return s.title.toLowerCase().includes(searchString)
     })
-  }, [songs, search, list])
+  }, [songs, search, selectedList])
 
   const updateHighlighted = useCallback((value: number) => {
     const listLength = filterSongs().length
@@ -189,8 +192,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           <label className='field field--dropdown'>
             <select
               className='field__input field__input--select'
-              value={list}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => setList(e.target.value)}
+              value={selectedList}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => onSelectList(e.target.value as List)}
             >
               <option value='all'>All songs</option>
               <option value='term'>This term</option>
@@ -209,6 +212,7 @@ function mapDispatchToProps (dispatch: Dispatch) {
   return {
     onToggle: () => dispatch(toggleSidebar()),
     onSelect: (title: string) => dispatch(selectSong(title)),
+    onSelectList: (list: List) => dispatch(selectList(list)),
     onResize: (width: number) => dispatch(resizeSidebar(width))
   }
 }
@@ -216,6 +220,7 @@ function mapDispatchToProps (dispatch: Dispatch) {
 function mapStateToProps (state: ApplicationState) {
   return {
     selectedSongTitle: state.selectedSong,
+    selectedList: state.selectedList,
     songs: state.songs,
     visible: state.ui.sidebarVisible,
     width: state.ui.sidebarWidth

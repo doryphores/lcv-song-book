@@ -196,6 +196,15 @@ export function selectSong (title: string): SelectSongAction {
 
 // =============================================================================
 
+export const SELECT_LIST = 'SELECT_LIST'
+export type SelectListAction = Action<typeof SELECT_LIST, List>
+
+export function selectList (list: List): SelectListAction {
+  return createAction(SELECT_LIST, list)
+}
+
+// =============================================================================
+
 export const ADD_MARKER = 'ADD_MARKER'
 export type AddMarkerAction = Action<typeof ADD_MARKER, { song: string, position: number }>
 

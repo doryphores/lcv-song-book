@@ -45,9 +45,12 @@ interface Selection {
   readonly voice: string
 }
 
+type List = 'all' | 'term'
+
 interface ApplicationState {
   readonly selectedSong: string
   readonly selectedVoice: string
+  readonly selectedList: List
   readonly songs: Song[]
   readonly markers: MarkerCollection
   readonly notifications: SavedNotification[]
