@@ -67,17 +67,24 @@ export function saveSettings (username: string, password: string, hideScrollbars
 
 // =============================================================================
 
-export const LOAD_RESOURCES = 'LOAD_RESOURCES'
-export type LoadResourcesAction = Action<typeof LOAD_RESOURCES, { resources: ScrapedResource[], timestamp: number }>
+export const LOAD_SONGS = 'LOAD_SONGS'
+export type LoadResourcesAction = Action<typeof LOAD_SONGS, { songs: Song[], timestamp: number }>
 
-export function loadResources (resources: ScrapedResource[]) {
-  return function (dispatch: Dispatch, getState: () => ApplicationState): void {
+export function loadSongs () {
+  return async function (dispatch: Dispatch, getState: () => ApplicationState): Promise<void> {
     const songsBefore = getState().songs.map(s => s.title)
     const recordingsBefore = gatherRecordings(getState().songs)
 
-    dispatch(createAction(LOAD_RESOURCES, {
+    dispatch(dismissAll())
+
+    const songs: Song[] = await api.scrape({
+      username: getState().settings.username,
+      password: getState().settings.password
+    })
+
+    dispatch(createAction(LOAD_SONGS, {
       timestamp: Date.now(),
-      resources
+      songs
     }))
 
     const newSongs = difference(getState().songs.map(s => s.title), songsBefore)
@@ -110,7 +117,7 @@ export function loadResources (resources: ScrapedResource[]) {
   }
 }
 
-function gatherRecordings (songs: Resource[]) {
+function gatherRecordings (songs: Song[]) {
   return compact(songs.map(s => !isEmpty(s.recordings) && s.title))
 }
 

@@ -9,6 +9,7 @@ import Downloader from './downloader'
 import Settings from './settings'
 import Shortcuts from './shortcuts'
 import Icon from './icon'
+import Updater from './updater'
 
 type ToolbarProps = {
   className: string
@@ -52,6 +53,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         </label>
       </div>
 
+      <Updater className='u-flex__panel' />
       <Downloader className='u-flex__panel' pdfURL={sheetMusicURL} />
       <Settings className='u-flex__panel' />
       <Shortcuts className='u-flex__panel' />

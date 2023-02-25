@@ -1,4 +1,4 @@
-import { ipcRenderer } from "electron";
+import { ipcRenderer } from "electron"
 
 export default {
   platform: process.platform,
@@ -10,5 +10,6 @@ export default {
       cb(actionType)
     })
   },
-  getAppName: () => ipcRenderer.invoke('get-name')
+  getAppName: () => ipcRenderer.invoke('get-name'),
+  scrape: (creds: Credentials) => ipcRenderer.invoke('scrape', creds)
 }

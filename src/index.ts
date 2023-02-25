@@ -11,6 +11,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 import { setApplicationMenu } from './application_menu'
 import Icon from './static/icon.png'
+import { getSongs } from './scraper';
 
 let appWindow: BrowserWindow = null
 
@@ -18,8 +19,6 @@ const CONFIG_PATH = path.join(
   app.getPath('userData'),
   'window.json'
 )
-
-// const isDevMode = /[\\/]electron/.test(process.execPath)
 
 const gotTheLock = app.requestSingleInstanceLock()
 
@@ -101,6 +100,10 @@ if (!gotTheLock) {
         request(fileUrl).pipe(stream).on('finish', () => {
           shell.openPath(downloadPath)
         })
+      })
+
+      ipcMain.handle('scrape', async (_event, creds: { username: string, password: string }) => {
+        return await getSongs(appWindow, creds)
       })
 
       appWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)

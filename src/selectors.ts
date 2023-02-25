@@ -36,7 +36,7 @@ export const sheetMusicURL = createSelector(
 
 export const fullRecordingURL = createSelector(
   currentSong,
-  (song) => song.recordings['full song']
+  (song) => song.recordings['full']
 )
 
 export const voiceRecordingURL = createSelector(

@@ -1,5 +1,5 @@
 import {
-  RESTORE, SAVE_SETTINGS, LOAD_RESOURCES,
+  RESTORE, SAVE_SETTINGS, LOAD_SONGS,
   RestoreAction, SaveSettingsAction, LoadResourcesAction
 } from '../../actions'
 
@@ -13,7 +13,7 @@ const initialState = {
 
 export const settings = (state = initialState, action: Actions) => {
   switch (action.type) {
-    case LOAD_RESOURCES:
+    case LOAD_SONGS:
       return {
         ...state,
         lastResourceUpdate: action.payload.timestamp

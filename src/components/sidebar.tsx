@@ -17,7 +17,7 @@ type SidebarProps = {
   className: string
   visible: boolean
   width: number
-  songs: Resource[]
+  songs: Song[]
   selectedSongTitle: string
   selectedPlaylist: string
   playlists: PlaylistCollection

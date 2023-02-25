@@ -6,16 +6,16 @@ declare module '*.worker';
 
 declare const api: typeof import("./api").default
 
-type ScrapedResource = Readonly<Record<'title' | 'voice' | 'url', string>>
+type Credentials = {
+  username: string
+  password: string
+}
 
-interface Resource {
-  readonly title: string
-  readonly sheets: {
-    [key: string]: string
-  }
-  readonly recordings: {
-    [key: string]: string
-  }
+type Song = {
+  title: string
+  url?: string
+  sheets: Record<string, string>
+  recordings: Record<string, string>
 }
 
 interface PlaylistCollection {
@@ -53,7 +53,7 @@ interface Selection {
 interface ApplicationState {
   readonly selectedSong: string
   readonly selectedVoice: string
-  readonly songs: Resource[]
+  readonly songs: Song[]
   readonly playlists: PlaylistState
   readonly markers: MarkerCollection
   readonly notifications: SavedNotification[]
