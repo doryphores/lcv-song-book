@@ -1,5 +1,5 @@
 import { BrowserView, BrowserWindow, session, WebRequestFilter } from "electron"
-import { mapKeys, sortBy, unionBy } from "lodash"
+import { mapKeys, sortBy } from "lodash"
 
 export async function getSongs (appWindow: BrowserWindow, credentials: Credentials) {
   const scraper = new Scraper(appWindow)
@@ -12,6 +12,8 @@ const SONGS_URL = 'https://www.londoncityvoices.co.uk/choirmembership/all-songs'
 class Scraper {
   appWindow: BrowserWindow
   view: BrowserView
+  songs: Song[] = []
+  termSongs: string[]
 
   constructor (appWindow: BrowserWindow) {
     this.appWindow = appWindow
@@ -50,40 +52,65 @@ class Scraper {
     return partition
   }
 
-  async run ({ username, password }: Credentials) {
-    await this.loadURL(LOGIN_URL)
-    await this.waitForElement('input[name=username]')
-    await this.fill('username', username)
-    await this.fill('password', password)
-    await this.submitForm()
-    // FIXME: return error when login fails
-    await this.waitForContent('Welcome to LCV!')
-    await this.loadURL(SONGS_URL)
-    const songs = await this.collectSongs()
-    this.appWindow.removeBrowserView(this.view)
-    return songs
+  async run (credentials: Credentials) {
+    try {
+      await this.login(credentials)
+      await this.loadURL(SONGS_URL)
+      this.termSongs = await this.collectTermSongTitles()
+      await this.collectSongs()
+      if (this.songs.length === 0) {
+        throw new Error('Failed to collect songs from LCV website')
+      }
+      return this.songs
+    } finally {
+      this.appWindow.removeBrowserView(this.view)
+    }
   }
 
-  private async collectSongs (pageURL: string = SONGS_URL, songs: Song[] = []): Promise<Song[]> {
-    await this.loadURL(pageURL)
-    const pageSongs = await this.collectSongsFromPage()
-    const nextPage = await this.runScript(`document.querySelector('[aria-label="Next Page"]')?.href`)
-    songs = unionBy(songs, pageSongs, 'title')
-    if (nextPage) return await this.collectSongs(nextPage, songs)
+  private async login (credentials: Credentials) {
+    await this.loadURL(LOGIN_URL)
+    await this.waitForElement('input[name=username]')
+    await this.fill('username', credentials.username)
+    await this.fill('password', credentials.password)
+    await this.submitForm()
+    const result = await this.waitForContent('Welcome to LCV!')
+    if (!result) throw new Error('Login failed, check your username and password')
+  }
 
-    for (const song of songs) {
+  private async collectSongs (): Promise<void> {
+    const pageSongs = await this.collectSongsFromPage()
+    this.songs = sortBy(this.songs.concat(pageSongs), 'title')
+
+    const nextPageURL = await this.runScript(`document.querySelector('[aria-label="Next Page"]')?.href`)
+    if (nextPageURL) {
+      await this.loadURL(nextPageURL)
+      return await this.collectSongs()
+    }
+
+    for (const song of this.songs) {
       const { sheets, recordings } = await this.collectSongDetails(song.url)
 
+      song.thisTerm = this.isTermSong(song)
       song.sheets = mapKeys(sheets, (_v, k) => k.toLowerCase())
       song.recordings = mapKeys(recordings, (_v, k) => k.toLowerCase())
     }
-
-    return sortBy(songs, 'title')
   }
 
-  private async collectSongsFromPage (): Promise<Song[]> {
+  private isTermSong (song: Song): boolean {
+    return this.termSongs.includes(song.title)
+  }
+
+  private collectTermSongTitles (): Promise<string[]> {
     return this.runScript(`
-      Array.from(document.querySelectorAll('h1.songtitle')).map(el => {
+      Array.from(document.querySelectorAll('[data-w-tab="This term\\'s songs"] h1.songtitle')).map(el => {
+        return el.innerText
+      })
+    `, false)
+  }
+
+  private collectSongsFromPage (): Promise<Song[]> {
+    return this.runScript(`
+      Array.from(document.querySelectorAll('[data-w-tab="All Songs"] h1.songtitle')).map(el => {
         return {
           title: el.innerText,
           url: el.parentElement.parentElement.href
@@ -157,25 +184,26 @@ class Scraper {
   }
 
   private waitForContent (content: string) {
-    return this.waitFor(`document.body.textContent.includes('${content}')`, `waiting for content #{content}`)
+    return this.waitFor(`document.body.textContent.includes('${content}')`)
   }
 
-  private waitFor (condition: string, msg = '') {
+  private waitFor (condition: string, timeout = 5000) {
     return this.runScript(`
-      function delay (timeout, cb) {
-        return new Promise (resolve => {
-          setTimeout(() => resolve(cb()), timeout)
-        })
-      }
-      async function waitForCondition () {
-        if (${condition}) {
-          console.log('found content!')
-          return
+      (async function () {
+        function delay (timeout, cb) {
+          return new Promise (resolve => {
+            setTimeout(() => resolve(cb()), timeout)
+          })
         }
-        console.log('${msg}')
-        return await delay(100, waitForCondition)
-      }
-      waitForCondition()
+        let timedOut = false
+        delay(${timeout}, () => timedOut = true)
+        async function waitForCondition () {
+          if (timedOut) return false
+          if (${condition}) return true
+          return await delay(100, waitForCondition)
+        }
+        return await waitForCondition()
+      })()
     `)
   }
 }

@@ -102,8 +102,14 @@ if (!gotTheLock) {
         })
       })
 
-      ipcMain.handle('scrape', async (_event, creds: { username: string, password: string }) => {
-        return await getSongs(appWindow, creds)
+      ipcMain.handle('scrape', async (_event, creds: Credentials) => {
+        const result: IPCResult = {}
+        try {
+          result.value = await getSongs(appWindow, creds)
+        } catch (error) {
+          result.error = error.message
+        }
+        return result
       })
 
       appWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)

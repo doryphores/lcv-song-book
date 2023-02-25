@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
@@ -39,6 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [search, setSearch] = useState('')
   const [highlighted, setHighlighted] = useState(-1)
   const [searching, setSearching] = useState(false)
+  const [list, setList] = useState('all')
 
   useEffect(() => {
     toggleKeyCapture.current = new KeyCapture({
@@ -101,12 +102,13 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [highlighted])
 
   const filterSongs = useCallback(() => {
-    if (search === '') return songs
     const searchString = search.toLowerCase()
     return songs.filter(s => {
+      if (list === 'term' && !s.thisTerm) return false
+      if (search === '') return true
       return s.title.toLowerCase().includes(searchString)
     })
-  }, [songs, search])
+  }, [songs, search, list])
 
   const updateHighlighted = useCallback((value: number) => {
     const listLength = filterSongs().length
@@ -116,7 +118,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       value = 0
     }
 
-    console.log(value)
     setHighlighted(value)
   }, [filterSongs])
 
@@ -186,7 +187,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         </ul>
         <div className='sidebar__playlist-selector theme--dark u-flex__panel'>
           <label className='field field--dropdown'>
-            <select className='field__input field__input--select'>
+            <select
+              className='field__input field__input--select'
+              value={list}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setList(e.target.value)}
+            >
               <option value='all'>All songs</option>
               <option value='term'>This term</option>
             </select>

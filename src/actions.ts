@@ -77,10 +77,17 @@ export function loadSongs () {
 
     dispatch(dismissAll())
 
-    const songs: Song[] = await api.scrape({
-      username: getState().settings.username,
-      password: getState().settings.password
-    })
+    let songs: Song[]
+
+    try {
+      songs = await api.scrape({
+        username: getState().settings.username,
+        password: getState().settings.password
+      })
+    } catch (error) {
+      dispatch(alert(error.message))
+      return
+    }
 
     dispatch(createAction(LOAD_SONGS, {
       timestamp: Date.now(),

@@ -11,5 +11,9 @@ export default {
     })
   },
   getAppName: () => ipcRenderer.invoke('get-name'),
-  scrape: (creds: Credentials) => ipcRenderer.invoke('scrape', creds)
+  scrape: async (creds: Credentials) => {
+    const result = await ipcRenderer.invoke('scrape', creds)
+    if (result.error) throw new Error(result.error)
+    return result.value
+  }
 }

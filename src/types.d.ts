@@ -6,6 +6,11 @@ declare module '*.worker';
 
 declare const api: typeof import("./api").default
 
+type IPCResult = {
+  value?: unknown
+  error?: Error
+}
+
 type Credentials = {
   username: string
   password: string
@@ -14,6 +19,7 @@ type Credentials = {
 type Song = {
   title: string
   url?: string
+  thisTerm: boolean
   sheets: Record<string, string>
   recordings: Record<string, string>
 }
