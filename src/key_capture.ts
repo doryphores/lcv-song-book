@@ -6,7 +6,7 @@ type Listener = {
 export default class KeyCapture {
   listeners: { [key: string]: Listener } = {}
 
-  constructor (handlers?: { [key: string]: () => void }) {
+  constructor (handlers?: { [key: string]: (key?: string) => void }) {
     this.listeners = {}
     if (handlers) this.registerMany(handlers)
     this.handleKeyDown = this.handleKeyDown.bind(this)
