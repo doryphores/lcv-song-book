@@ -1,66 +1,63 @@
-import React from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 import KeyCapture from '../key_capture'
 import Overlay from './overlay'
 
-interface ModalProps {
-  readonly open: boolean
-  readonly className?: string
-  readonly buttonLabel: string
-  readonly title: string
-  readonly onSubmit: () => void
-  readonly onCancel: () => void
-  readonly children: React.ReactNode
+type ModalProps = {
+  open: boolean
+  className?: string
+  buttonLabel: string
+  title: string
+  onSubmit: () => void
+  onCancel: () => void
+  children: React.ReactNode
 }
 
-export default class Modal extends React.Component<ModalProps> {
-  private keyCapture: KeyCapture
+const Modal: React.FC<ModalProps> = ({
+  open,
+  className,
+  buttonLabel,
+  title,
+  onSubmit,
+  onCancel,
+  children
+}) => {
+  const keyCapture = useRef<KeyCapture>(null)
 
-  constructor (props: ModalProps) {
-    super(props)
-
-    this.keyCapture = new KeyCapture({
-      'Escape': props.onCancel
+  useEffect(() => {
+    keyCapture.current = new KeyCapture({
+      'Escape': onCancel
     })
-  }
 
-  handleSubmit = (e: React.FormEvent) => {
+    return () => keyCapture.current.deactivate()
+  }, [])
+
+  useEffect(() => {
+    if (open) keyCapture.current.activate()
+    else keyCapture.current.deactivate()
+  }, [open])
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault()
-    this.props.onSubmit()
-  }
+    onSubmit()
+  }, [onSubmit])
 
-  handleCancel = () => {
-    this.props.onCancel()
-  }
-
-  componentWillUnmount () {
-    this.keyCapture.deactivate()
-  }
-
-  componentWillReceiveProps (nextProps: ModalProps) {
-    if (nextProps.open && !this.props.open) {
-      this.keyCapture.activate()
-    } else if (!nextProps.open && this.props.open) {
-      this.keyCapture.deactivate()
-    }
-  }
-
-  render () {
-    return (
-      <Overlay open={this.props.open} className={this.props.className}>
-        <form className='modal__panel' onSubmit={this.handleSubmit}>
-          <h2 className='modal__heading'>{this.props.title}</h2>
-          {this.props.children}
-          <div className='form-actions'>
-            {this.props.onCancel && (
-              <button className='button' type='button' onClick={this.handleCancel}>
-                Cancel
-              </button>
-            )}
-            <button className='button'>{this.props.buttonLabel}</button>
-          </div>
-        </form>
-      </Overlay>
-    )
-  }
+  return (
+    <Overlay open={open} className={className}>
+      <form className='modal__panel' onSubmit={handleSubmit}>
+        <h2 className='modal__heading'>{title}</h2>
+        {children}
+        <div className='form-actions'>
+          {onCancel && (
+            <button className='button' type='button' onClick={onCancel}>
+              Cancel
+            </button>
+          )}
+          <button className='button'>{buttonLabel}</button>
+        </div>
+      </form>
+    </Overlay>
+  )
 }
+
+export default Modal
