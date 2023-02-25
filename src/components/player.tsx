@@ -147,6 +147,8 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
     this.playHeads = {
       voice: new Howl({
         src: [this.props.voiceRecordingURL],
+        html5: true,
+        preload: 'metadata',
         onload: () => {
           this.configureTrack('voice')
           if (this.playHeads === undefined) return
@@ -176,6 +178,8 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
       }),
       full: new Howl({
         src: [this.props.fullRecordingURL],
+        html5: true,
+        preload: 'metadata',
         onload: () => {
           this.configureTrack('full')
           if (this.playHeads === undefined) return
