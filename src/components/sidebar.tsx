@@ -2,15 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-// import { remote } from 'electron'
 
-import {
-  selectSong, resizeSidebar, toggleSidebar,
-  selectPlaylist, addToPlaylist, removeFromPlaylist
-} from '../actions'
+import { selectSong, resizeSidebar, toggleSidebar } from '../actions'
 import Icon from './icon'
 import Resizer from './resizer'
-import Modal from './modal'
 import KeyCapture from '../key_capture'
 
 type SidebarProps = {
@@ -19,14 +14,9 @@ type SidebarProps = {
   width: number
   songs: Song[]
   selectedSongTitle: string
-  selectedPlaylist: string
-  playlists: PlaylistCollection
   onToggle: () => void
   onSelect: (song: string) => void
   onResize: (width: number) => void
-  onPlaylistSelect: (song: string) => void
-  onPlaylistAdd: (playlist: string, song: string) => void
-  onPlaylistRemove: (playlist: string, song: string) => void
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -35,14 +25,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   width,
   songs,
   selectedSongTitle,
-  selectedPlaylist,
-  playlists,
   onToggle,
   onSelect,
-  onResize,
-  onPlaylistSelect,
-  onPlaylistAdd
-  // onPlaylistRemove
+  onResize
 }) => {
   const toggleKeyCapture = useRef<KeyCapture>(null)
   const searchingKeyCapture = useRef<KeyCapture>(null)
@@ -54,8 +39,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [search, setSearch] = useState('')
   const [highlighted, setHighlighted] = useState(-1)
   const [searching, setSearching] = useState(false)
-  const [newPlaylistLabel, setNewPlaylistLabel] = useState('')
-  const [songToAdd, setSongToAdd] = useState('')
 
   useEffect(() => {
     toggleKeyCapture.current = new KeyCapture({
@@ -118,16 +101,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [highlighted])
 
   const filterSongs = useCallback(() => {
-    if (selectedPlaylist !== '') {
-      const playlist = playlists[selectedPlaylist]
-      songs = songs.filter(s => playlist.includes(s.title))
-    }
     if (search === '') return songs
     const searchString = search.toLowerCase()
     return songs.filter(s => {
       return s.title.toLowerCase().includes(searchString)
     })
-  }, [selectedPlaylist, songs, playlists, search])
+  }, [songs, search])
 
   const updateHighlighted = useCallback((value: number) => {
     const listLength = filterSongs().length
@@ -157,73 +136,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     setSearch(e.target.value)
     setHighlighted(-1)
   }, [])
-
-  const handlePlaylistSelect = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    stopSearch()
-    onPlaylistSelect(e.target.value)
-    setSearch('')
-  }, [stopSearch, onPlaylistSelect])
-
-  // popupMenu (title: string) {
-  //   const template: Electron.MenuItemConstructorOptions[] = [{
-  //     label: 'Add to new playlist',
-  //     click: () => {
-  //       this.setState({ songToAdd: title })
-  //     }
-  //   }]
-
-  //   const playlistLabels = Object.keys(playlists)
-
-  //   if (playlistLabels.length) {
-  //     template.push({ type: 'separator' })
-  //     playlistLabels.forEach(playlist => {
-  //       const inPlaylist = playlists[playlist].includes(title)
-  //       template.push({
-  //         label: inPlaylist ? `Remove from "${playlist}"` : `Add to "${playlist}"`,
-  //         type: 'checkbox',
-  //         checked: inPlaylist,
-  //         click: () => {
-  //           if (inPlaylist) {
-  //             onPlaylistRemove(playlist, title)
-  //           } else {
-  //             onPlaylistAdd(playlist, title)
-  //           }
-  //         }
-  //       })
-  //     })
-  //   }
-
-  //   // FIXME: find alternative to remote
-  //   // remote.Menu.buildFromTemplate(template).popup({})
-  // }
-
-  const resetNewplaylist = useCallback(() => {
-    setNewPlaylistLabel('')
-    setSongToAdd('')
-  }, [])
-
-  const createPlaylist = useCallback(() => {
-    onPlaylistAdd(newPlaylistLabel, songToAdd)
-    resetNewplaylist()
-  }, [newPlaylistLabel, songToAdd, onPlaylistAdd, resetNewplaylist])
-
-  const renderNewPlaylistPanel = useCallback(() => (
-    <Modal open={!!songToAdd}
-      title='New playlist'
-      buttonLabel='Create playlist'
-      onSubmit={createPlaylist}
-      onCancel={resetNewplaylist}>
-      <label className='field'>
-        <input type='text'
-          className='field__input'
-          value={newPlaylistLabel}
-          required
-          autoFocus
-          onChange={(e) => setNewPlaylistLabel(e.target.value)} />
-        <span className='field__label'>Playlist name</span>
-      </label>
-    </Modal>
-  ), [songToAdd, newPlaylistLabel, createPlaylist, resetNewplaylist])
 
   const classNames = useCallback((classNames: string) => {
     return classnames(classNames, className, {
@@ -274,19 +186,14 @@ const Sidebar: React.FC<SidebarProps> = ({
         </ul>
         <div className='sidebar__playlist-selector theme--dark u-flex__panel'>
           <label className='field field--dropdown'>
-            <select className='field__input field__input--select'
-              value={selectedPlaylist}
-              onChange={handlePlaylistSelect}>
-              <option value=''>All songs</option>
-              {Object.keys(playlists).map((p, i) => (
-                <option key={i}>{p}</option>
-              ))}
+            <select className='field__input field__input--select'>
+              <option value='all'>All songs</option>
+              <option value='term'>This term</option>
             </select>
             <Icon className='field__icon' icon='arrow_drop_down' />
           </label>
         </div>
       </div>
-      {renderNewPlaylistPanel()}
       <Resizer className='sidebar__resizer'
         onResize={onResize} />
     </div>
@@ -297,10 +204,7 @@ function mapDispatchToProps (dispatch: Dispatch) {
   return {
     onToggle: () => dispatch(toggleSidebar()),
     onSelect: (title: string) => dispatch(selectSong(title)),
-    onResize: (width: number) => dispatch(resizeSidebar(width)),
-    onPlaylistSelect: (playlist: string) => dispatch(selectPlaylist(playlist)),
-    onPlaylistAdd: (playlist: string, song: string) => dispatch(addToPlaylist(playlist, song)),
-    onPlaylistRemove: (playlist: string, song: string) => dispatch(removeFromPlaylist(playlist, song))
+    onResize: (width: number) => dispatch(resizeSidebar(width))
   }
 }
 
@@ -308,8 +212,6 @@ function mapStateToProps (state: ApplicationState) {
   return {
     selectedSongTitle: state.selectedSong,
     songs: state.songs,
-    playlists: state.playlists.playlists,
-    selectedPlaylist: state.playlists.selectedPlaylist,
     visible: state.ui.sidebarVisible,
     width: state.ui.sidebarWidth
   }

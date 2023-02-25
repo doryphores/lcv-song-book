@@ -189,33 +189,6 @@ export function selectSong (title: string): SelectSongAction {
 
 // =============================================================================
 
-export const SELECT_PLAYLIST = 'SELECT_PLAYLIST'
-export type SelectPlaylistAction = Action<typeof SELECT_PLAYLIST, string>
-
-export function selectPlaylist (list: string): SelectPlaylistAction {
-  return createAction(SELECT_PLAYLIST, list)
-}
-
-// =============================================================================
-
-export const ADD_TO_PLAYLIST = 'ADD_TO_PLAYLIST'
-export type AddToPlaylistAction = Action<typeof ADD_TO_PLAYLIST, { list: string, song: string }>
-
-export function addToPlaylist (list: string, song: string): AddToPlaylistAction {
-  return createAction(ADD_TO_PLAYLIST, { list, song })
-}
-
-// =============================================================================
-
-export const REMOVE_FROM_PLAYLIST = 'REMOVE_FROM_PLAYLIST'
-export type RemoveFromPlaylistAction = Action<typeof REMOVE_FROM_PLAYLIST, { list: string, song: string }>
-
-export function removeFromPlaylist (list: string, song: string): RemoveFromPlaylistAction {
-  return createAction(REMOVE_FROM_PLAYLIST, { list, song })
-}
-
-// =============================================================================
-
 export const ADD_MARKER = 'ADD_MARKER'
 export type AddMarkerAction = Action<typeof ADD_MARKER, { song: string, position: number }>
 

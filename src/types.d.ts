@@ -18,16 +18,6 @@ type Song = {
   recordings: Record<string, string>
 }
 
-interface PlaylistCollection {
-  readonly [key: string]: string[]
-}
-
-// Temporary: selectedPlaylist should move to Selection
-interface PlaylistState {
-  readonly selectedPlaylist: string
-  readonly playlists: PlaylistCollection
-}
-
 type SongMarkers = Array<number>
 
 interface MarkerCollection {
@@ -47,14 +37,12 @@ interface SavedNotification extends INotification {
 interface Selection {
   readonly song: string
   readonly voice: string
-  readonly playlist: keyof PlaylistCollection
 }
 
 interface ApplicationState {
   readonly selectedSong: string
   readonly selectedVoice: string
   readonly songs: Song[]
-  readonly playlists: PlaylistState
   readonly markers: MarkerCollection
   readonly notifications: SavedNotification[]
   readonly settings: {
