@@ -1,37 +1,38 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import classnames from 'classnames'
 
-interface ResizerProps {
-  readonly className: string
-  readonly onResize: (x: number) => void
+type ResizerProps  = {
+  className: string
+  onResize: (x: number) => void
 }
 
-export default class Resizer extends React.Component<ResizerProps> {
-  constructor (props: ResizerProps) {
-    super(props)
-  }
-
-  stopResize = () => {
-    document.body.classList.remove('u-resizing')
-    window.removeEventListener('mouseup', this.stopResize)
-    window.removeEventListener('mousemove', this.handleResize)
-  }
-
-  handleResize = (e: MouseEvent) => {
-    this.props.onResize(e.clientX)
+const Resizer: React.FC<ResizerProps> = ({
+  className,
+  onResize
+}) => {
+  const handleResize = useCallback((e: MouseEvent) => {
+    onResize(e.clientX)
     window.dispatchEvent(new UIEvent('resize'))
-  }
+  }, [])
 
-  startResize () {
+  const stopResize = useCallback(() => {
+    document.body.classList.remove('u-resizing')
+    window.removeEventListener('mouseup', stopResize)
+    window.removeEventListener('mousemove', handleResize)
+  }, [])
+
+  const startResize = useCallback(() => {
     document.body.classList.add('u-resizing')
-    window.addEventListener('mouseup', this.stopResize)
-    window.addEventListener('mousemove', this.handleResize)
-  }
+    window.addEventListener('mouseup', stopResize)
+    window.addEventListener('mousemove', handleResize)
+  }, [])
 
-  render () {
-    return (
-      <div className={classnames(this.props.className, 'resizer')}
-        onMouseDown={this.startResize.bind(this)} />
-    )
-  }
+  return (
+    <div
+      className={classnames(className, 'resizer')}
+      onMouseDown={startResize}
+    />
+  )
 }
+
+export default Resizer
