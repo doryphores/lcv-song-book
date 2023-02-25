@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
 import { configureStore } from './store'
@@ -8,11 +8,11 @@ import App from './components/app'
 import './scss/app.scss'
 
 configureStore().then(store => {
-  ReactDOM.render(
+  const root = createRoot(document.getElementById('app'))
+  root.render(
     <Provider store={store}>
       <App />
-    </Provider>,
-    document.getElementById('app')
+    </Provider>
   )
 
   store.subscribe(() => setTitle(store.getState()))
