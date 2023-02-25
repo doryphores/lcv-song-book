@@ -41,16 +41,6 @@ const Settings: React.FC<SettingsProps> = ({
     }
   }, [open])
 
-  // componentWillReceiveProps (nextProps: SettingsProps) {
-  //   if (nextProps.open && !open) {
-  //     this.setState({
-  //       username: nextProps.username,
-  //       password: nextProps.password,
-  //       hideScrollbars: nextProps.hideScrollbars
-  //     })
-  //   }
-  // }
-
   const handleSubmit = useCallback(() => {
     onSubmit({
       username: state.username,
