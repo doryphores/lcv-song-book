@@ -8,14 +8,14 @@ import { fullRecordingURL, sheetMusicURL, songMarkers, voiceRecordingURL } from 
 import Player from './player'
 import Sheet from './sheet'
 
-interface SelectedSongProps {
-  readonly className: string
-  readonly sheetMusicURL: string | undefined
-  readonly fullRecordingURL: string
-  readonly voiceRecordingURL: string
-  readonly songMarkers: SongMarkers
-  readonly onAddMarker: (position: number) => void
-  readonly onRemoveMarker: (position: number) => void
+type SelectedSongProps = {
+  className: string
+  sheetMusicURL: string | undefined
+  fullRecordingURL: string
+  voiceRecordingURL: string
+  songMarkers: SongMarkers
+  onAddMarker: (position: number) => void
+  onRemoveMarker: (position: number) => void
 }
 
 const SelectedSong: React.FC<SelectedSongProps> = ({

@@ -3,13 +3,13 @@ import classnames from 'classnames'
 
 import Icon from './icon'
 
-interface ToolbarPanelProps {
-  readonly className: string
-  readonly toggleIcon: string
-  readonly disabled?: boolean
-  readonly spinToggle?: boolean
-  readonly onToggle: () => void
-  readonly children?: React.ReactChild | React.ReactChild[]
+type ToolbarPanelProps = {
+  className: string
+  toggleIcon: string
+  disabled?: boolean
+  spinToggle?: boolean
+  onToggle: () => void
+  children?: React.ReactNode
 }
 
 const ToolbarPanel: React.FC<ToolbarPanelProps> = ({

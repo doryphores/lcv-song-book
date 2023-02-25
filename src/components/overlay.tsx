@@ -2,10 +2,10 @@ import React from 'react'
 import classnames from 'classnames'
 import { CSSTransition } from 'react-transition-group'
 
-interface OverlayProps {
-  readonly open: boolean
-  readonly className?: string
-  readonly children: React.ReactNode
+type OverlayProps  = {
+  open: boolean
+  className?: string
+  children: React.ReactNode
 }
 
 const Overlay: React.FC<OverlayProps> = ({ open, className, children }) => (

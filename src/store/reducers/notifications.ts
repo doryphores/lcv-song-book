@@ -9,7 +9,7 @@ type Actions = RestoreAction | NotifyAction | DismissAction | DismissAllAction
 
 let nextID = 0
 
-export const notifications = (state: SavedNotification[] = [], action: Actions) => {
+export const notifications = (state: INotification[] = [], action: Actions) => {
   switch (action.type) {
     case NOTIFY:
       return concat(state, castArray(action.payload).map((notification) => ({

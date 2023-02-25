@@ -28,11 +28,11 @@ const ICON_GROUPS: { [key: string]: string } = {
   'voicemail': CommunicationSprite
 }
 
-interface IconProps {
-  readonly className: string
-  readonly icon: string
-  readonly style?: React.CSSProperties
-  readonly onClick?: () => void
+type IconProps = {
+  className: string
+  icon: string
+  style?: React.CSSProperties
+  onClick?: () => void
 }
 
 const Icon: React.FC<IconProps> = ({ className, icon, style, onClick }) => (

@@ -7,10 +7,10 @@ import { notifications } from '../selectors'
 import Icon from './icon'
 import { dismiss, selectSong } from '../actions'
 
-interface NotificationsProps {
-  readonly notifications: SavedNotification[]
-  readonly onDismiss: (id: number) => void
-  readonly onView: (song: string) => void
+type NotificationsProps = {
+  notifications: INotification[]
+  onDismiss: (id: number) => void
+  onView: (song: string) => void
 }
 
 const Notifications: React.FC<NotificationsProps> = ({ notifications, onDismiss, onView }) => (

@@ -8,9 +8,9 @@ import Toolbar from './toolbar'
 import SelectedSong from './selected_song'
 import Notifications from './notifications'
 
-interface AppProps {
-  readonly showSong: boolean
-  readonly hideScrollbars: boolean
+type AppProps = {
+  showSong: boolean
+  hideScrollbars: boolean
 }
 
 const App: React.FC<AppProps> = ({ showSong, hideScrollbars }) => (

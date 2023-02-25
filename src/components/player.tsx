@@ -41,24 +41,24 @@ const TRACK_SETTINGS = {
 
 type Track = 'voice' | 'full' | 'both'
 
-interface PlayerProps {
-  readonly className: string
-  readonly markers: SongMarkers
-  readonly voiceRecordingURL: string
-  readonly fullRecordingURL: string
-  readonly onAddMarker: (position: number) => void
-  readonly onRemoveMarker: (position: number) => void
+type PlayerProps = {
+  className: string
+  markers: SongMarkers
+  voiceRecordingURL: string
+  fullRecordingURL: string
+  onAddMarker: (position: number) => void
+  onRemoveMarker: (position: number) => void
 }
 
-interface PlayerState {
-  readonly track: Track
-  readonly duration: number
-  readonly progress: number
-  readonly playing: boolean
-  readonly loading: number
+type PlayerState = {
+  track: Track
+  duration: number
+  progress: number
+  playing: boolean
+  loading: number
 }
 
-interface PlayHeads {
+type PlayHeads = {
   voice: Howl
   full: Howl
 }

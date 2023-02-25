@@ -26,44 +26,41 @@ type Song = {
 
 type SongMarkers = Array<number>
 
-interface MarkerCollection {
+type MarkerCollection = {
   readonly [key: string]: SongMarkers
 }
 
-interface INotification {
-  readonly icon: string
-  readonly message: string
-  readonly song?: string
+type INotification = {
+  icon: string
+  message: string
+  song?: string
+  id?: number
 }
 
-interface SavedNotification extends INotification {
-  readonly id: number
-}
-
-interface Selection {
-  readonly song: string
-  readonly voice: string
+type Selection = {
+  song: string
+  voice: string
 }
 
 type List = 'all' | 'term'
 
-interface ApplicationState {
-  readonly selectedSong: string
-  readonly selectedVoice: string
-  readonly selectedList: List
-  readonly songs: Song[]
-  readonly markers: MarkerCollection
-  readonly notifications: SavedNotification[]
-  readonly settings: {
-    readonly username: string
-    readonly password: string
-    readonly lastResourceUpdate: number
+type ApplicationState = {
+  selectedSong: string
+  selectedVoice: string
+  selectedList: List
+  songs: Song[]
+  markers: MarkerCollection
+  notifications: SavedNotification[]
+  settings: {
+    username: string
+    password: string
+    lastResourceUpdate: number
   }
-  readonly ui: {
-    readonly sidebarVisible: boolean
-    readonly sidebarWidth: number
-    readonly settingsVisible: boolean
-    readonly shortcutsVisible: boolean
-    readonly hideScrollbars: boolean
+  ui: {
+    sidebarVisible: boolean
+    sidebarWidth: number
+    settingsVisible: boolean
+    shortcutsVisible: boolean
+    hideScrollbars: boolean
   }
 }

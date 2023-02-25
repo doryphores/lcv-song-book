@@ -2,19 +2,19 @@ import React from 'react'
 import classnames from 'classnames'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
-interface ProgressBarProps {
-  readonly className: string
-  readonly value: number
-  readonly duration: number
-  readonly markers: SongMarkers
-  readonly onSeek: (seek: number) => void
-  readonly onAddMarker: (position: number) => void
-  readonly onRemoveMarker: (position: number) => void
+type ProgressBarProps = {
+  className: string
+  value: number
+  duration: number
+  markers: SongMarkers
+  onSeek: (seek: number) => void
+  onAddMarker: (position: number) => void
+  onRemoveMarker: (position: number) => void
 }
 
-interface ProgressBarState {
-  readonly seeking: boolean
-  readonly seek: number
+type ProgressBarState = {
+  seeking: boolean
+  seek: number
 }
 
 export default class ProgressBar extends React.Component<ProgressBarProps, ProgressBarState> {
