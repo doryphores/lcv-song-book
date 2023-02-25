@@ -53,12 +53,10 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const [search, setSearch] = useState('')
   const [highlighted, setHighlighted] = useState(-1)
-  // FIXME: where is searching used?
-  // const [searching, setSearching] = useState(false)
+  const [searching, setSearching] = useState(false)
   const [newPlaylistLabel, setNewPlaylistLabel] = useState('')
   const [songToAdd, setSongToAdd] = useState('')
 
-  // FIXME: doesn't work because of deps
   useEffect(() => {
     toggleKeyCapture.current = new KeyCapture({
       's': () => {
@@ -69,9 +67,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     toggleKeyCapture.current.activate()
 
     return () => toggleKeyCapture.current.deactivate()
-  }, [])
+  }, [visible])
 
-  // FIXME: doesn't work because of deps
   useEffect(() => {
     searchingKeyCapture.current = new KeyCapture({
       'Enter': () => {
@@ -85,8 +82,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       'ArrowDown': () => updateHighlighted(highlighted + 1)
     })
 
+    if (searching) searchingKeyCapture.current.activate()
+
     return () => searchingKeyCapture.current.deactivate()
-  }, [])
+  }, [highlighted, searching])
 
   useEffect(() => {
     sidebar.current.addEventListener('transitionend', () => {
@@ -102,18 +101,21 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [])
 
-  // componentDidUpdate (prevProps: SidebarProps, prevState: SidebarState) {
-  //   if (this.state.highlighted > -1 && prevState.highlighted !== this.state.highlighted) {
-  //     const highlightedElement = this.songRefs[this.state.highlighted]
-  //     const listRect = this.songList.current!.getBoundingClientRect()
-  //     const itemRect = highlightedElement.getBoundingClientRect()
-  //     if (itemRect.bottom > listRect.bottom) {
-  //       highlightedElement.scrollIntoView(false)
-  //     } else if (itemRect.top < listRect.top) {
-  //       highlightedElement.scrollIntoView(true)
-  //     }
-  //   }
-  // }
+
+  useEffect(() => {
+    if (highlighted > -1) {
+      const highlightedElement = songRefs.current[highlighted]
+      if (!highlightedElement) return
+
+      const listRect = songList.current.getBoundingClientRect()
+      const itemRect = highlightedElement.getBoundingClientRect()
+      if (itemRect.bottom > listRect.bottom) {
+        highlightedElement.scrollIntoView(false)
+      } else if (itemRect.top < listRect.top) {
+        highlightedElement.scrollIntoView(true)
+      }
+    }
+  }, [highlighted])
 
   const filterSongs = useCallback(() => {
     if (selectedPlaylist !== '') {
@@ -134,17 +136,19 @@ const Sidebar: React.FC<SidebarProps> = ({
     } else if (value >= listLength) {
       value = 0
     }
+
+    console.log(value)
     setHighlighted(value)
   }, [filterSongs])
 
   const startSearch = useCallback(() => {
-    // setSearching(true)
+    setSearching(true)
     setHighlighted(filterSongs().findIndex(s => s.title === selectedSongTitle))
     searchingKeyCapture.current.activate()
   }, [selectedSongTitle])
 
   const stopSearch = useCallback(() => {
-    // setSearching(false)
+    setSearching(false)
     setHighlighted(-1)
     searchingKeyCapture.current.deactivate()
   }, [])
