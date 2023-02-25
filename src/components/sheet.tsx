@@ -47,14 +47,6 @@ const Sheet: React.FC<SheetProps> = ({
   }, [])
 
   useEffect(() => {
-    const onResize = debounce(() => renderPDF(), 250)
-    window.addEventListener('resize', onResize)
-    return () => {
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
-
-  useEffect(() => {
     loadPDF(pdfURL)
   }, [pdfURL])
 
@@ -113,6 +105,14 @@ const Sheet: React.FC<SheetProps> = ({
            .then(() => setLoading(false))
            .catch(err => console.log(err))
   }
+
+  useEffect(() => {
+    const onResize = debounce(renderPDF, 250)
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
+  }, [renderPDF])
 
   const classNames = useCallback((classNames: string) => {
     return classnames(className, classNames, {
