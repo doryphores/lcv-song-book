@@ -153,10 +153,10 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
           this.configureTrack('voice')
           if (this.playHeads === undefined) return
           this.playHeads.voice.seek(this.state.progress)
-          this.setState({
-            loading: this.state.loading - 1,
+          this.setState((s) => ({
+            loading: s.loading - 1,
             duration: this.playHeads.voice.duration()
-          })
+          }))
         },
         onplay: () => {
           this.setState({
@@ -184,9 +184,7 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
           this.configureTrack('full')
           if (this.playHeads === undefined) return
           this.playHeads.full.seek(this.state.progress)
-          this.setState({
-            loading: this.state.loading - 1
-          })
+          this.setState((s) => ({ loading: s.loading - 1 }))
         }
       })
     }
