@@ -21,7 +21,7 @@ if (!gotTheLock) {
     }
   })
 
-  app.whenReady().then(async () => {
+  setupFileCache().then(async () => {
     const STORE_PATH = path.join(
       app.getPath('userData'),
       'store.json'
