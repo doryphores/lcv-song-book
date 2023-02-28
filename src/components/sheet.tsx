@@ -62,7 +62,7 @@ const Sheet: React.FC<SheetProps> = ({
 
     scrollerElement.current.scrollTop = 0
 
-    pdfDocument.current = await PDFJS.getDocument(pdfURL).promise
+    pdfDocument.current = await PDFJS.getDocument(pdfURL.replace('https://', 'lcvfile://')).promise
 
     const pdfPage = await pdfDocument.current.getPage(1)
     const viewport = pdfPage.getViewport({ scale: 1.0 })
