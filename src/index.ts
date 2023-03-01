@@ -5,62 +5,51 @@ import request from 'request'
 
 import { getSongs } from './scraper';
 import { setupFileCache } from './file_cache';
-import { configureAppWindow } from './app_window';
+import { createAppWindow } from './app_window';
 
-let appWindow: BrowserWindow = null
+async function start () {
+  await setupFileCache()
 
-const gotTheLock = app.requestSingleInstanceLock()
+  const appWindow: BrowserWindow = await createAppWindow()
 
-if (!gotTheLock) {
-  app.quit()
-} else {
-  app.on('second-instance', () => {
-    if (appWindow) {
-      if (appWindow.isMinimized()) appWindow.restore()
-      appWindow.focus()
+  const STORE_PATH = path.join(
+    app.getPath('userData'),
+    'store.json'
+  )
+
+  ipcMain.handle('read-store', async () => {
+    try {
+      return await readJSON(STORE_PATH)
+    } catch (err) {
+      if (err.code === 'ENOENT') return {}
+      throw err
     }
   })
 
-  setupFileCache().then(async () => {
-    const STORE_PATH = path.join(
-      app.getPath('userData'),
-      'store.json'
-    )
+  ipcMain.handle('write-store', (_event, data) => {
+    outputJSONSync(STORE_PATH, data)
+  })
 
-    ipcMain.handle('read-store', async () => {
-      try {
-        return await readJSON(STORE_PATH)
-      } catch (err) {
-        if (err.code === 'ENOENT') return {}
-        throw err
-      }
+  ipcMain.handle('get-name', () => app.getName())
+
+  ipcMain.handle('download-file', (_event, fileUrl: string) => {
+    const filename = decodeURIComponent(fileUrl.split('/').pop())
+    const downloadPath = path.join(app.getPath('downloads'), filename)
+    const stream = createWriteStream(downloadPath)
+    request(fileUrl).pipe(stream).on('finish', () => {
+      shell.openPath(downloadPath)
     })
+  })
 
-    ipcMain.handle('write-store', (_event, data) => {
-      outputJSONSync(STORE_PATH, data)
-    })
-
-    ipcMain.handle('get-name', () => app.getName())
-
-    ipcMain.handle('download-file', (_event, fileUrl: string) => {
-      const filename = decodeURIComponent(fileUrl.split('/').pop())
-      const downloadPath = path.join(app.getPath('downloads'), filename)
-      const stream = createWriteStream(downloadPath)
-      request(fileUrl).pipe(stream).on('finish', () => {
-        shell.openPath(downloadPath)
-      })
-    })
-
-    ipcMain.handle('scrape', async (_event, creds: Credentials) => {
-      const result: IPCResult = {}
-      try {
-        result.value = await getSongs(appWindow, creds)
-      } catch (error) {
-        result.error = error.message
-      }
-      return result
-    })
-
-    appWindow = await configureAppWindow()
+  ipcMain.handle('scrape', async (_event, creds: Credentials) => {
+    const result: IPCResult = {}
+    try {
+      result.value = await getSongs(appWindow, creds)
+    } catch (error) {
+      result.error = error.message
+    }
+    return result
   })
 }
+
+start()
