@@ -1,4 +1,4 @@
-import type { ModuleOptions } from 'webpack';
+import type { ModuleOptions } from 'webpack'
 
 export const rules: Required<ModuleOptions>['rules'] = [
   // Add support for native node modules
@@ -40,4 +40,4 @@ export const rules: Required<ModuleOptions>['rules'] = [
       },
     ],
   },
-];
+]

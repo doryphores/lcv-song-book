@@ -3,9 +3,9 @@ import path from 'path'
 import { outputJSONSync, readJSON, createWriteStream } from 'fs-extra'
 import request from 'request'
 
-import { getSongs } from './scraper';
-import { setupFileCache } from './file_cache';
-import { createAppWindow } from './app_window';
+import { getSongs } from './scraper'
+import { setupFileCache } from './file_cache'
+import { createAppWindow } from './app_window'
 
 async function start () {
   await setupFileCache()

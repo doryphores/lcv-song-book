@@ -12,7 +12,7 @@ type SheetProps = {
   pdfURL: string
 }
 
-PDFJS.GlobalWorkerOptions.workerSrc = PDFWorker;
+PDFJS.GlobalWorkerOptions.workerSrc = PDFWorker
 
 const Sheet: React.FC<SheetProps> = ({
   className,
@@ -28,7 +28,7 @@ const Sheet: React.FC<SheetProps> = ({
   const pages = useRef<HTMLDivElement[]>([])
 
   if (pages.current.length !== numPages) {
-    pages.current = Array(numPages).fill(null).map((_, i) => pages.current[i]);
+    pages.current = Array(numPages).fill(null).map((_, i) => pages.current[i])
   }
 
   const scrollerElement = useRef<HTMLDivElement>()

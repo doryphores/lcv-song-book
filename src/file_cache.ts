@@ -1,6 +1,6 @@
 import { app, protocol } from 'electron'
 import path from 'path'
-import { temporaryFile } from 'tempy';
+import { temporaryFile } from 'tempy'
 import { createWriteStream, ensureDir, pathExists, move, WriteStream } from 'fs-extra'
 import request from 'request'
 
