@@ -5,6 +5,7 @@ import { createWriteStream, ensureDir, pathExists, move, WriteStream } from 'fs-
 import request from 'request'
 
 export async function setupFileCache () {
+  // this needs to be done before app is ready
   protocol.registerSchemesAsPrivileged([
     { scheme: 'lcvfile', privileges: { bypassCSP: true, stream: true } }
   ])
@@ -15,6 +16,7 @@ export async function setupFileCache () {
 
   const writeStreams: Record<string, WriteStream> = {}
 
+  // and this needs to be done after app is ready
   protocol.registerFileProtocol('lcvfile', async (req, callback) => {
     const url = new URL(req.url)
     const filePath = path.join(cachePath, url.pathname)
