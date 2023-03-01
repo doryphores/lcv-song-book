@@ -1,5 +1,5 @@
-import { BrowserView, BrowserWindow, session, WebRequestFilter } from "electron"
-import { mapKeys, sortBy } from "lodash"
+import { BrowserView, BrowserWindow, session, WebRequestFilter } from 'electron'
+import { mapKeys, sortBy } from 'lodash'
 
 export async function getSongs (appWindow: BrowserWindow, credentials: Credentials) {
   const scraper = new Scraper(appWindow)

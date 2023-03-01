@@ -4,7 +4,7 @@ declare module '*.png';
 declare module '*.svg';
 declare module '*.worker';
 
-declare const api: typeof import("./api").default
+declare const api: typeof import('./api').default
 
 type IPCResult = {
   value?: unknown
