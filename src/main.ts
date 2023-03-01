@@ -18,12 +18,7 @@ async function start () {
   )
 
   ipcMain.handle('read-store', async () => {
-    try {
-      return await readJSON(STORE_PATH)
-    } catch (err) {
-      if (err.code === 'ENOENT') return {}
-      throw err
-    }
+    return await readJSON(STORE_PATH, { throws: false }) || {}
   })
 
   ipcMain.handle('write-store', (_event, data) => {
