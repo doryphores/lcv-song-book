@@ -41,7 +41,7 @@ class Scraper {
         'woff',
         'otf',
         'woff2'
-      ].map(ext => `https://*/*.${ext}`)
+      ].map(ext => `https://*/*.${ext}`).concat(['https://www.googletagmanager.com/*'])
     }
 
     // block all unnecessary asset requests to optimize scraping process
@@ -56,10 +56,12 @@ class Scraper {
     try {
       await this.login(credentials)
       await this.loadURL(SONGS_URL)
+      const onSongListingPage = await this.waitForElement('h1.songtitle')
+      if (!onSongListingPage) throw new Error('Failed to collect songs from LCV website. Please try again.')
       this.termSongs = await this.collectTermSongTitles()
       await this.collectSongs()
       if (this.songs.length === 0) {
-        throw new Error('Failed to collect songs from LCV website')
+        throw new Error('Failed to collect songs from LCV website. Please try again.')
       }
       return this.songs
     } finally {
@@ -88,6 +90,7 @@ class Scraper {
     }
 
     for (const song of this.songs) {
+      console.log(song.title)
       const { sheets, recordings } = await this.collectSongDetails(song.url)
 
       song.thisTerm = this.isTermSong(song)
@@ -121,7 +124,6 @@ class Scraper {
 
   private async collectSongDetails (url: string): Promise<Song> {
     await this.loadURL(url)
-    console.log(`collecting ${url}`)
     return this.runScript(`
       (function () {
         const sheets = Array.from(document.querySelectorAll('.pdf-button')).reduce((r, button) => {
