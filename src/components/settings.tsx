@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
-import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../actions'
+import { TOGGLE_SETTINGS, SAVE_SETTINGS } from '../store/actions'
 import ToolbarPanel from './toolbar_panel'
 import Icon from './icon'
 import Modal from './modal'

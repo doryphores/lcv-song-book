@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { Dispatch } from 'redux'
 
-import { notifications } from '../selectors'
+import { notifications } from '../store/selectors'
 import Icon from './icon'
-import { dismiss, selectSong } from '../actions'
+import { dismiss, selectSong } from '../store/actions'
 
 type NotificationsProps = {
   notifications: INotification[]

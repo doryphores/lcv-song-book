@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 import * as reducers from './reducers'
-import { RESTORE } from '../actions'
+import { RESTORE } from './actions'
 
 export async function configureStore () {
   const data = await api.readStore()

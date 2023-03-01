@@ -3,7 +3,7 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { selectSong, resizeSidebar, toggleSidebar, selectList } from '../actions'
+import { selectSong, resizeSidebar, toggleSidebar, selectList } from '../store/actions'
 import Icon from './icon'
 import Resizer from './resizer'
 import KeyCapture from '../key_capture'

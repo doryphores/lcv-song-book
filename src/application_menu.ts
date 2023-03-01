@@ -1,6 +1,6 @@
 import { app, Menu, shell, BrowserWindow } from 'electron'
 
-import { TOGGLE_SIDEBAR, TOGGLE_SETTINGS, TOGGLE_SHORTCUTS } from './actions'
+import { TOGGLE_SIDEBAR, TOGGLE_SETTINGS, TOGGLE_SHORTCUTS } from './store/actions'
 
 let win: BrowserWindow
 

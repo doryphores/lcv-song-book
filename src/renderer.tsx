@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
 import { configureStore } from './store'
-import { TOGGLE_SETTINGS } from './actions'
+import { TOGGLE_SETTINGS } from './store/actions'
 import App from './components/app'
 
 import './scss/app.scss'

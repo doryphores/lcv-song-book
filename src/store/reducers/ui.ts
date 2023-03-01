@@ -3,7 +3,7 @@ import {
   TOGGLE_SETTINGS, TOGGLE_SHORTCUTS, SAVE_SETTINGS,
   RestoreAction, ResizeSidebarAction, ToggleSidebarAction,
   ToggleSettingsAction, ToggleShortcutsAction, SaveSettingsAction
-} from '../../actions'
+} from '../actions'
 
 type Actions = RestoreAction
   | ResizeSidebarAction

@@ -3,7 +3,7 @@ import { castArray, concat, reject } from 'lodash'
 import {
   RESTORE, NOTIFY, DISMISS, DISMISS_ALL,
   RestoreAction, NotifyAction, DismissAction, DismissAllAction
-} from '../../actions'
+} from '../actions'
 
 type Actions = RestoreAction | NotifyAction | DismissAction | DismissAllAction
 

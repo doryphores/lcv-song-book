@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { loadSongs } from '../actions'
+import { loadSongs } from '../store/actions'
 
 import ToolbarPanel from './toolbar_panel'
 

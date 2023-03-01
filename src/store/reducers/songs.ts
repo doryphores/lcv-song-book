@@ -1,4 +1,4 @@
-import { LOAD_SONGS, LoadResourcesAction } from '../../actions'
+import { LOAD_SONGS, LoadResourcesAction } from '../actions'
 
 const initialState: Song[] = []
 

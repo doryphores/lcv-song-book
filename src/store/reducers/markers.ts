@@ -3,7 +3,7 @@ import { findIndex, sortedIndex, without } from 'lodash'
 import {
   ADD_MARKER, REMOVE_MARKER,
   AddMarkerAction, RemoveMarkerAction
-} from '../../actions'
+} from '../actions'
 
 type Actions = AddMarkerAction | RemoveMarkerAction
 

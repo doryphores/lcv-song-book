@@ -3,8 +3,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { addMarker, removeMarker, AddMarkerAction, RemoveMarkerAction } from '../actions'
-import { fullRecordingURL, sheetMusicURL, songMarkers, voiceRecordingURL } from '../selectors'
+import { addMarker, removeMarker, AddMarkerAction, RemoveMarkerAction } from '../store/actions'
+import { fullRecordingURL, sheetMusicURL, songMarkers, voiceRecordingURL } from '../store/selectors'
 import Player from './player'
 import Sheet from './sheet'
 

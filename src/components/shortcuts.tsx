@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
-import { TOGGLE_SHORTCUTS } from '../actions'
+import { TOGGLE_SHORTCUTS } from '../store/actions'
 import ToolbarPanel from './toolbar_panel'
 import Overlay from './overlay'
 import KeyCapture from '../key_capture'

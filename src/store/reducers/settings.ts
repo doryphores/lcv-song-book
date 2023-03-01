@@ -1,7 +1,7 @@
 import {
   RESTORE, SAVE_SETTINGS, LOAD_SONGS,
   RestoreAction, SaveSettingsAction, LoadResourcesAction
-} from '../../actions'
+} from '../actions'
 
 type Actions = RestoreAction | SaveSettingsAction | LoadResourcesAction
 

@@ -1,4 +1,4 @@
-import { SelectVoiceAction, SELECT_VOICE } from '../../actions'
+import { SelectVoiceAction, SELECT_VOICE } from '../actions'
 
 export const selectedVoice = (state = 'Tenor 1', action: SelectVoiceAction) => {
   switch (action.type) {

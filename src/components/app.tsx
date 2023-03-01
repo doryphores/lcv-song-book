@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 
-import { isSongSelected } from '../selectors'
+import { isSongSelected } from '../store/selectors'
 import Sidebar from './sidebar'
 import Toolbar from './toolbar'
 import SelectedSong from './selected_song'
