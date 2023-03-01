@@ -24,7 +24,7 @@ export default class ProgressBar extends React.Component<ProgressBarProps, Progr
     super(props)
     this.state = {
       seeking: false,
-      seek: props.value
+      seek: props.value,
     }
     this.progressBar = React.createRef()
   }
@@ -70,7 +70,7 @@ export default class ProgressBar extends React.Component<ProgressBarProps, Progr
   updateSeek (seek: number) {
     this.setState({
       seeking: true,
-      seek
+      seek,
     })
   }
 

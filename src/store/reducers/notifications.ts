@@ -2,7 +2,7 @@ import { castArray, concat, reject } from 'lodash'
 
 import {
   RESTORE, NOTIFY, DISMISS, DISMISS_ALL,
-  RestoreAction, NotifyAction, DismissAction, DismissAllAction
+  RestoreAction, NotifyAction, DismissAction, DismissAllAction,
 } from '../actions'
 
 type Actions = RestoreAction | NotifyAction | DismissAction | DismissAllAction
@@ -14,7 +14,7 @@ export const notifications = (state: INotification[] = [], action: Actions) => {
     case NOTIFY:
       return concat(state, castArray(action.payload).map((notification) => ({
         id: nextID++,
-        ...notification
+        ...notification,
       })))
     case DISMISS:
       return reject(state, n => n.id === action.payload)

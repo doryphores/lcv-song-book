@@ -15,7 +15,7 @@ export default class KeyCapture {
   register (keys: string, handler: () => void) {
     keys.split(' ').forEach(key => {
       this.listeners[key] = Object.assign({
-        ignoreInForms: this.isChar(key) || ['ArrowLeft', 'ArrowRight', 'Space'].includes(key)
+        ignoreInForms: this.isChar(key) || ['ArrowLeft', 'ArrowRight', 'Space'].includes(key),
       }, { handler: handler.bind(null, key) })
     })
   }

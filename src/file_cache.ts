@@ -7,7 +7,7 @@ import request from 'request'
 export async function setupFileCache () {
   // this needs to be done before app is ready
   protocol.registerSchemesAsPrivileged([
-    { scheme: 'lcvfile', privileges: { bypassCSP: true, stream: true } }
+    { scheme: 'lcvfile', privileges: { bypassCSP: true, stream: true } },
   ])
 
   await app.whenReady()

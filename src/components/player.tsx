@@ -12,31 +12,31 @@ const TRACK_SETTINGS = {
   voice: {
     voice: {
       stereo: 0,
-      volume: 1
+      volume: 1,
     },
     full: {
       stereo: 0,
-      volume: 0
+      volume: 0,
     },
     both: {
       stereo: -1,
-      volume: 0.5
-    }
+      volume: 0.5,
+    },
   },
   full: {
     voice: {
       stereo: 0,
-      volume: 0
+      volume: 0,
     },
     full: {
       stereo: 0,
-      volume: 1
+      volume: 1,
     },
     both: {
       stereo: 1,
-      volume: 0.5
-    }
-  }
+      volume: 0.5,
+    },
+  },
 }
 
 type Track = 'voice' | 'full' | 'both'
@@ -76,7 +76,7 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
       duration: 0,
       progress: 0,
       playing: false,
-      loading: 0
+      loading: 0,
     }
 
     this.keyCapture = new KeyCapture({
@@ -96,7 +96,7 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
       'm': () => this.props.onAddMarker(this.state.progress),
       'f': () => this.selectTrack('full'),
       'v': () => this.selectTrack('voice'),
-      'b': () => this.selectTrack('both')
+      'b': () => this.selectTrack('both'),
     })
   }
 
@@ -141,7 +141,7 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
       loading: 2,
       playing: false,
       duration: 0,
-      progress: 0
+      progress: 0,
     })
 
     this.playHeads = {
@@ -154,26 +154,26 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
           this.playHeads.voice.seek(this.state.progress)
           this.setState((s) => ({
             loading: s.loading - 1,
-            duration: this.playHeads.voice.duration()
+            duration: this.playHeads.voice.duration(),
           }))
         },
         onplay: () => {
           this.setState({
-            playing: true
+            playing: true,
           })
           this.step()
         },
         onpause: () => {
           this.setState({
-            playing: false
+            playing: false,
           })
         },
         onend: () => {
           this.setState({
             progress: 0,
-            playing: false
+            playing: false,
           })
-        }
+        },
       }),
       full: new Howl({
         src: [this.props.fullRecordingURL.replace('https://', 'lcvfile://')],
@@ -183,8 +183,8 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
           if (this.playHeads === undefined) return
           this.playHeads.full.seek(this.state.progress)
           this.setState((s) => ({ loading: s.loading - 1 }))
-        }
-      })
+        },
+      }),
     }
   }
 
@@ -228,13 +228,13 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
   classNames (classNames: string) {
     return classnames(this.props.className, classNames, {
       'player--loading': this.state.loading > 0,
-      'player--empty': this.isEmpty()
+      'player--empty': this.isEmpty(),
     })
   }
 
   toggleClassNames (track: string) {
     return classnames('toggle', {
-      'toggle--selected': track === this.state.track
+      'toggle--selected': track === this.state.track,
     })
   }
 

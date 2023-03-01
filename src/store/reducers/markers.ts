@@ -2,7 +2,7 @@ import { findIndex, sortedIndex, without } from 'lodash'
 
 import {
   ADD_MARKER, REMOVE_MARKER,
-  AddMarkerAction, RemoveMarkerAction
+  AddMarkerAction, RemoveMarkerAction,
 } from '../actions'
 
 type Actions = AddMarkerAction | RemoveMarkerAction
@@ -16,12 +16,12 @@ export const markers = (state = initiaState, action: Actions) => {
     case ADD_MARKER:
       return {
         ...state,
-        [action.payload.song]: addMarker(state[action.payload.song], action.payload.position)
+        [action.payload.song]: addMarker(state[action.payload.song], action.payload.position),
       }
     case REMOVE_MARKER:
       return {
         ...state,
-        [action.payload.song]: without(state[action.payload.song], action.payload.position)
+        [action.payload.song]: without(state[action.payload.song], action.payload.position),
       }
     default:
       return state

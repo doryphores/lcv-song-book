@@ -82,7 +82,7 @@ export function loadSongs () {
     try {
       songs = await api.scrape({
         username: getState().settings.username,
-        password: getState().settings.password
+        password: getState().settings.password,
       })
     } catch (error) {
       dispatch(alert(error.message))
@@ -91,7 +91,7 @@ export function loadSongs () {
 
     dispatch(createAction(LOAD_SONGS, {
       timestamp: Date.now(),
-      songs
+      songs,
     }))
 
     const newSongs = difference(getState().songs.map(s => s.title), songsBefore)
@@ -111,13 +111,13 @@ export function loadSongs () {
       newSongs.map(s => ({
         message: 'New song:',
         icon: 'audiotrack',
-        song: s
+        song: s,
       })),
       newRecordings.map(s => ({
         message: 'New recording for',
         icon: 'voicemail',
-        song: s
-      }))
+        song: s,
+      })),
     )
 
     dispatch(notify(notifications))
@@ -140,21 +140,21 @@ export function notify (notifications: INotification[]): NotifyAction {
 export function info (message: string) {
   return notify([{
     message,
-    icon: 'info'
+    icon: 'info',
   }])
 }
 
 export function alert (message: string) {
   return notify([{
     message,
-    icon: 'error'
+    icon: 'error',
   }])
 }
 
 export function success (message: string) {
   return notify([{
     message,
-    icon: 'check'
+    icon: 'check',
   }])
 }
 
@@ -212,7 +212,7 @@ export function addMarker (position: number): ThunkAction<void, ApplicationState
   return function (dispatch, getState) {
     dispatch(createAction(ADD_MARKER, {
       song: getState().selectedSong,
-      position
+      position,
     }))
   }
 }
@@ -226,7 +226,7 @@ export function removeMarker (position: number): ThunkAction<void, ApplicationSt
   return function (dispatch, getState) {
     dispatch(createAction(REMOVE_MARKER, {
       song: getState().selectedSong,
-      position
+      position,
     }))
   }
 }

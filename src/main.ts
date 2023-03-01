@@ -14,7 +14,7 @@ async function start () {
 
   const STORE_PATH = path.join(
     app.getPath('userData'),
-    'store.json'
+    'store.json',
   )
 
   ipcMain.handle('read-store', async () => {

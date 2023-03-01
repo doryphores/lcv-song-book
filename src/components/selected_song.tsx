@@ -25,7 +25,7 @@ const SelectedSong: React.FC<SelectedSongProps> = ({
   voiceRecordingURL,
   songMarkers,
   onAddMarker,
-  onRemoveMarker
+  onRemoveMarker,
 }) => (
   <div className={classnames(className, 'u-flex u-flex--vertical')}>
     {sheetMusicURL
@@ -49,14 +49,14 @@ function mapStateToProps (state: ApplicationState) {
     sheetMusicURL: sheetMusicURL(state),
     fullRecordingURL: fullRecordingURL(state),
     voiceRecordingURL: voiceRecordingURL(state),
-    songMarkers: songMarkers(state)
+    songMarkers: songMarkers(state),
   }
 }
 
 function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, AddMarkerAction | RemoveMarkerAction>) {
   return {
     onAddMarker: (position: number) => dispatch(addMarker(position)),
-    onRemoveMarker: (position: number) => dispatch(removeMarker(position))
+    onRemoveMarker: (position: number) => dispatch(removeMarker(position)),
   }
 }
 

@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggle,
   onSelect,
   onSelectList,
-  onResize
+  onResize,
 }) => {
   const toggleKeyCapture = useRef<KeyCapture>(null)
   const searchingKeyCapture = useRef<KeyCapture>(null)
@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       's': () => {
         if (!visible) onToggle()
         searchInput.current.select()
-      }
+      },
     })
     toggleKeyCapture.current.activate()
 
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       },
       'Escape': () => searchInput.current.blur(),
       'ArrowUp': () => updateHighlighted(highlighted - 1),
-      'ArrowDown': () => updateHighlighted(highlighted + 1)
+      'ArrowDown': () => updateHighlighted(highlighted + 1),
     })
 
     if (searching) searchingKeyCapture.current.activate()
@@ -143,14 +143,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const classNames = useCallback((classNames: string) => {
     return classnames(classNames, className, {
-      'sidebar--collapsed': !visible
+      'sidebar--collapsed': !visible,
     })
   }, [visible, className])
 
   const itemClassNames = useCallback((title: string, index: number) => {
     return classnames('sidebar__menu-item', {
       'sidebar__menu-item--selected': title === selectedSongTitle,
-      'sidebar__menu-item--highlighted': index === highlighted
+      'sidebar__menu-item--highlighted': index === highlighted,
     })
   }, [selectedSongTitle, highlighted])
 
@@ -213,7 +213,7 @@ function mapDispatchToProps (dispatch: Dispatch) {
     onToggle: () => dispatch(toggleSidebar()),
     onSelect: (title: string) => dispatch(selectSong(title)),
     onSelectList: (list: List) => dispatch(selectList(list)),
-    onResize: (width: number) => dispatch(resizeSidebar(width))
+    onResize: (width: number) => dispatch(resizeSidebar(width)),
   }
 }
 
@@ -223,7 +223,7 @@ function mapStateToProps (state: ApplicationState) {
     selectedList: state.selectedList,
     songs: state.songs,
     visible: state.ui.sidebarVisible,
-    width: state.ui.sidebarWidth
+    width: state.ui.sidebarWidth,
   }
 }
 

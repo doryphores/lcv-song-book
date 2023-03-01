@@ -12,7 +12,7 @@ configureStore().then(store => {
   root.render(
     <Provider store={store}>
       <App />
-    </Provider>
+    </Provider>,
   )
 
   store.subscribe(() => setTitle(store.getState()))

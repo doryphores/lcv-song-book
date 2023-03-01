@@ -14,7 +14,7 @@ type UpdaterProps = {
 
 const Updater: React.FC<UpdaterProps> = ({
   className,
-  onLoadSongs
+  onLoadSongs,
 }) => {
   const [started, setStarted] = useState(false)
   const start = useCallback(async () => {
@@ -35,7 +35,7 @@ const Updater: React.FC<UpdaterProps> = ({
 
 function mapDispatchToProps (dispatch: ThunkDispatch<ApplicationState, void, Action>) {
   return {
-    onLoadSongs: async () => await dispatch(loadSongs())
+    onLoadSongs: async () => await dispatch(loadSongs()),
   }
 }
 

@@ -16,7 +16,7 @@ PDFJS.GlobalWorkerOptions.workerSrc = PDFWorker;
 
 const Sheet: React.FC<SheetProps> = ({
   className,
-  pdfURL
+  pdfURL,
 }) => {
   const [numPages, setNumPages] = useState(0)
   const [pageRatio, setPageRatio] = useState(0)
@@ -39,7 +39,7 @@ const Sheet: React.FC<SheetProps> = ({
       'PageUp PageDown': () => {
         scrollerElement.current.focus()
         return true
-      }
+      },
     })
     keyCapture.current.activate()
 
@@ -88,7 +88,7 @@ const Sheet: React.FC<SheetProps> = ({
 
         return pdfPage.render({
           canvasContext: canvas.getContext('2d'),
-          viewport: viewport
+          viewport: viewport,
         }).promise.then(() => {
           const page = pages.current[i]
 
@@ -116,7 +116,7 @@ const Sheet: React.FC<SheetProps> = ({
 
   const classNames = useCallback((classNames: string) => {
     return classnames(className, classNames, {
-      'sheet--loading': loading
+      'sheet--loading': loading,
     })
   }, [className, loading])
 

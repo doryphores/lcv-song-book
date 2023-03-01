@@ -8,7 +8,7 @@ type ResizerProps  = {
 
 const Resizer: React.FC<ResizerProps> = ({
   className,
-  onResize
+  onResize,
 }) => {
   const handleResize = useCallback((e: MouseEvent) => {
     onResize(e.clientX)

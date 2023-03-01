@@ -11,101 +11,101 @@ const template: Electron.MenuItemConstructorOptions[] = [
       {
         label: 'Undo',
         accelerator: 'CmdOrCtrl+Z',
-        role: 'undo'
+        role: 'undo',
       },
       {
         label: 'Redo',
         accelerator: 'Shift+CmdOrCtrl+Z',
-        role: 'redo'
+        role: 'redo',
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
         label: 'Cut',
         accelerator: 'CmdOrCtrl+X',
-        role: 'cut'
+        role: 'cut',
       },
       {
         label: 'Copy',
         accelerator: 'CmdOrCtrl+C',
-        role: 'copy'
+        role: 'copy',
       },
       {
         label: 'Paste',
         accelerator: 'CmdOrCtrl+V',
-        role: 'paste'
+        role: 'paste',
       },
       {
         label: 'Select All',
         accelerator: 'CmdOrCtrl+A',
-        role: 'selectAll'
+        role: 'selectAll',
       },
       {
         label: 'Preferences',
         click: () => win.webContents.send('dispatch-action', TOGGLE_SETTINGS),
-        accelerator: 'CmdOrCtrl+,'
-      }
-    ]
+        accelerator: 'CmdOrCtrl+,',
+      },
+    ],
   },
   {
     label: 'View',
     submenu: [
       {
-        role: 'togglefullscreen'
+        role: 'togglefullscreen',
       },
       {
         label: 'Toggle Sidebar',
         click: () => win.webContents.send('dispatch-action', TOGGLE_SIDEBAR),
-        accelerator: 'CmdOrCtrl+\\'
+        accelerator: 'CmdOrCtrl+\\',
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
-        role: 'resetZoom'
+        role: 'resetZoom',
       },
       {
-        role: 'zoomIn'
+        role: 'zoomIn',
       },
       {
-        role: 'zoomOut'
+        role: 'zoomOut',
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
         label: 'Developer',
         submenu: [
           {
-            role: 'reload'
+            role: 'reload',
           },
           {
-            role: 'toggleDevTools'
-          }
-        ]
-      }
-    ]
+            role: 'toggleDevTools',
+          },
+        ],
+      },
+    ],
   },
   {
     role: 'help',
     submenu: [
       {
         label: `Version ${app.getVersion()}`,
-        enabled: false
+        enabled: false,
       },
       {
         label: 'Learn More',
-        click () { shell.openExternal('https://github.com/doryphores/lcv_resources') }
+        click () { shell.openExternal('https://github.com/doryphores/lcv_resources') },
       },
       { type: 'separator' },
       {
         label: 'Keyboard shortcuts',
         click: () => win.webContents.send('dispatch-action', TOGGLE_SHORTCUTS),
-        accelerator: '?'
-      }
-    ]
-  }
+        accelerator: '?',
+      },
+    ],
+  },
 ]
 
 if (process.platform === 'darwin') {
@@ -113,43 +113,43 @@ if (process.platform === 'darwin') {
     label: app.getName(),
     submenu: [
       {
-        role: 'about'
+        role: 'about',
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
         role: 'services',
-        submenu: []
+        submenu: [],
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
-        role: 'hide'
+        role: 'hide',
       },
       {
-        role: 'hideOthers'
+        role: 'hideOthers',
       },
       {
-        role: 'unhide'
+        role: 'unhide',
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
-        role: 'quit'
-      }
-    ]
+        role: 'quit',
+      },
+    ],
   })
 } else {
   template.unshift({
     label: 'File',
     submenu: [
       {
-        role: 'quit'
-      }
-    ]
+        role: 'quit',
+      },
+    ],
   })
 }
 

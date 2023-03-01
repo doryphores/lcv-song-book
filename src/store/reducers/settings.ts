@@ -1,6 +1,6 @@
 import {
   RESTORE, SAVE_SETTINGS, LOAD_SONGS,
-  RestoreAction, SaveSettingsAction, LoadResourcesAction
+  RestoreAction, SaveSettingsAction, LoadResourcesAction,
 } from '../actions'
 
 type Actions = RestoreAction | SaveSettingsAction | LoadResourcesAction
@@ -8,7 +8,7 @@ type Actions = RestoreAction | SaveSettingsAction | LoadResourcesAction
 const initialState = {
   username: '',
   password: '',
-  lastResourceUpdate: 0
+  lastResourceUpdate: 0,
 }
 
 export const settings = (state = initialState, action: Actions) => {
@@ -16,17 +16,17 @@ export const settings = (state = initialState, action: Actions) => {
     case LOAD_SONGS:
       return {
         ...state,
-        lastResourceUpdate: action.payload.timestamp
+        lastResourceUpdate: action.payload.timestamp,
       }
     case SAVE_SETTINGS:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       }
     case RESTORE:
       return {
         ...initialState,
-        ...state
+        ...state,
       }
     default:
       return state

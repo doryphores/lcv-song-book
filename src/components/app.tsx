@@ -27,7 +27,7 @@ const App: React.FC<AppProps> = ({ showSong, hideScrollbars }) => (
 function mapStateToProps (state: ApplicationState) {
   return {
     showSong: isSongSelected(state),
-    hideScrollbars: state.ui.hideScrollbars
+    hideScrollbars: state.ui.hideScrollbars,
   }
 }
 

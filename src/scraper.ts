@@ -18,7 +18,7 @@ class Scraper {
   constructor (appWindow: BrowserWindow) {
     this.appWindow = appWindow
     this.view = new BrowserView({
-      webPreferences: { partition: this.setupSession() }
+      webPreferences: { partition: this.setupSession() },
     })
 
     this.appWindow.addBrowserView(this.view)
@@ -40,8 +40,8 @@ class Scraper {
         'svg',
         'woff',
         'otf',
-        'woff2'
-      ].map(ext => `https://*/*.${ext}`).concat(['https://www.googletagmanager.com/*'])
+        'woff2',
+      ].map(ext => `https://*/*.${ext}`).concat(['https://www.googletagmanager.com/*']),
     }
 
     // block all unnecessary asset requests to optimize scraping process
@@ -155,7 +155,7 @@ class Scraper {
   private runScript (script: string, userGesture = true) {
     return this.view.webContents.executeJavaScript(
       script,
-      userGesture
+      userGesture,
     )
   }
 

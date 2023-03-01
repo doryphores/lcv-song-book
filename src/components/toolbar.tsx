@@ -26,14 +26,14 @@ const VOICES: Record<string, string> = {
   'Tenor 1': 'Tenor 1',
   'Tenor 2': 'Tenor 2',
   'Bass 1': 'Bass 1',
-  'Bass 2': 'Bass 2'
+  'Bass 2': 'Bass 2',
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
   className,
   selectedVoice,
   sheetMusicURL,
-  onSelectVoice
+  onSelectVoice,
 }) => {
   const selectVoice = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
     onSelectVoice(e.target.value)
@@ -64,13 +64,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
 function mapStateToProps (state: ApplicationState) {
   return {
     selectedVoice: state.selectedVoice,
-    sheetMusicURL: sheetMusicURL(state)
+    sheetMusicURL: sheetMusicURL(state),
   }
 }
 
 function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    onSelectVoice: (voice: string) => dispatch(selectVoice(voice))
+    onSelectVoice: (voice: string) => dispatch(selectVoice(voice)),
   }
 }
 

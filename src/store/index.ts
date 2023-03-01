@@ -10,7 +10,7 @@ export async function configureStore () {
   const store = createStore(
     rootReducer,
     rootReducer(data, { type: RESTORE }),
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
   )
 
   api.onActionDispatch((actionType) => store.dispatch({ type: actionType }))

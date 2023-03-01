@@ -25,7 +25,7 @@ const ICON_GROUPS: { [key: string]: string } = {
   'refresh': NavigationSprite,
   'search': ActionSprite,
   'settings': ActionSprite,
-  'voicemail': CommunicationSprite
+  'voicemail': CommunicationSprite,
 }
 
 type IconProps = {

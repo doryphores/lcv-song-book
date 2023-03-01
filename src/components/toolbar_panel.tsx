@@ -18,7 +18,7 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = ({
   disabled = false,
   spinToggle = false,
   onToggle,
-  children
+  children,
 }) => (
   <div className={className}>
     {children}
@@ -33,7 +33,7 @@ const ToolbarPanel: React.FC<ToolbarPanelProps> = ({
 
 function buttonClassnames (spin: boolean) {
   return classnames('toolbar__button', {
-    'toolbar__button--spinning': spin
+    'toolbar__button--spinning': spin,
   })
 }
 

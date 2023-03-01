@@ -18,13 +18,13 @@ type ShortcutsProps = {
 const Shortcuts: React.FC<ShortcutsProps> = ({
   className,
   open,
-  onToggle
+  onToggle,
 }) => {
   const keyCapture = useRef<KeyCapture>()
 
   useEffect(() => {
     keyCapture.current = new KeyCapture({
-      'Escape': onToggle
+      'Escape': onToggle,
     })
 
     return () => keyCapture.current.deactivate()
@@ -135,7 +135,7 @@ function mapStateToProps (state: ApplicationState) {
 
 function mapDispatchToProps (dispatch: Dispatch) {
   return {
-    onToggle: () => dispatch({ type: TOGGLE_SHORTCUTS })
+    onToggle: () => dispatch({ type: TOGGLE_SHORTCUTS }),
   }
 }
 

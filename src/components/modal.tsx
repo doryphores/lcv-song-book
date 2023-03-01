@@ -20,13 +20,13 @@ const Modal: React.FC<ModalProps> = ({
   title,
   onSubmit,
   onCancel,
-  children
+  children,
 }) => {
   const keyCapture = useRef<KeyCapture>(null)
 
   useEffect(() => {
     keyCapture.current = new KeyCapture({
-      'Escape': onCancel
+      'Escape': onCancel,
     })
 
     return () => keyCapture.current.deactivate()

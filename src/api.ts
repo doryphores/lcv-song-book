@@ -15,5 +15,5 @@ export default {
     const result = await ipcRenderer.invoke('scrape', creds)
     if (result.error) throw new Error(result.error)
     return result.value
-  }
+  },
 }

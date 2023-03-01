@@ -27,7 +27,7 @@ const Settings: React.FC<SettingsProps> = ({
   className,
   open,
   onSubmit,
-  onToggle
+  onToggle,
 }) => {
   const [state, setState] = useState<SettingsState>({ username, password, hideScrollbars })
 
@@ -36,7 +36,7 @@ const Settings: React.FC<SettingsProps> = ({
       setState({
         username: username,
         password: password,
-        hideScrollbars: hideScrollbars
+        hideScrollbars: hideScrollbars,
       })
     }
   }, [open])
@@ -45,7 +45,7 @@ const Settings: React.FC<SettingsProps> = ({
     onSubmit({
       username: state.username,
       password: state.password,
-      hideScrollbars: state.hideScrollbars
+      hideScrollbars: state.hideScrollbars,
     })
   }, [state])
 
@@ -100,7 +100,7 @@ function mapStateToProps (state: ApplicationState) {
     open: state.ui.settingsVisible,
     username: state.settings.username,
     password: state.settings.password,
-    hideScrollbars: state.ui.hideScrollbars
+    hideScrollbars: state.ui.hideScrollbars,
   }
 }
 
@@ -110,9 +110,9 @@ function mapDispatchToProps (dispatch: Dispatch) {
     onSubmit: (settings: SettingsState) => {
       dispatch({
         type: SAVE_SETTINGS,
-        payload: settings
+        payload: settings,
       })
-    }
+    },
   }
 }
 

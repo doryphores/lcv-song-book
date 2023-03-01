@@ -36,14 +36,14 @@ const Notifications: React.FC<NotificationsProps> = ({ notifications, onDismiss,
 
 function mapStateToProps (state: ApplicationState) {
   return {
-    notifications: notifications(state)
+    notifications: notifications(state),
   }
 }
 
 function mapDispatchToProps (dispatch: Dispatch) {
   return {
     onDismiss: (id: number) => dispatch(dismiss(id)),
-    onView: (song: string) => dispatch(selectSong(song))
+    onView: (song: string) => dispatch(selectSong(song)),
   }
 }
 
