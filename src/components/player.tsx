@@ -160,8 +160,7 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
         onplay: () => {
           this.setState({
             playing: true,
-          })
-          this.step()
+          }, () => this.step())
         },
         onpause: () => {
           this.setState({
@@ -197,8 +196,8 @@ export default class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   step () {
-    if (this.playHeads !== undefined && this.playHeads.voice.playing()) {
-      this.setState({ progress: this.playHeads['voice'].seek() as number || 0 })
+    if (this.state.playing) {
+      this.setState({ progress: this.playHeads['voice'].seek() || 0 })
       this.animationFrame = window.requestAnimationFrame(this.step.bind(this))
     }
   }
