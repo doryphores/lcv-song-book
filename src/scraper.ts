@@ -94,6 +94,13 @@ class Scraper {
       return await this.collectSongs()
     }
 
+    this.broadcastProgress({
+      total: this.songs.length,
+      collected: 0,
+    })
+
+    let collected = 0
+
     for (const song of this.songs) {
       console.log(song.title)
       const { sheets, recordings } = await this.collectSongDetails(song.url)
@@ -101,6 +108,11 @@ class Scraper {
       song.thisTerm = this.isTermSong(song)
       song.sheets = mapKeys(sheets, (_v, k) => k.toLowerCase())
       song.recordings = mapKeys(recordings, (_v, k) => k.toLowerCase())
+
+      this.broadcastProgress({
+        total: this.songs.length,
+        collected: collected += 1,
+      })
     }
   }
 
@@ -217,5 +229,9 @@ class Scraper {
         return await waitForCondition()
       })()
     `)
+  }
+
+  private broadcastProgress (progress: ScraperProgress) {
+    this.appWindow.webContents.send('scraper-progress', progress)
   }
 }

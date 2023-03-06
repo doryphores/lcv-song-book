@@ -65,6 +65,16 @@ export function saveSettings (username: string, password: string, hideScrollbars
   return createAction(SAVE_SETTINGS, { username, password, hideScrollbars })
 }
 
+
+// =============================================================================
+
+export const UPDATE_SCRAPER_PROGRESS = 'UPDATE_SCRAPER_PROGRESS'
+export type UpdateScraperProgressAction = Action<typeof UPDATE_SCRAPER_PROGRESS, number>
+
+export function updateScraperProgress (progress: number): UpdateScraperProgressAction {
+  return createAction(UPDATE_SCRAPER_PROGRESS, progress)
+}
+
 // =============================================================================
 
 export const LOAD_SONGS = 'LOAD_SONGS'
@@ -83,10 +93,14 @@ export function loadSongs () {
       songs = await api.scrape({
         username: getState().settings.username,
         password: getState().settings.password,
+      }, (progress) => {
+        if (progress.total > 0) dispatch(updateScraperProgress(progress.collected / progress.total))
       })
     } catch (error) {
       dispatch(alert(error.message))
       return
+    } finally {
+      dispatch(updateScraperProgress(0))
     }
 
     dispatch(createAction(LOAD_SONGS, {

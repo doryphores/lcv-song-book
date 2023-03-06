@@ -2,7 +2,7 @@ import {
   RESTORE, RESIZE_SIDEBAR, TOGGLE_SIDEBAR,
   TOGGLE_SETTINGS, TOGGLE_SHORTCUTS, SAVE_SETTINGS,
   RestoreAction, ResizeSidebarAction, ToggleSidebarAction,
-  ToggleSettingsAction, ToggleShortcutsAction, SaveSettingsAction,
+  ToggleSettingsAction, ToggleShortcutsAction, SaveSettingsAction, UpdateScraperProgressAction, UPDATE_SCRAPER_PROGRESS,
 } from '../actions'
 
 type Actions = RestoreAction
@@ -11,6 +11,7 @@ type Actions = RestoreAction
   | ToggleSettingsAction
   | ToggleShortcutsAction
   | SaveSettingsAction
+  | UpdateScraperProgressAction
 
 const initialState = {
   sidebarVisible: true,
@@ -18,6 +19,7 @@ const initialState = {
   settingsVisible: false,
   shortcutsVisible: false,
   hideScrollbars: false,
+  scraperProgress: 0,
 }
 
 export const ui = (state = initialState, action: Actions) => {
@@ -44,6 +46,11 @@ export const ui = (state = initialState, action: Actions) => {
         shortcutsVisible: !state.shortcutsVisible,
         settingsVisible: false,
       }
+    case UPDATE_SCRAPER_PROGRESS:
+      return {
+        ...state,
+        scraperProgress: action.payload,
+      }
     case SAVE_SETTINGS:
       return {
         ...state,
@@ -56,6 +63,7 @@ export const ui = (state = initialState, action: Actions) => {
         ...state,
         settingsVisible: false,
         shortcutsVisible: false,
+        scraperProgress: 0,
       }
     default:
       return state

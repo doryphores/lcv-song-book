@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, IpcRendererEvent } from 'electron'
 
 export default {
   platform: process.platform,
@@ -11,9 +11,15 @@ export default {
     })
   },
   getAppName: () => ipcRenderer.invoke('get-name'),
-  scrape: async (creds: Credentials) => {
-    const result = await ipcRenderer.invoke('scrape', creds)
-    if (result.error) throw new Error(result.error)
-    return result.value
+  scrape: async (creds: Credentials, onProgress: (progress: ScraperProgress) => void) => {
+    const callback = (event: IpcRendererEvent, progress: ScraperProgress) => onProgress(progress)
+    try{
+      ipcRenderer.on('scraper-progress', callback)
+      const result = await ipcRenderer.invoke('scrape', creds)
+      if (result.error) throw new Error(result.error)
+      return result.value
+    } finally {
+      ipcRenderer.off('scraper-progress', callback)
+    }
   },
 }

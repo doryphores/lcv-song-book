@@ -24,6 +24,11 @@ type Song = {
   recordings: Record<string, string>
 }
 
+type ScraperProgress = {
+  total: number
+  collected: number
+}
+
 type SongMarkers = Array<number>
 
 type MarkerCollection = {
@@ -62,5 +67,6 @@ type ApplicationState = {
     settingsVisible: boolean
     shortcutsVisible: boolean
     hideScrollbars: boolean
+    scraperProgress: number
   }
 }
