@@ -1,4 +1,4 @@
-import { compact, concat, difference, isEmpty } from 'lodash'
+import { concat, difference, differenceWith, isEmpty, isEqual } from 'lodash'
 import { Dispatch, Action as ReduxAction } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 
@@ -82,8 +82,7 @@ export type LoadResourcesAction = Action<typeof LOAD_SONGS, { songs: Song[], tim
 
 export function loadSongs () {
   return async function (dispatch: Dispatch, getState: () => ApplicationState): Promise<void> {
-    const songsBefore = getState().songs.map(s => s.title)
-    const recordingsBefore = gatherRecordings(getState().songs)
+    const stateBefore = getState()
 
     dispatch(dismissAll())
 
@@ -108,16 +107,17 @@ export function loadSongs () {
       songs,
     }))
 
-    const newSongs = difference(getState().songs.map(s => s.title), songsBefore)
-    const newRecordings = difference(gatherRecordings(getState().songs), recordingsBefore)
+    const newSongs = difference(getState().songs.map(s => s.title), stateBefore.songs.map(s => s.title))
+    let updatedSongs = differenceWith(getState().songs, stateBefore.songs, (a, b) => isEqual(a, b)).map(s => s.title)
+    updatedSongs = difference(updatedSongs, newSongs)
 
-    if (isEmpty(newSongs) && isEmpty(newRecordings)) {
+    if (isEmpty(newSongs) && isEmpty(updatedSongs)) {
       dispatch(info('No new songs or recordings'))
       return
     }
 
-    if (isEmpty(songsBefore)) {
-      dispatch(success(`Found ${newSongs.length} songs and ${newRecordings.length} recordings`))
+    if (newSongs.length + updatedSongs.length > 5) {
+      dispatch(success(`Found ${newSongs.length} new songs and ${updatedSongs.length} changed songs`))
       return
     }
 
@@ -127,19 +127,15 @@ export function loadSongs () {
         icon: 'audiotrack',
         song: s,
       })),
-      newRecordings.map(s => ({
-        message: 'New recording for',
-        icon: 'voicemail',
+      updatedSongs.map(s => ({
+        message: 'Changed song',
+        icon: 'audiotrack',
         song: s,
       })),
     )
 
     dispatch(notify(notifications))
   }
-}
-
-function gatherRecordings (songs: Song[]) {
-  return compact(songs.map(s => !isEmpty(s.recordings) && s.title))
 }
 
 // =============================================================================
