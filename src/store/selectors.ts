@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-const currentSong = createSelector(
+export const currentSong = createSelector(
   (state: ApplicationState) => state.songs,
   (state: ApplicationState) => state.selectedSong,
   (songs, title) => {

@@ -35,12 +35,13 @@ const SelectedSong: React.FC<SelectedSongProps> = ({
         Missing sheet music
       </span>
     }
-    <Player className='u-flex__panel'
+    {fullRecordingURL && voiceRecordingURL && <Player className='u-flex__panel'
       fullRecordingURL={fullRecordingURL}
       voiceRecordingURL={voiceRecordingURL}
       markers={songMarkers}
       onAddMarker={onAddMarker}
-      onRemoveMarker={onRemoveMarker} />
+      onRemoveMarker={onRemoveMarker}
+    />}
   </div>
 )
 

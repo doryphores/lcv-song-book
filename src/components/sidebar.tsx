@@ -7,6 +7,7 @@ import { selectSong, resizeSidebar, toggleSidebar, selectList } from '../store/a
 import Icon from './icon'
 import Resizer from './resizer'
 import KeyCapture from '../key_capture'
+import { currentSong } from '../store/selectors'
 
 type SidebarProps = {
   className: string
@@ -219,7 +220,7 @@ function mapDispatchToProps (dispatch: Dispatch) {
 
 function mapStateToProps (state: ApplicationState) {
   return {
-    selectedSongTitle: state.selectedSong,
+    selectedSongTitle: currentSong(state)?.title,
     selectedList: state.selectedList,
     songs: state.songs,
     visible: state.ui.sidebarVisible,
