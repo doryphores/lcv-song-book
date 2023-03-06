@@ -6,7 +6,6 @@ export async function getSongs (appWindow: BrowserWindow, credentials: Credentia
   return await scraper.run(credentials)
 }
 
-const LOGIN_URL = 'https://www.londoncityvoices.co.uk/lcv/forms/login'
 const SONGS_URL = 'https://www.londoncityvoices.co.uk/choirmembership/all-songs'
 
 class Scraper {
@@ -21,8 +20,8 @@ class Scraper {
       webPreferences: { partition: this.setupSession() },
     })
 
-    this.appWindow.addBrowserView(this.view)
-    this.view.setBounds({ x: 0, y: 50, width: 0, height: 0 })
+    this.appWindow.setBrowserView(this.view)
+    this.view.setBounds({ x: -1000, y: 2000, width: 1000, height: 800 })
     // this.view.webContents.openDevTools()
   }
 
@@ -54,10 +53,14 @@ class Scraper {
 
   async run (credentials: Credentials) {
     try {
-      await this.login(credentials)
       await this.loadURL(SONGS_URL)
-      const onSongListingPage = await this.waitForElement('h1.songtitle')
-      if (!onSongListingPage) throw new Error('Failed to collect songs from LCV website. Please try again.')
+      let onSongListingPage = await this.waitForElement('h1.songtitle', 1000)
+      if (!onSongListingPage) {
+        await this.login(credentials)
+        onSongListingPage = await this.waitForElement('h1.songtitle')
+        if (!onSongListingPage) throw new Error('Failed to collect songs from LCV website. Please try again.')
+      }
+      console.log('on song page')
       this.termSongs = await this.collectTermSongTitles()
       await this.collectSongs()
       if (this.songs.length === 0) {
@@ -70,13 +73,15 @@ class Scraper {
   }
 
   private async login (credentials: Credentials) {
-    await this.loadURL(LOGIN_URL)
-    await this.waitForElement('input[name=username]')
-    await this.fill('username', credentials.username)
-    await this.fill('password', credentials.password)
-    await this.submitForm()
-    const result = await this.waitForContent('Welcome to LCV!')
-    if (!result) throw new Error('Login failed, check your username and password')
+    try {
+      await this.waitForElement('input[name=username]', 1000)
+      await this.fill('username', credentials.username)
+      await this.fill('password', credentials.password)
+      console.log('submitted login')
+      await this.submitForm()
+    } catch(err) {
+      throw new Error('Login failed, check your username and password')
+    }
   }
 
   private async collectSongs (): Promise<void> {
@@ -146,7 +151,7 @@ class Scraper {
   private loadURL (url: string): Promise<void> {
     this.view.webContents.loadURL(url)
     return new Promise(resolve => {
-      this.view.webContents.once('dom-ready', () => {
+      this.view.webContents.once('did-finish-load', () => {
         resolve()
       })
     })
@@ -162,6 +167,7 @@ class Scraper {
   private fill (inputName: string, value: string) {
     return this.runScript(`
       const ${inputName} = document.querySelector('input[name=${inputName}]')
+      ${inputName}.dispatchEvent(new Event('focus', { bubbles: true }))
       ${inputName}.value = '${value}'
       ${inputName}.dispatchEvent(new Event('input', { bubbles: true }))
     `)
@@ -176,13 +182,17 @@ class Scraper {
       })
       document.querySelector('button').dispatchEvent(clickEvent)
     `)
-    return new Promise(resolve => {
-      this.view.webContents.once('did-finish-load', () => resolve())
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(), 5000)
+      this.view.webContents.once('did-finish-load', () => {
+        clearTimeout(timer)
+        resolve()
+      })
     })
   }
 
-  private waitForElement (selector: string) {
-    return this.waitFor(`document.querySelector('${selector}')`)
+  private waitForElement (selector: string, timeout = 5000) {
+    return this.waitFor(`document.querySelector('${selector}')`, timeout)
   }
 
   private waitForContent (content: string) {
